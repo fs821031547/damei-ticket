@@ -1,0 +1,165 @@
+<template>
+  <my-pad-box>
+    <div style="padding:0 20px">
+      <h3 class="my-title">精彩{{ title }}</h3>
+      <div class="ticket-input-box">
+        <input type="text" class="ticket-input" placeholder="请输入兑奖码" v-model="ticketCode">
+        <p class="ticket-input-tip">
+          兑奖码激活及使用有效期至2018年4月28日逾期作废，请尽早激活使用。
+        </p>
+      </div>
+      <x-button type="primary" @click.native="exChange">提交</x-button>
+      <div class="my-pad"></div>
+      <div class="tip" @click="$router.push({name:'ticket-list'})">
+        查看兑奖记录
+      </div>
+    </div>
+    <toast v-model="toastShow" type="text" is-show-mask :text="toastMsg" position="middle"></toast>
+  </my-pad-box>
+
+</template>
+
+<script>
+  import Vue from 'vue'
+  import mixin from '../mixin.js'
+  export default {
+    data() {
+      return {
+        title: '美国游兑奖',
+        ticketCode: '',
+      }
+    },
+    mixins: [mixin],
+    computed: {
+      mine() {
+        return this.$store.getters["mine/mine"];
+      },
+      status() {
+        return this.$route.query.status;
+      }
+    },
+    created() {
+      if (!this.mine.id) {
+        if (this.$route.name == 'apply') {
+          return;
+        }
+        if (this.$route.name == 'sign-true') {
+          return;
+        }
+
+        this.$store.dispatch("mine/mine_request").then(x => {
+          // console.log(this.$route.name);
+          // if (this.$route.name != 'ticket' && this.$route.name != 'pay-form') {
+          //   return;
+          // }
+
+          if (!x.status) {
+            this.$router.push({ name: 'ticket' })
+            return;
+          }
+
+          if (x.status == 1) {  //兑换未报名3或者报名未付款6
+            let wechat_id = this.mine.id;
+            let exchange_code = x.exchang_code;
+            var data = {
+              wechat_id,
+              exchange_code,
+            };
+            this.$store.dispatch('mine/search_exchange_code', data).then(body => {
+              if (body.success && !body.code_status) {
+                this.$store.dispatch('mine/code_info', body.code_info);
+              }
+            });
+            this.$router.push({ name: 'pay-form', query: { status: x.status, id: x.exchang_code } })
+          } else {
+            this.$router.push({ name: 'ticket', query: { status: x.status } })
+          }
+        });
+      }
+    },
+    methods: {
+      exChange() {
+        let wechat_id = this.mine.id;
+        console.log(wechat_id);
+        let exchange_code = this.ticketCode;
+        var data = {
+          wechat_id,
+          exchange_code,
+        };
+        if (!this.ticketCode) {
+          this.toastFn('兑换码未填写');
+          return;
+        }
+
+        this.$store.dispatch('mine/search_exchange_code', data).then(body => {
+          // console.log(body.code_status);
+          let status=['','已兑换','已兑换','已兑换','已放弃','已失效','已使用'];
+          if (body.success && !body.code_info.code_status) {
+            this.toastFn('操作成功');
+            this.$store.dispatch('mine/code_info', body.code_info);
+            this.$router.push({ name: 'pay-form', query: { status: 0 } })
+          } else {
+            this.toastFn(status[body.code_info.status] || '兑奖码错误');
+          }
+        });
+        // Vue.http.post(
+        //   "search-exchange-code",
+        //   data,
+        //   { emulateJSON: true }
+        // ).then(res => {
+        //   let body = res.body;
+        //   if (!body) return;
+        //   if (body.success && !body.code_status) {
+        //     this.$store.dispatch('mine/code_info',body.code_info);
+        //     this.toastFn('兑换成功');
+        //     this.$router.push({ name: 'pay-form',query:{status:0} })
+        //   } else {
+        //     this.toastFn(body.msg);
+        //   }
+        // })
+      },
+    },
+    props: {
+    }
+  }
+
+</script>
+
+<style lang="less" scoped>
+  .my-title {
+    text-align: center;
+    font-size: 17px;
+    margin-top: 20px;
+    color: #666;
+    font-weight: 500
+  }
+
+  .ticket-input-box {
+    margin: 60px 0 30px;
+    padding: 0 30px;
+  }
+
+  .ticket-input {
+    width: 100%;
+    text-align: center;
+    font-size: 22px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+    line-height: 44px;
+    outline: none;
+  }
+
+  .ticket-input-tip {
+    color: #666;
+    text-align: center;
+    font-size: 14px;
+    line-height: 20px;
+    margin-top: 30px;
+  }
+
+  .tip {
+    color: #666;
+    text-align: center;
+  }
+  /*.ticket-input*/
+</style>
