@@ -28,21 +28,31 @@
       },
     },
     created() {
-      let id = this.mine.id;
-      let data = { id: id }; 
-      // let data = { id: 106440 };  //暂用
-      this.$store.dispatch('apply/interview', data).then(x=>{
-        console.log(this.interview);
-      })
+      if (!this.mine.id) {
+        this.$store.dispatch("mine/mine_request").then(end => {
+          this.fnInit();
+        })
+      } else {
+        this.fnInit();
+
+      }
+
     },
     methods: {
-      fnSetBook(item,orderid) {
+      fnInit() {
+        let id = this.mine.id;
+        let data = { id: id };
+        // let data = { id: 106440 };  //暂用
+        this.$store.dispatch('apply/interview', data).then(x => {
+        })
+      },
+      fnSetBook(item, orderid) {
         let id = item.id;
         let data = { id: id };
         let now = DateFmt(new Date(), 'yyyy-MM-dd-hh-mm-ss');
         this.$store.dispatch("apply/interviewPerson", data).then(end => {
           // return;//http://dev.1.tontisa.cn/sys/api/1.0.0/
-          let fileName = item.name + '-' +orderid + '-' + item.id + '-' + now + '.doc';
+          let fileName = item.name + '-' + orderid + '-' + item.id + '-' + now + '.doc';
           let pdfData = {
             fileName: fileName,
             tplFile: 'plan_order_notice.doc',

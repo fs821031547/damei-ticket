@@ -14,7 +14,7 @@
   export default {
     data() {
       return {
-        orders:[],
+        orders: [],
       }
     },
     computed: {
@@ -23,38 +23,49 @@
       },
     },
     created() {
-      let order_data= this.mine.order_data;
-      let orders=[];
-      order_data.forEach(x=>{
-        if(x.isOK==1){
-          orders.push(x);
-        }
-      })
-      this.orders=orders;
+      if (!this.mine.id) {
+        this.$store.dispatch("mine/mine_request").then(end => {
+          this.fnInit();
+
+        })
+      } else {
+        this.fnInit();
+      }
+
     },
-    methods:{
-      fnSetBook(item){
-        let data={ordID:item.ordId};
-        this.$store.dispatch('apply/getNoticeData',data).then(end=>{
-          let jsonData=end;
-          item.addTime=DateFmt(item.addTime,'yyyy-MM-dd-hh-mm-ss');
-          let fileName=item.lineName+'-'+item.ordId+'-' +item.addTime+'.doc';
+    methods: {
+      fnInit() {
+        let order_data = this.mine.order_data;
+        let orders = [];
+        order_data.forEach(x => {
+          if (x.isOK == 1) {
+            orders.push(x);
+          }
+        })
+        this.orders = orders;
+      },
+      fnSetBook(item) {
+        let data = { ordID: item.ordId };
+        this.$store.dispatch('apply/getNoticeData', data).then(end => {
+          let jsonData = end;
+          item.addTime = DateFmt(item.addTime, 'yyyy-MM-dd-hh-mm-ss');
+          let fileName = item.lineName + '-' + item.ordId + '-' + item.addTime + '.doc';
           // let tplFile=this.planTemplateSelect.value;
-          let pdfData={
-                fileName:fileName,
-                tplFile: '1/plan_order_notice_904.html',
-                jsonData:JSON.stringify(jsonData),
-              };
-            this.$store.dispatch("apply/generatePdf",pdfData).then(end=>{
-                // return;//http://dev.1.tontisa.cn/sys/api/1.0.0/
-                let endType=Object.prototype.toString.call(end).slice(8,-1);
-                if(endType=='Object'&&!end.success){
-                  Toast(end.msg);
-                  return;
-                }
-                window.location.href='/sys/api/dm904/dm-activity/'+end+'/1';
-            });
-             
+          let pdfData = {
+            fileName: fileName,
+            tplFile: '1/plan_order_notice_904.html',
+            jsonData: JSON.stringify(jsonData),
+          };
+          this.$store.dispatch("apply/generatePdf", pdfData).then(end => {
+            // return;//http://dev.1.tontisa.cn/sys/api/1.0.0/
+            let endType = Object.prototype.toString.call(end).slice(8, -1);
+            if (endType == 'Object' && !end.success) {
+              Toast(end.msg);
+              return;
+            }
+            window.location.href = '/sys/api/dm904/dm-activity/' + end + '/1';
+          });
+
         });
       },
     },
