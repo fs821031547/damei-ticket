@@ -55,7 +55,7 @@
           let fileName = item.name + '-' + orderid + '-' + item.id + '-' + now + '.doc';
           let pdfData = {
             fileName: fileName,
-            tplFile: 'plan_order_notice.doc',
+            tplFile: 'plan_order_notice.html',
             jsonData: JSON.stringify(end),
           };
           this.fnSetPdf(pdfData);

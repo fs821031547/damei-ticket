@@ -102,7 +102,7 @@ const actions = {
     return Vue.http.post(
       "line-plan",
       {
-        lineID: lineID || '166',
+        lineID: lineID ,
       },
       { emulateJSON: true }
     ).then(res => {

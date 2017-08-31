@@ -203,7 +203,7 @@
             if (body.fin_ids) {
               this.$store.dispatch('mine/fin_ids', body.fin_ids);
             }
-            this.$router.push({ name: 'pay-way', query: { 'id': 'ticket' }, params: { refresh: true } })
+            this.$router.push({ name: 'pay-way', query: { 'names': 'ticket' }, params: { refresh: true } })
           } else {
             this.fnToastMsg(body.msg || '');
           }

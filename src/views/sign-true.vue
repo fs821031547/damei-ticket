@@ -1,10 +1,14 @@
 <template>
   <div style="padding-bottom:50px">
     <div v-if="!status" class="noknow-box">
-      <img src="../assets/sign_1.jpg" alt="">
-      <img src="../assets/sign_2.jpg" alt="">
-      <img src="../assets/sign_3.jpg" alt="">
-      <img src="../assets/sign_4.jpg" alt="">
+      <!--<img class="previewer-demo-img" v-for="(item, index) in list" :src="item.src" @click="show(index)">-->
+      <img class="previewer-demo-img" src="../assets/sign_1.jpg" @click="show(0)">
+      <img class="previewer-demo-img" src="../assets/sign_2.jpg" @click="show(1)">
+      <img class="previewer-demo-img" src="../assets/sign_3.jpg" @click="show(2)">
+      <img class="previewer-demo-img" src="../assets/sign_4.jpg" @click="show(3)">
+    </div>
+    <div v-transfer-dom>
+      <previewer :list="list" ref="previewer" :options="options"></previewer>
     </div>
     <div v-if="status" class="noknow-box">
       <img src="../assets/signfalse.png" alt="">
@@ -14,10 +18,42 @@
   </div>
 </template>
 <script>
+  import { Previewer, TransferDom } from 'vux'
   export default {
+    directives: {
+      TransferDom
+    },
+    components: {
+      Previewer
+    },
     data() {
       return {
         status: false,
+        // list: [{
+        //   src: '../assets/sign_1.jpg',
+        // },
+        // {
+        //   src: '../assets/sign_2.jpg'
+        // }, {
+        //   src: '../assets/sign_3.jpg'
+        // }, {
+        //   src: '../assets/sign_4.jpg'
+        // }],
+        options: {
+          getThumbBoundsFn(index) {
+            // find thumbnail element
+            let thumbnail = document.querySelectorAll('.previewer-demo-img')[index]
+            // get window scroll Y
+            let pageYScroll = window.pageYOffset || document.documentElement.scrollTop
+            // optionally get horizontal scroll
+            // get position of element relative to viewport
+            let rect = thumbnail.getBoundingClientRect()
+            // w = width
+            return { x: rect.left, y: rect.top + pageYScroll, w: rect.width }
+            // Good guide on how to get element coordinates:
+            // http://javascript.info/tutorial/coordinates
+          }
+        }
       }
     },
     created() {
@@ -38,17 +74,33 @@
     },
     methods: {
       fnInit() {
-        if (this.mine.exchange_code && this.mine.exchange_code.length>0) {
+        if (this.mine.exchange_code && this.mine.exchange_code.length > 0) {
           this.status = false;
         } else {
           this.status = true;
         }
+      },
+      show(index) {
+        this.$refs.previewer.show(index)
       }
     },
     computed: {
       mine() {
         return this.$store.getters["mine/mine"];
       },
+      list() {
+        let arr = [];
+        setTimeout(() => {
+          let img_dom = document.querySelectorAll('.previewer-demo-img');
+          for(let i=0;i<img_dom.length;i++){
+            let obj={};
+            obj.src=img_dom[i].src;
+            arr.push(obj);
+          }
+        }, 100);
+        
+        return arr;
+      }
     },
   }
 

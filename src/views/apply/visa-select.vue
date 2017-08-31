@@ -228,11 +228,6 @@
             dataStatus.status = false;
             dataStatus.msg = '请填写签证办理'
           }
-          if (x.phone && x.phone.length != 11) {
-            // this.fnToastMsg('请填写正确的手机号码');
-            dataStatus.status = false;
-            dataStatus.msg = '请填写正确的手机号码'
-          }
           //0-有签证有EVUS 1-有签证没有EVUS 3-没有签证办理1500的 4-没有签证办理2999的
           if (x.visaVal == this.visaStatus[0] && x.visaWayVal == this.visaWayList[0]) {
             y.visa_status = 0
@@ -276,7 +271,7 @@
             qrcodeData.code_id = data.exchangeIDs;
             this.$store.dispatch('mine/changeQrcodeData', qrcodeData);
             if (data.bill == 0 || x.money == 0) {
-              this.$store.dispatch("apply/confirmOrder", { ordId: x.ordId }).then(y => {
+              this.$store.dispatch("apply/confirmOrder", { ordId: x.ordId,exchange_code:data.exchangeIDs }).then(y => {
                 if (y.success) {
                   this.$router.push({ name: 'pay-complete' });  //跳转到付款成功页     
                 }

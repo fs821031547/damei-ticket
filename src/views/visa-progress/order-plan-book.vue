@@ -53,7 +53,7 @@
           // let tplFile=this.planTemplateSelect.value;
           let pdfData = {
             fileName: fileName,
-            tplFile: '1/plan_order_notice_904.html',
+            tplFile: 'plan_order_notice.html',
             jsonData: JSON.stringify(jsonData),
           };
           this.$store.dispatch("apply/generatePdf", pdfData).then(end => {

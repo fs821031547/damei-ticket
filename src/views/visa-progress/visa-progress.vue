@@ -54,13 +54,14 @@
         if (item.qianzheng_result == '拒签') {
           let qrcodeData = {};
           let money=this.moneys[item.visa_type];
-          // let money= item.theAmount;  
-          qrcodeData.money = money;
+          // qrcodeData.money = money;
+          qrcodeData.money = 1500;
           qrcodeData.type = 2;
           qrcodeData.orderId = item.orderid;
           qrcodeData.id = this.mine.id;
           qrcodeData.userListId=item.id;
-          item.money=money;
+          // item.money=money;
+          item.money=1500;
           this.$store.dispatch('mine/changeQrcodeData', qrcodeData);
           this.$store.dispatch('apply/visaSelect', item);
           this.$router.push({ name: 'visa-info', query: { status: 'visa' } });
