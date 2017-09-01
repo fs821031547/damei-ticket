@@ -20,8 +20,8 @@ const state = {
     phone: '',
     addr: '',
     deptName: '',
-    province:'',
-    city:'',
+    province: '',
+    city: '',
   },
   lineID: '',
   clickStatus: false,  //按钮点击状态
@@ -54,9 +54,9 @@ const actions = {
     });
   },
   mine_request({ state, commit, dispatch }) {
-    let data={};
-    if(process.env.NODE_ENV !== 'production'){
-      data.key='EC7121327EEC21702D0C71E0E19F0829381F22E89B5B763F1D5E26F785D93B23';
+    let data = {};
+    if (process.env.NODE_ENV !== 'production') {
+      data.key = 'EC7121327EEC21702D0C71E0E19F0829381F22E89B5B763F1D5E26F785D93B23';
     }
     return Vue.http.post(
       "get-person-info",
@@ -207,15 +207,30 @@ const actions = {
     commit("fin_ids", data);
   },
   exchange_code_qrcode({ state, commit }, data) {
+    //乘法函数，用来得到精确的乘法结果
+    //说明：javascript的乘法结果会有误差，在两个浮点数相乘的时候会比较明显。这个函数返回较为精确的乘法结果。
+    //调用：accMul(arg1,arg2)
+    //返回值：arg1乘以arg2的精确结果
+    function accMul(arg1, arg2) {
+      var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
+      try { m += s1.split(".")[1].length } catch (e) { }
+      try { m += s2.split(".")[1].length } catch (e) { }
+      return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m)
+    }
+
+    //给Number类型增加一个mul方法，调用起来更加方便。
+    Number.prototype.mul = function (arg) {
+      return accMul(arg, this);
+    }
     return Vue.http.post(
       'exchange_code_qrcode',
       {
-        amount: data.money * 100,
+        amount: (data.money).mul(100),
         type: data.type,
         orderId: data.orderId || '',
         exchange_code: data.code_id || '',
         id: data.id || '',
-        userListId:data.userListId || ''
+        userListId: data.userListId || ''
       },
       { emulateJSON: true }
     ).then(res => {
