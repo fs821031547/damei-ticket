@@ -120,7 +120,7 @@
         personMoney = (planMoney * personLen) - (planMoney * ticketLen);
         visaMoney = this.fnVisaPrice();
         totalMoney = personMoney + specilMoney + visaMoney;
-        totalMoney = NumFmt(totalMoney,2);
+        totalMoney = NumFmt(totalMoney, 2);
         this.$store.dispatch('apply/totalMoney', totalMoney);
         return totalMoney;
       },
@@ -216,7 +216,7 @@
           let y = {};
           y.name = x.name;
           y.phone = x.phone;
-          y.sex= x.sex;
+          y.sex = x.sex;
           y.identification = x.identification;
           if (!x.visaVal) {
             // this.fnToastMsg('请填写签证情况');
@@ -259,28 +259,59 @@
         }
         personDates = JSON.stringify(personDates);
         data.personDates = personDates;
-        data.bill = this.totalMoney 　|| this.money;
+        data.bill = this.totalMoney || this.money;
         this.$store.dispatch('apply/placeOrder', data).then(x => {
-          if(x.success){
+          if (x.success) {
             this.fnToastMsg(x.msg);
             this.$store.dispatch('apply/preOrder', x);
             let qrcodeData = {};
-            qrcodeData.money = x.money;
+            qrcodeData.money = x.order.billBak;
             qrcodeData.type = 1;
             qrcodeData.orderId = x.ordId;
             qrcodeData.code_id = data.exchangeIDs;
             this.$store.dispatch('mine/changeQrcodeData', qrcodeData);
             if (data.bill == 0 || x.money == 0) {
-              this.$store.dispatch("apply/confirmOrder", { ordId: x.ordId,exchange_code:data.exchangeIDs }).then(y => {
+              this.$store.dispatch("apply/confirmOrder", { ordId: x.ordId, exchange_code: data.exchangeIDs }).then(y => {
                 if (y.success) {
-                  this.$router.push({ name: 'pay-complete' });  //跳转到付款成功页     
+                  this.$router.push({ name: 'pay-complete' });  //跳转到付款成功页  
+                }else{
+                  this.fnToastMsg('订单确认失败');
                 }
               });
             } else {
               this.$router.push({ name: 'pay-confirm' });  //跳转到付款确认页            
             }
-          }else{
-            this.fnToastMsg(x.msg);
+          } else {
+            let errorCode = {
+              "10001": "无效数据",
+              "10002": "数据格式错误",
+              "10003": "授权校验未通过",
+              "10004": "参数错误",
+              "10005": "文件类型不符",
+              "10006": "上传文件失败",
+              "11001": "余位不足",
+              "11002": "无效的公司信息",
+              "11003": "无效的开放方团期信息",
+              "11004": "下单失败",
+              "11005": "无效的订单人数",
+              "11006": "客户欠款总额超过授信额度，订单状态将自动变更为预留单",
+              "11007": "销售欠款总额超过授信额度，订单状态将自动变更为预留单",
+              "11008": "订单信息异常",
+              "11010": "订单类型不存在，已取消下单请求",
+              "11011": "仅允许状态为正常的团才可以下单",
+              "11012": "团期信息不存在",
+              "11013": "对方版本太低，暂不支持下单!",
+              "11014": "出发城市异常",
+              "11015": "占位信息异常",
+              "11016": "单位名称必须从系统中选择，否则不能添加!",
+              "11017": "erpId信息无效",
+              "11018": "当前下单人数过多，占位失败，请刷新重试!",
+              "11019": "已存在的手机号码，请重试!",
+              "11020": "团状态非正常",
+              "11021": "非预留订单不允许修改人数",
+              "11022": "对不起，共享计划的订单不能更改人数，请重新预订",
+            }
+            this.fnToastMsg(x.msg || errorCode[x.code]);
           }
         })
       },

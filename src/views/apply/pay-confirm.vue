@@ -6,7 +6,7 @@
       <my-pad></my-pad>
       <div class="bg-white">
         <cell title="订单号" :value="preOrder.ordId"></cell>
-        <cell title="付款金额" :value="'RMB'+NumFmt(preOrder.money,2)"></cell>
+        <cell title="付款金额" :value="'RMB'+NumFmt(preOrder.order.billBak,2)"></cell>
         <!--<cell title="付款明细" :value="order_data.dataDesc"></cell>-->
         <my-cell title="付款明细" :value="orderDesc"></my-cell>
 
@@ -104,46 +104,6 @@
         if (orderDesc.gifts > 0) desc += visaWayList2[2] + '*' + orderDesc.gifts;
         return desc;
 
-      },
-      dataDesc() {
-        let visaWayList1 = this.visaWayList2[1];   //签证类型1  办理evus
-        let visaWayList2 = this.visaWayList2[2];  //签证类型2  办理签证（￥1500）
-        let visaWayList3 = this.visaWayList2[3];
-        let desc = '';
-        let num1 = 0;     //签证数量
-        let num2 = 0;
-        let num3 = 0;
-        console.log('exchangesID:', this.order.exchangesID);
-        let exchangesID = JSON.parse(this.order.exchangesID);
-        let lineNum = this.order.personDates.length - exchangesID.length;
-
-        this.order.personDates(x => {
-          if (x.visaVal == this.visaStatus[0] && x.visaWayVal == this.visaWayList[1]) {
-            num1++;
-          }
-          if (x.visaVal == this.visaStatus[1] && x.visaWayVal == this.visaWayList1[0]) {
-            num2++;
-          }
-          if (x.visaVal == this.visaStatus[1] && x.visaWayVal == this.visaWayList1[1]) {
-            num3++;
-          }
-        })
-        if (num1 > 0) {
-          desc += visaWayList1 + '*' + num1 + '<br>';
-        }
-        if (num2 > 0) {
-          desc += visaWayList2 + '*' + num2 + '<br>';
-        }
-        if (num3 > 0) {
-          desc += visaWayList3 + '*' + num3 + '<br>';
-        }
-        if (lineNum > 0) {
-          desc += this.code_info.title + '*' + lineNum + '<br>';
-        }
-        if (this.order.specilPerson != '') {
-          desc += '单房差*1';
-        }
-        return desc;
       },
 
     },
