@@ -42,7 +42,7 @@
       orderDesc() {
         let desc = '';
         let visa=this.visaSelect;   //所选签证
-        return this.visaWayList2[visa.visa_type]+'*1';
+        return '美国签证+EVUS'+'*1';
       },
     },
     methods: {

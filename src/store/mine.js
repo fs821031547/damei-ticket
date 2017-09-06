@@ -22,6 +22,7 @@ const state = {
     deptName: '',
     province: '',
     city: '',
+    remark:'',
   },
   lineID: '',
   clickStatus: false,  //按钮点击状态

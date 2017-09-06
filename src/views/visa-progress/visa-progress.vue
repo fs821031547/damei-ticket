@@ -22,15 +22,29 @@
         visaStatus: { 20: '拒签', 0: '审核中' },
         visaColor: { 20: 'oranger-box', 0: 'color-true-box' },
         list: [],
-        moneys:[0,100,1500,2999],
+        moneys: [0, 100, 1500, 2999],
 
       }
     },
     created() {
       let id = this.mine.id;
+      let ordId = this.$route.query.id;
       // let id = 106448;
       let list = [];
       this.$store.dispatch('apply/visaPogress', { id: id }).then(x => {
+        if (ordId) {
+          let visaObj = this.visa.find(y => {
+            return y.orderid == ordId;
+          })
+          if (visaObj) {
+            visaObj.qianzheng.forEach(z => {
+              z.orderid = visaObj.orderid;
+              list.push(z);
+            })
+          }
+          this.list = list;
+          return;
+        }
         this.visa.forEach(y => {
           y.qianzheng.forEach(z => {
             z.orderid = y.orderid;
@@ -53,15 +67,15 @@
       fnPay(item) {
         if (item.qianzheng_result == '拒签') {
           let qrcodeData = {};
-          let money=this.moneys[item.visa_type];
+          let money = this.moneys[item.visa_type];
           // qrcodeData.money = money;
           qrcodeData.money = 1500;
           qrcodeData.type = 2;
           qrcodeData.orderId = item.orderid;
           qrcodeData.id = this.mine.id;
-          qrcodeData.userListId=item.id;
+          qrcodeData.userListId = item.id;
           // item.money=money;
-          item.money=1500;
+          item.money = 1500;
           this.$store.dispatch('mine/changeQrcodeData', qrcodeData);
           this.$store.dispatch('apply/visaSelect', item);
           this.$router.push({ name: 'visa-info', query: { status: 'visa' } });

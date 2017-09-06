@@ -2,7 +2,7 @@
   <!--<x-header title></x-header>-->
   <div style="padding-bottom:50px;">
     <div class="vux-header" style="position:fixed;width:100%">
-      <h1 class="vux-header-title">
+      <h1 class="vux-header-title" >
         <span>我的报名</span>
       </h1>
     </div>
@@ -45,7 +45,7 @@
             <a class="title-name">查看行程>></a>
           </div>
           <div class="right-item">
-            <x-button mini v-if="item.isOK==1" type="primary" size="small" @click.native.stop="$router.push({name:'visa-progress'})">查看签证</x-button>
+            <x-button mini v-if="item.isOK==1" type="primary" size="small" @click.native.stop="$router.push({name:'visa-progress',query:{id:item.ordId}})">查看签证</x-button>
             <x-button mini v-else type="primary" style="background:grey" @click.native.stop="fnNopay" size="small">查看签证</x-button>
           </div>
         </div>
@@ -109,7 +109,7 @@
         this.fnToastMsg('未付款不能查看签证');
       },
       fnOrder_data() {
-        this.mine.order_data = this.mine.order_data.reverse();
+        // this.mine.order_data = this.mine.order_data.reverse();
         this.order_data = this.mine.order_data;
         // this.mine.order_data.forEach(y => {
         //   y.endTime = DateFmt(new Date(y.endTime), 'yyyy/MM/dd hh:mm');

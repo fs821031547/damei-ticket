@@ -4,8 +4,8 @@
     <div style="padding-top:46px">
       <my-pad height="20"></my-pad>
       <div class="bg-white" v-for="item in interview">
-        <div v-for="itemi in item.persons">
-          <cell :title="itemi.name" @click.native="fnSetBook(itemi,item.id)" is-link></cell>
+        <div v-for="itemi in item.persons" style="margin-top:10px">
+          <cell :title="itemi.name" @click.native="fnSetBook(itemi,item.orderid)" is-link></cell>
         </div>
       </div>
       <divider v-if="orders.length==0">我是有底线的</divider>
@@ -49,17 +49,19 @@
       fnSetBook(item, orderid) {
         let id = item.id;
         let data = { id: id };
-        let now = DateFmt(new Date(), 'yyyy-MM-dd-hh-mm-ss');
-        this.$store.dispatch("apply/interviewPerson", data).then(end => {
-          // return;//http://dev.1.tontisa.cn/sys/api/1.0.0/
-          let fileName = item.name + '-' + orderid + '-' + item.id + '-' + now + '.doc';
-          let pdfData = {
-            fileName: fileName,
-            tplFile: 'plan_order_notice.html',
-            jsonData: JSON.stringify(end),
-          };
-          this.fnSetPdf(pdfData);
-        });
+        window.location.href = '/sys/api/dm904/dm-activity/interview-person?id=' + id+'&name='+item.name;
+
+        // let now = DateFmt(new Date(), 'yyyy-MM-dd-hh-mm-ss');
+        // this.$store.dispatch("apply/interviewPerson", data).then(end => {
+        //   // return;//http://dev.1.tontisa.cn/sys/api/1.0.0/
+        //   let fileName = item.name + '-' + orderid + '-' + item.id + '-' + now + '.doc';
+        //   let pdfData = {
+        //     fileName: fileName,
+        //     tplFile: 'plan_order_notice.html',
+        //     jsonData: JSON.stringify(end),
+        //   };
+        //   this.fnSetPdf(pdfData);
+        // });
       },
       fnSetPdf(pdfData) {
         this.$store.dispatch("apply/generatePdf", pdfData).then(end => {

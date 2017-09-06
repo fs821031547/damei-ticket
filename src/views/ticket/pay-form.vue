@@ -10,14 +10,16 @@
         <div class="ticket-form-body my-cell" v-if="status">
           <x-input title="姓名" textAlign="right" v-model="userInfo.name" placeholder="请输入联系人姓名"></x-input>
           <x-input title="手机" textAlign="right" v-model="userInfo.phone" placeholder="请输入联系人手机号" keyboard="number" is-type="china-mobile"></x-input>
-          <x-input title="美容院"  textAlign="right" v-model="userInfo.deptName" placeholder="请输入美容院名称"></x-input>
+          <x-input title="美容院" textAlign="right" v-model="userInfo.deptName" placeholder="请输入美容院名称"></x-input>
           <cell title="所在省市" :class="userInfo.addr ? 'ticket' : ''" is-link :value="userInfo.addr || '请选择美容院所在省市'" @click.native="openAddress"></cell>
+          <x-input title="美容产品品牌" placeholder="请输入美容产品品牌" textAlign="right" v-model="userInfo.remark"></x-input>
         </div>
         <div class="ticket-form-body my-cell" v-else>
           <cell title="姓名" :value="mine.name"></cell>
           <cell title="手机号码" :value="mine.phone"></cell>
           <cell title="美容院" :value="mine.deptName"></cell>
           <cell title="所在省市" :value="mine.addr"></cell>
+          <x-input title="美容产品品牌" placeholder="请输入美容产品品牌" textAlign="right" v-model="userInfo.remark"></x-input>
         </div>
         <!--<div class="ticket-form-foot">※剩余有效付款时间：
           <clocker :time="time" format="%H 小时 %M 分 %S 秒" class="red" slot="value">
@@ -153,21 +155,50 @@
       },
       fnPay() {
         if (!this.status) {
-          this.$router.push({ name: 'pay-way', query: { names: 'ticket' }, params: { refresh: true } })
+          let data = {};
+          data.name = this.mine.name;
+          data.phone = this.mine.phone;
+          data.addr = this.mine.addr;
+          data.deptName = this.mine.deptName;
+          data.remark = this.userInfo.remark;
+          data.id = this.mine.id;
+          data.code_id = this.code_info.code_id || this.ticketSelect.code_id;
+          if (!data.remark) {
+            this.fnToastMsg('请输入美容产品品牌');
+            return;
+          }
+          Vue.http.post(
+            'complete-person-info',
+            data,
+            { emulateJSON: true }
+          ).then(res => {
+            let body = res.body;
+            if (!body) return;
+            this.$router.push({ name: 'pay-way', query: { names: 'ticket' }, params: { refresh: true } })
+          })
           return;
         }
+
         let userId = this.mine.id;
         let name = this.userInfo.name;
         let phone = this.userInfo.phone;
         let money = this.ticketSelect.money;
         let addr = this.userInfo.addr;
         let deptName = this.userInfo.deptName;
+        let remark = this.userInfo.remark;
+        let code_id = this.code_info.code_id || this.ticketSelect.code_id;
+
         if (!name) {
           this.fnToastMsg('请填写姓名');
           return;
         }
         if (!phone) {
           this.fnToastMsg('请填写手机号码');
+          return;
+        }
+
+        if (!remark) {
+          this.fnToastMsg('请输入美容产品品牌');
           return;
         }
 
@@ -184,6 +215,7 @@
           return;
         }
 
+
         Vue.http.post(
           'complete-person-info',
           {
@@ -193,6 +225,8 @@
             money: money,
             addr: addr,
             deptName: deptName,
+            remark,
+            code_id
           },
           { emulateJSON: true }
         ).then(res => {
@@ -389,7 +423,8 @@
     transform: scaleY(0.5);
     -webkit-transform: scaleY(0.5);
   }
-    .ticket .weui-cell__ft {
+
+  .ticket .weui-cell__ft {
     color: #000;
   }
 </style>

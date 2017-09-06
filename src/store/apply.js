@@ -42,7 +42,7 @@ const state = {
     visaWayStatus: false,
     visaVal: '',
     visaWayVal: '',
-    sex:'男',
+    sex: '男',
   }],
   plan_info: [],    //团期信息
   plan_city: [],   //城市信息
@@ -52,12 +52,12 @@ const state = {
   totalMoney: 0, //总金额
   preOrder: {},  //预留单成功数据
   visa: [],
-  payInfo:{},
-  orderSelect:{},  //所选订单
-  visaSelect:{},
-  checked:false,
-  specialStatus:false,
-  interview:[],
+  payInfo: {},
+  orderSelect: {},  //所选订单
+  visaSelect: {},
+  checked: false,
+  specialStatus: false,
+  interview: [],
 }
 
 const getters = {
@@ -102,7 +102,7 @@ const actions = {
     return Vue.http.post(
       "line-plan",
       {
-        lineID: lineID ,
+        lineID: lineID,
       },
       { emulateJSON: true }
     ).then(res => {
@@ -194,7 +194,7 @@ const actions = {
       return res.body;
     })
   },
-  interview({ state,commit }, data) {
+  interview({ state, commit }, data) {
     return Vue.http.post(
       "interview",
       data,
@@ -203,7 +203,7 @@ const actions = {
       if (!res.body) return;
       let data = res.body;
       //commit("confirmConfig", { data });
-      state.interview=data;
+      state.interview = data;
       return res.body;
     })
   },
@@ -225,17 +225,17 @@ const actions = {
   payInfo({ state, commit, dispatch }, data) {
     state.payInfo = data;
   },
-  orderSelect({state , commit , dispatch},data){
-    state.orderSelect=data;
+  orderSelect({ state, commit, dispatch }, data) {
+    state.orderSelect = data;
   },
-  visaSelect({state , commit , dispatch},data){
-    state.visaSelect=data;
+  visaSelect({ state, commit, dispatch }, data) {
+    state.visaSelect = data;
   },
-  changeChecked({state , commit , dispatch},data){
-    state.checked=data;
+  changeChecked({ state, commit, dispatch }, data) {
+    state.checked = data;
   },
-  specialStatus({state , commit , dispatch},data){
-    state.specialStatus=data;
+  specialStatus({ state, commit, dispatch }, data) {
+    state.specialStatus = data;
   },
 
 }

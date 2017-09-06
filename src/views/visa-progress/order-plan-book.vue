@@ -62,7 +62,8 @@
       },
       fnSetBook(item) {
         let data = { ordID: item.ordId };
-        this.formWord(item.ordId);
+        // this.formWord(item.ordId);
+        window.location.href='/sys/api/dm904/dm-activity/generate-pdf-set?ordID='+item.ordId;
         // this.$store.dispatch('apply/getNoticeData', data).then(end => {
         //   let jsonData = end;
         //   item.addTime = DateFmt(item.addTime, 'yyyy-MM-dd-hh-mm-ss');

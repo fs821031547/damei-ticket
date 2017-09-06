@@ -64,7 +64,7 @@
         visaWay: false,
         visaWayList: ['已办EVUS', '办理EVUS（RMB100）'],
         visaWayList1: ['办理签证（RMB1500）', '签证保障套餐（RMB2999）'],
-        visaWayList2: ['办理EVUS（￥100）', '办理签证（￥1500）', '签证保障套餐（￥2999）'],
+        visaWayList2: ['EVUS', '美国签证+EVUS', '签证大礼包'],
         checkBtn: false,
       }
     },

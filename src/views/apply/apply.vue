@@ -20,13 +20,13 @@
         <popup-radio class="my-cell" title="性别" :options="sexArr" v-model="item.sex"></popup-radio>
         <x-input title="手机号" v-model="item.phone" keyboard="number" is-type="china-mobile" textAlign="right" placeholder="请输入手机号"></x-input>
         <x-input title="身份证号" v-model="item.identification" textAlign="right" placeholder="请输入身份证号"></x-input>
-        <div class="my-delete-btn" @click="delTour(index)"></div>
+        <div class="my-delete-btn" @click="showPlugin(index)"></div>
         <div class="my-delete-border"></div>
       </group>
       <my-pad></my-pad>
       <div class="bg-white" v-if="personDates.length % 2 == 1">
         <x-switch class="my-switch" title="是否需要单独一人入住 RMB1680" v-model="specialStatus" inline-desc="（本次出行统一安排双人房，若是单独1人出行，且不愿意拼房，可选单独入住1人间）"></x-switch>
-        <x-input title="请独入住人" v-show="specialStatus" v-model="order.specilPerson" textAlign="right" placeholder="请输入单独入住人姓名"></x-input>
+        <x-input title="单独入住人" v-show="specialStatus" v-model="order.specilPerson" textAlign="right" placeholder="请输入单独入住人姓名"></x-input>
       </div>
       <my-pad></my-pad>
       <div class="add-tour">
@@ -58,7 +58,7 @@
 
 </template>
 <script>
-  import { PopupPicker, Picker, Checklist, PopupRadio } from 'vux'
+  import { PopupPicker, Picker, Checklist, PopupRadio, Confirm } from 'vux'
   export default {
     data() {
       return {
@@ -85,6 +85,7 @@
       Checklist,
       Picker,
       PopupRadio,
+      Confirm,
     },
     watch: {
       specialStatus() {
@@ -189,6 +190,7 @@
         this.ticketValue = this.ticketArrs;  //兑奖码所选值
       },
       delTour(i) {  //删除游客
+        // this.showPlugin();
         if (this.personDates.length == 1) {
           this.fnToastMsg('游客人数至少有1位');
           return;
@@ -257,6 +259,15 @@
           dataStatus.msg = '兑奖码数量不能大于游客人数'
         }
 
+        if (this.order.specilPerson != '' && this.specialStatus) {
+          let result = this.personDates.find(x => {
+            return x.name == this.order.specilPerson;
+          })
+          if (!result) {
+            dataStatus.msg = '单独入住人必须与所填游客姓名一致';
+          }
+        }
+
         this.personDates.forEach(x => {
           let y = {};
           let birth = '';
@@ -277,6 +288,7 @@
           if (!y.name) {
             dataStatus.msg = '请填写用户姓名'
           }
+
           if (y.identification.length == 15) {
             birth = y.identification.toString();
             birth = '19' + birth.slice(6, 8);
@@ -331,6 +343,22 @@
       },
       onHide(type) {
         console.log('on hide', type)
+      },
+      showPlugin(i) {
+        let _this = this;
+        this.$vux.confirm.show({
+          title: '提示',
+          content: '是否删除此游客信息？',
+          onShow() {
+          },
+          onHide() {
+          },
+          onCancel() {
+          },
+          onConfirm() {
+            _this.delTour(i);
+          }
+        })
       },
 
     },

@@ -1,7 +1,7 @@
 <template>
   <!--<x-header title></x-header>-->
   <div style="padding-bottom:50px;">
-    <x-header style="position:absolute;left: 0px; top: 0px;z-index: 1001; width:100%;">在线报名</x-header>
+    <x-header style="position:absolute;left: 0px; top: 0px;z-index: 1001; width:100%;">报名信息</x-header>
     <div style="padding-top:46px">
       <my-pad></my-pad>
       <group title="产品信息">
