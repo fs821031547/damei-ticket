@@ -70,12 +70,14 @@
           let money = this.moneys[item.visa_type];
           // qrcodeData.money = money;
           qrcodeData.money = 1500;
+          // qrcodeData.money = 0.02;
           qrcodeData.type = 2;
           qrcodeData.orderId = item.orderid;
           qrcodeData.id = this.mine.id;
           qrcodeData.userListId = item.id;
           // item.money=money;
           item.money = 1500;
+          // item.money = 0.02;
           this.$store.dispatch('mine/changeQrcodeData', qrcodeData);
           this.$store.dispatch('apply/visaSelect', item);
           this.$router.push({ name: 'visa-info', query: { status: 'visa' } });
