@@ -16,8 +16,8 @@
       <div class="weui-panel__bd">
         <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
           <div class="weui-media-box__bd">
-            <p class="weui-media-box__desc" v-if="item.status==1">有效期：{{item.exist_time}}</p>
-            <p class="weui-media-box__desc" v-else>兑换时间：{{item.exist_time}}</p>
+            <p class="weui-media-box__desc">兑换时间：{{item.exist_time}}</p>
+            <p class="weui-media-box__desc" style="margin-top:6px">兑奖码需在2017年10月31日前激活，在2018年2月28日前使用。</p>
           </div>
         </a>
       </div>

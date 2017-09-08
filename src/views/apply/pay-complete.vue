@@ -7,7 +7,7 @@
       <h2 class="weui-msg__title">操作成功</h2>
     </div>
     <div class="weui-msg__text-area">
-      <p class="weui-msg__desc">您已成功付款：{{ code_info.title || '美国阳光西岸8日精品游' }}</p>
+      <!--<p class="weui-msg__desc">您已成功付款：{{ code_info.title || '美国阳光西岸8日精品游' }}</p>-->
     </div>
     <my-pad height="20"></my-pad>
     <div style="padding:0 15px">

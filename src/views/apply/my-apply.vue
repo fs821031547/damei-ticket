@@ -37,7 +37,7 @@
         <div class="details-list-row row-3">
           <div class="left-item">{{item.addTime}}</div>
           <div class="right-item">
-            RMB {{ NumFmt(item.order.billBak,2)}}
+            {{NumFmt(item.order.billBak,2)}}
           </div>
         </div>
         <div class="box-order-list-header footer">

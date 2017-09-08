@@ -5,7 +5,7 @@
       <my-pad height="20"></my-pad>
       <div class="bg-white">
         <cell title="订单号" :value="visaSelect.orderid"></cell>
-        <cell title="付款金额" class="my-money" :value="'RMB '+visaSelect.money"></cell>
+        <cell title="付款金额" class="my-money" :value="NumFmt(visaSelect.money,2)"></cell>
         <!--<cell title="付款明细" :value="order_data.dataDesc"></cell>-->
         <my-cell title="付款明细" :value="orderDesc"></my-cell>
       </div>

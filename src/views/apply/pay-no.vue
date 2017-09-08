@@ -16,8 +16,7 @@
       </group>
       <my-pad></my-pad>
     </div>
-    <div class="daoji-time" v-if="order.isOK==0">※剩余有效付款时间：
-      <!--<span class="red">47小时59分59秒。</span>-->
+    <!--<div class="daoji-time" v-if="order.isOK==0">※剩余有效付款时间：
       <clocker :time="time" format="%H 小时 %M 分 %S 秒" class="red" slot="value">
         <span class="day">%_H1</span>
         <span class="day">%_H2</span>时
@@ -26,10 +25,10 @@
         <span class="day">%_S1</span>
         <span class="day">%_S2</span>秒
       </clocker>
-    </div>
+    </div>-->
     <my-bottom-box>
       <div class="footer">
-        <div class="footer-money">总金额：<span class="orange">RMB {{ NumFmt(order.order.billBak,2)}}</span></div>
+        <div class="footer-money">总金额：<span class="orange">{{ NumFmt(order.order.billBak,2)}}</span></div>
         <x-button type="primary" @click.native="fnConfirmOrder" style="border-radius:0;width:50%;float:left;">立即付款</x-button>
       </div>
     </my-bottom-box>
@@ -48,7 +47,7 @@
         order_data: {
         },
         personDates: [],
-        visaWayList: ['已办EVUS', '办理EVUS（￥100）', '办理签证（￥1500）', '签证保障套餐（￥2999）'],
+        visaWayList: ['已办EVUS', '办理EVUS（100.00）', '办理签证（1500.00）', '签证保障套餐（2999.00）'],
       }
     },
     components: {

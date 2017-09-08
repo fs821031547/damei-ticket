@@ -6,18 +6,14 @@
       <my-pad></my-pad>
       <div class="bg-white">
         <cell title="订单号" :value="preOrder.ordId"></cell>
-        <cell title="付款金额" :value="'RMB'+NumFmt(preOrder.order.billBak,2)"></cell>
+        <cell title="付款金额" :value="NumFmt(preOrder.order.billBak,2)"></cell>
         <!--<cell title="付款明细" :value="order_data.dataDesc"></cell>-->
         <my-cell title="付款明细" :value="orderDesc"></my-cell>
 
       </div>
       <my-pad height="20"></my-pad>
-      <!--<div class="bg-white hetong">
-        <span @click="checkFn"  class="checked"><input type="checkbox"  id="checkbox" v-model="checkBtn" ref="checkBtn" name="" value=""></span> 我已知悉
-        <span class="blue">《电子合同条款》</span>
-      </div>-->
-      <div class="ticket-form-foot" style="text-align:center">剩余有效付款时间：
-        <!--<span class="red">47小时59分59秒。</span>-->
+      <!--<div class="ticket-form-foot" style="text-align:center">剩余有效付款时间：
+        <span class="red">47小时59分59秒。</span>
         <clocker :time="time" format="%H 小时 %M 分 %S 秒" class="red" slot="value">
           <span class="day">%_H1</span>
           <span class="day">%_H2</span>时
@@ -26,7 +22,7 @@
           <span class="day">%_S1</span>
           <span class="day">%_S2</span>秒
         </clocker>
-      </div>
+      </div>-->
       <my-pad></my-pad>
       <my-pad></my-pad>
       <div style="padding:0 10px;">

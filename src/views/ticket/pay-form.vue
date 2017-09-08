@@ -3,23 +3,25 @@
     <div style="padding:0 15px">
       <h3 class="my-title">{{ title }}</h3>
       <div class="ticket-form">
-        <p class="ticket-form-head">获得了仅需
-          <span class="red" v-if="queryStatus==0">RMB{{code_info.money || '0'}}</span>
-          <span class="red" v-else>RMB{{ticketSelect.money || '0'}}</span> 即可参加{{ code_info.title || '美国阳光西岸8日精品游' }}的宝贵资格1个。
+        <p class="ticket-form-head" style="font-size:16px;text-align:center">
+          <!--获得了仅需
+          <span class="red" v-if="queryStatus==0">{{ NumFmt(code_info.money,0) || '0'}}</span>
+          <span class="red" v-else>{{ticketSelect.money || '0'}}</span> 即可参加{{ code_info.title || '美国阳光西岸8日精品游' }}的宝贵资格1个。-->
+          请完善以下信息，激活账户报名！
         </p>
         <div class="ticket-form-body my-cell" v-if="status">
           <x-input title="姓名" textAlign="right" v-model="userInfo.name" placeholder="请输入联系人姓名"></x-input>
           <x-input title="手机" textAlign="right" v-model="userInfo.phone" placeholder="请输入联系人手机号" keyboard="number" is-type="china-mobile"></x-input>
           <x-input title="美容院" textAlign="right" v-model="userInfo.deptName" placeholder="请输入美容院名称"></x-input>
-          <cell title="所在省市" :class="userInfo.addr ? 'ticket' : ''" is-link :value="userInfo.addr || '请选择美容院所在省市'" @click.native="openAddress"></cell>
           <x-input title="美容产品品牌" placeholder="请输入美容产品品牌" textAlign="right" v-model="userInfo.remark"></x-input>
+          <cell title="所在省市" :class="userInfo.addr ? 'ticket' : ''" is-link :value="userInfo.addr || '请选择美容院所在省市'" @click.native="openAddress"></cell>
         </div>
         <div class="ticket-form-body my-cell" v-else>
           <cell title="姓名" :value="mine.name"></cell>
           <cell title="手机号码" :value="mine.phone"></cell>
           <cell title="美容院" :value="mine.deptName"></cell>
-          <cell title="所在省市" :value="mine.addr"></cell>
           <x-input title="美容产品品牌" placeholder="请输入美容产品品牌" textAlign="right" v-model="userInfo.remark"></x-input>
+          <cell title="所在省市" :value="mine.addr"></cell>
         </div>
         <!--<div class="ticket-form-foot">※剩余有效付款时间：
           <clocker :time="time" format="%H 小时 %M 分 %S 秒" class="red" slot="value">
@@ -131,6 +133,9 @@
       });
     },
     methods: {
+      fnFocus(){
+        console.log('focus');
+      },
       fnGiveup() {
         let id = this.ticketSelect.code_id;
         Vue.http.post(

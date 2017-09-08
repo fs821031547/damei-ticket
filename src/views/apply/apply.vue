@@ -11,7 +11,7 @@
           placeholder="请选择出发地"></popup-picker>
         <cell title="使用兑奖" @click.native="showTicket=!showTicket" :class="exchangeValue ? 'apply':''" :value="exchangeValue ||'请选择'"
           is-link></cell>
-        <cell title="签证包" @click.native="$router.push({name:'visa'})" value="查看详情" is-link></cell>
+        <cell title="美国签证介绍" class="sign" @click.native="$router.push({name:'visa'})" value="查看详情" is-link></cell>
       </div>
       <panel :list="list" class="my-panel" style="background-color: #f2f2f2;margin-top:0"></panel>
       <group class="my-group" :title="'※游客'+(index+1)" v-for="item,index in personDates" :key="item.id">
@@ -25,7 +25,7 @@
       </group>
       <my-pad></my-pad>
       <div class="bg-white" v-if="personDates.length % 2 == 1">
-        <x-switch class="my-switch" title="是否需要单独一人入住 RMB1680" v-model="specialStatus" inline-desc="（本次出行统一安排双人房，若是单独1人出行，且不愿意拼房，可选单独入住1人间）"></x-switch>
+        <x-switch class="my-switch" title="※是否需单独入住一间房（需补房差支付1680.00）" v-model="specialStatus" inline-desc="（本次出行统一安排双人房，若是单独1人出行，且不愿意拼房，可选单独入住1人间）"></x-switch>
         <x-input title="单独入住人" v-show="specialStatus" v-model="order.specilPerson" textAlign="right" placeholder="请输入单独入住人姓名"></x-input>
       </div>
       <my-pad></my-pad>
@@ -64,7 +64,7 @@
       return {
         title: '兑奖记录',
         list: [{
-          title: '游客信息',
+          title: '订单填写要求',
           desc: '※注：游客年龄需满足①18~70间②＜75岁，且同时报名人数最多不超过9人；兑换码生效需满足，1张兑奖码只兑换1人出游，多出名额，按正价报名。',
         }],
         showTicket: false,
@@ -210,8 +210,8 @@
             visa: false,
             EVUS: '',
             visaStatusList: ['已有签证', '没有签证'],
-            visaWayList: ['已办EVUS', '办理EVUS（RMB100）'],
-            visaWayList1: ['办理签证（RMB1500）', '签证保障套餐（RMB2999）'],
+            visaWayList: ['已办EVUS', '办理EVUS（100.00）'],
+            visaWayList1: ['办理签证（1500.00）', '签证保障套餐（2999.00）'],
             visaStatus: false,
             visaWayStatus: false,
             visaVal: '',
@@ -370,7 +370,11 @@
 </script>
 <style>
   .my-panel .weui-media-box__title {
-    font-size: 15px;
+    font-size: 16px;
+  }
+
+  .weui-cell.sign .vux-label {
+    color: red;
   }
 
   .my-switch.weui-cell_switch .weui-cell__ft {

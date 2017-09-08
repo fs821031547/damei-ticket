@@ -11,7 +11,7 @@
       <previewer :list="list" ref="previewer" :options="options"></previewer>
     </div>
     <div v-if="status" class="noknow-box">
-      <img src="../assets/signfalse.png" alt="">
+      <img src="../assets/signfalse.jpg" alt="">
     </div>
     <div v-if="!$route.query.status && !status" class="baoming-btn" @click="$router.push({name:'apply',params:{refresh:true}})">立即报名</div>
     <div v-if="status" class="baoming-btn" @click="$router.push({name:'ticket'})">去兑奖</div>

@@ -7,18 +7,18 @@
     </tab>-->
     <my-pad height="8"></my-pad>
     <div class="qrcode-box" v-show="!qrcodeShow">
-      <div class="qrcode-title">扫一扫付款</div>
-      <div class="qrcode-head">RMB {{ NumFmt(qrcodeData.money,2) || '0' }}</div>
+      <div class="qrcode-title">扫码或长按识别付款</div>
+      <div class="qrcode-head">{{ NumFmt(qrcodeData.money,2) || '0' }}</div>
       <div class="qrcode-body">
         <img :src="qrcode">
       </div>
       <div class="qrcode-footer">
-        <div class="img-box">
+        <div class="img-box" style="margin-right:10px;">
           <img src="../assets/weixin.png" alt="">
-          <img src="../assets/alipy.png" alt="">
+          <img src="../assets/alipy.png" alt="" >
         </div>
         <div class="qrcode-footer-content">
-          请使用微信 / 支付宝扫码支付或者长按识别二维码支付
+         微信、支付宝<br>均可直接支付。
         </div>
       </div>
       <div style="padding:15px 15px;">
@@ -70,7 +70,7 @@
       this.$store.dispatch('mine/exchange_code_qrcode', data).then(x => {
         if (x && x.executeStatus == 0 && x.qrcode) {
           // console.log(x.qrcode);
-          this.qrcode = "http://pan.baidu.com/share/qrcode?w=210&h=210&url=" + x.qrcode;
+          this.qrcode = "http://pan.baidu.com/share/qrcode?w=240&h=240&url=" + x.qrcode;
           let isKey = x.key.indexOf(':');
           if (isKey > 0) {
             this.key = x.key.slice(isKey + 1);;
@@ -175,14 +175,14 @@
   .qrcode-body {
     padding-top: 20px;
     text-align: center;
-    width: 210px;
-    height: 240px;
+    width: 240px;
+    height: 270px;
     margin: 0 auto;
   }
 
   .qrcode-body img {
-    height: 210px;
-    width: 210px;
+    height: 240px;
+    width: 240px;
   }
 
   .qrcode-title {
@@ -197,13 +197,13 @@
   }
 
   .qrcode-footer {
-    width: 220px;
+    width: 180px;
     margin: 0 auto;
   }
 
   .qrcode-footer-content {
     line-height: 20px;
-    font-size: 12px;
+    font-size: 15px;
   }
 
   .img-box {

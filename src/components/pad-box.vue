@@ -31,6 +31,7 @@
     border-radius: 4px;
     overflow: hidden;
     padding: 20px 0;
+    position: relative;
   }
   /*.my-pad-box-content{}*/
 </style>

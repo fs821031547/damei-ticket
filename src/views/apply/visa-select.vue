@@ -45,11 +45,11 @@
         <span class="checked" @click.stop.prevent="checkBtn">
           <check-icon :value="checked" type="plain"></check-icon>
           </span>
-        <span @click="toVisaTip"> 代办签证服务<a style="text-decoration:underline;color:#0fa3ed">免责说明</a></span>
+        <span @click="toVisaTip"> <a style="text-decoration:underline;color:#0fa3ed">已阅签证服务说明并同意免责说明</a></span>
       </div>
       <my-bottom-box>
         <div class="footer">
-          <div class="footer-money">总金额：<span class="orange">RMB {{ totalMoney ||　money}}</span></div>
+          <div class="footer-money">总金额：<span class="orange">{{ totalMoney ||　money}}</span></div>
           <x-button v-if="checked" type="primary" @click.native="placeOrder" style="border-radius:0;width:50%;float:left;">提交</x-button>
           <x-button v-else type="primary" ref="submit" style="border-radius:0;width:50%;float:left;background:#adadad">提交</x-button>
         </div>
@@ -60,7 +60,7 @@
 
 </template>
 <script>
-  import { CheckIcon } from 'vux'
+  import { Loading, CheckIcon } from 'vux'
   export default {
     data() {
       return {
@@ -73,8 +73,8 @@
         visaVal: false,
         visaWayVal: false,
         visaWay: false,
-        visaWayList: ['已办EVUS', '办理EVUS（RMB100）'],
-        visaWayList1: ['办理签证（RMB1500）', '签证保障套餐（RMB2999）'],
+        visaWayList: ['已办EVUS', '办理EVUS（100.00）'],
+        visaWayList1: ['办理签证（1500.00）', '签证保障套餐（2999.00）'],
         fromCityName: '',
         toastShow: false,
         toastMsg: '',
@@ -110,8 +110,10 @@
           ticketLen = 0;
         }
         // console.log(this.order.exchangeIDs);
-        if (this.order.specilPerson != '' && this.order.specilPerson != undefined && this.order.specilPerson != null) {
+        if (this.specStatus && this.order.specilPerson != '' && this.order.specilPerson != undefined && this.order.specilPerson != null) {
           specilMoney = 1680;
+        } else {
+          this.order.specilPerson = '';
         }
         // if (ticketLen > 0) {
         //   ticketLen = JSON.parse(ticketLen).length;
@@ -144,6 +146,9 @@
       },
       money() {  //获得存储的金额
         return this.$store.getters["apply/totalMoney"];
+      },
+      specStatus() {
+        return this.$store.getters["apply/specialStatus"];
       },
       // checked(){
       //   return this.$store.getters["apply/checked"];        
@@ -197,6 +202,9 @@
         }
       },
       placeOrder() {
+        this.$vux.loading.show({
+          text: '正在下单，请勿重新操作！'
+        })
         this.checked = !this.checked;
         let data = {};  //请求参数
         let dataStatus = { status: true, msg: '' }; //用户输入数据状态是否正确
@@ -272,16 +280,19 @@
             this.$store.dispatch('mine/changeQrcodeData', qrcodeData);
             if (data.bill == 0 || x.money == 0) {
               this.$store.dispatch("apply/confirmOrder", { ordId: x.ordId, exchange_code: data.exchangeIDs }).then(y => {
+                this.$vux.loading.hide()
                 if (y.success) {
                   this.$router.push({ name: 'pay-complete' });  //跳转到付款成功页  
-                }else{
+                } else {
                   this.fnToastMsg('订单确认失败');
                 }
               });
             } else {
+              this.$vux.loading.hide()
               this.$router.push({ name: 'pay-confirm' });  //跳转到付款确认页            
             }
           } else {
+            this.$vux.loading.hide()
             let errorCode = {
               "10001": "无效数据",
               "10002": "数据格式错误",

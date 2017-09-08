@@ -1,7 +1,7 @@
 <template>
     <div class="weui-msg__extra-area">
       <div class="weui-footer">
-        <p class="weui-footer__text">※本产品由中信国旅提供，最终解释权归广东中信国旅所有。</p>
+        <p class="weui-footer__text">本产品由广东中信优胜旅行提供<br>最终解释权由广东中信优胜旅行所有</p>
       </div>
     </div>  
 </template>
@@ -27,7 +27,7 @@
     text-align: center;
   }
 
-  .weui-msg__extra-area {
+  .weui-msg__extra-area .weui-footer__text {
     margin-bottom: 15px;
     font-size: 10px;
     zoom:0.8;
@@ -35,5 +35,6 @@
     color: #999999;
     padding:0 20px;
     text-align: center;
+    /*transform: scale(.6);*/
   }
 </style>

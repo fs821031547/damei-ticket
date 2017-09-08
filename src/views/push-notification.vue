@@ -49,8 +49,8 @@
         this.$vux.confirm.show({
           title: '提示',
           content: '请点击右上角在浏览器中打开并点击下载',
-          cancelText:"null",
-          confirmText:'知道了',
+          cancelText: "null",
+          confirmText: '知道了',
         })
       }
     }

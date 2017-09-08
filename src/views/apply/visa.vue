@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="noknow-box">
-       <img src="../../assets/visa.jpg">
+       <img src="../../assets/visa.png">
     </div>
     <div class="question-btn" @click="$router.push('visa-question')">
       <div style="margin:5px 10px">签证常见问题</div>  

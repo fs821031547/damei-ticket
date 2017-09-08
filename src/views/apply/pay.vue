@@ -15,15 +15,14 @@
       </group>
       <my-pad></my-pad>
       <div class="visa-tips" v-show="!isPay">
-        ※签证说明：<br> 1、已办EVUS：请将签证页发送至XXXX。
-        <br> 2、办理EVUS：请将护照页、旧签证页发送至XXX。
-        <br> 3、办理签证：请将游客照片、护照首页、身份证正反面照片发送至XXX。
-        <br> 4、相关明细查看公众号推送消息。
+        ※签证说明：<br> 1、已有美国签证并且已经办理EVUS的客人,将  以下资料发送客服：有效护照首页复印件、有效美国签证页复印件、EVUS确认页。
+        <br> 2、需要办理美国签证的客人，请按报名成功后推送的消息，点击“详情”查看签证办理流程和下载文档。
+        <br> 3、如有任何疑问，请直接联系公众号客服。
       </div>
     </div>
     <my-bottom-box v-show="isPay">
       <div class="footer">
-        <div class="footer-money">总金额：<span class="orange">RMB {{NumFmt(order.order.billBak,2)}}</span></div>
+        <div class="footer-money">总金额：<span class="orange">{{NumFmt(order.order.billBak,2)}}</span></div>
         <x-button type="primary" style="border-radius:0;width:50%;float:left;">下一步</x-button>
       </div>
     </my-bottom-box>
@@ -39,7 +38,7 @@
         ticketOpt: ['..', 'heheh'],
         isPay: false,
         personDates: [],
-        visaWayList2: ['已办EVUS', '办理EVUS（￥100）', '办理签证（￥1500）', '签证保障套餐（￥2999）'],
+        visaWayList2: ['已办EVUS', '办理EVUS（100.00）', '办理签证（1500.00）', '签证保障套餐（2999.00）'],
       }
     },
     created() {

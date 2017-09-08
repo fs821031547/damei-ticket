@@ -5,9 +5,10 @@
       <div class="ticket-input-box">
         <input type="text" class="ticket-input" placeholder="请输入兑奖码" v-model="ticketCode">
         <p class="ticket-input-tip">
-          兑奖码激活及使用有效期至2018年4月28日逾期作废，请尽早激活使用。
+          <!--兑奖码激活及使用有效期至2018年4月28日逾期作废，请尽早激活使用。-->
         </p>
       </div>
+      <div class="my-pad"></div>
       <x-button type="primary" @click.native="exChange">提交</x-button>
       <div class="my-pad"></div>
       <div class="tip" @click="$router.push({name:'ticket-list'})">

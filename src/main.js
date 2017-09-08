@@ -8,7 +8,7 @@ import App from './App'
 // import Home from './components/HelloFromVux'
 import routes from './routes'
 import vueComponents from './components'
-import { ConfigPlugin , ConfirmPlugin , ToastPlugin , XButton,  XHeader, Panel, XInput, Cell, GroupTitle, Group, Radio, XSwitch, Toast, Popup ,Divider } from 'vux'
+import { ConfigPlugin , ConfirmPlugin , ToastPlugin , XButton, LoadingPlugin ,  XHeader, Panel, XInput, Cell, GroupTitle, Group, Radio, XSwitch, Toast, Popup ,Divider } from 'vux'
 import VueResource from 'vue-resource'
 
 vueComponents(Vue)
@@ -16,6 +16,7 @@ Vue.use(VueRouter)
 Vue.use(VueResource)
 Vue.use(ToastPlugin)
 Vue.use(ConfirmPlugin)
+Vue.use(LoadingPlugin)
 Vue.use(ConfigPlugin, {
   $layout: 'VIEW_BOX' // global config for VUX, since v2.6.0
 })
