@@ -94,7 +94,7 @@ function NumFmt(value, semi, spl) {
     return value;
   }
   if (!spl && spl !== "") {
-    spl = ","
+    spl = ''
   }
   var n = semi >= 0 && semi <= 20 ? semi : 0;
   var s = parseInt(value, 10) + '';

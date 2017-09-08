@@ -45,7 +45,7 @@
         <span class="checked" @click.stop.prevent="checkBtn">
           <check-icon :value="checked" type="plain"></check-icon>
           </span>
-        <span @click="toVisaTip"> <a style="text-decoration:underline;color:#0fa3ed">已阅签证服务说明并同意免责说明</a></span>
+        <span @click="toVisaTip"> <a style="text-decoration:underline;color:#0fa3ed">已阅签证服务说明并同意</a></span>
       </div>
       <my-bottom-box>
         <div class="footer">
