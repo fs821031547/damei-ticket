@@ -25,7 +25,7 @@
       </group>
       <my-pad></my-pad>
       <div class="bg-white" v-if="personDates.length % 2 == 1">
-        <x-switch class="my-switch" title="※是否需单独入住一间房（需补房差支付1680.00）" v-model="specialStatus" inline-desc="（本次出行统一安排双人房，若是单独1人出行，且不愿意拼房，可选单独入住1人间）"></x-switch>
+        <x-switch class="my-switch" title="※是否需单独入住一间房<br>（需补房差支付1680.00）" v-model="specialStatus" inline-desc="（本次出行统一安排双人房，若是单独1人出行，且不愿意拼房，可选单独入住1人间）"></x-switch>
         <x-input title="单独入住人" v-show="specialStatus" v-model="order.specilPerson" textAlign="right" placeholder="请输入单独入住人姓名"></x-input>
       </div>
       <my-pad></my-pad>
@@ -276,19 +276,6 @@
           y.phone = x.phone;
           count++;
           y.identification = x.identification;
-          if (x.phone && x.phone.length != 11) {
-            dataStatus.msg = '请填写正确的手机号码'
-          }
-          if (!y.identification) {
-            dataStatus.msg = '请填写身份证号码'
-          }
-          if (!y.phone) {
-            dataStatus.msg = '请填写手机号码'
-          }
-          if (!y.name) {
-            dataStatus.msg = '请填写用户姓名'
-          }
-
           if (y.identification.length == 15) {
             birth = y.identification.toString();
             birth = '19' + birth.slice(6, 8);
@@ -311,6 +298,21 @@
           }
           if (y.identification.length != 18 && y.identification.length != 15) {
             dataStatus.msg = '身份证输入不正确'
+          }
+          if (!y.identification) {
+            dataStatus.msg = '请填写身份证号码'
+          }
+          if (x.phone && x.phone.length != 11) {
+            dataStatus.msg = '请填写正确的手机号码'
+          }
+          if (!y.phone) {
+            dataStatus.msg = '请填写手机号码'
+          }
+          if (!y.name) {
+            dataStatus.msg = '请填写用户姓名'
+          }
+          if(!y.name && !y.phone && !y.identification){
+            dataStatus.msg = '游客信息必须填写'
           }
           personDates.push(y);
         });

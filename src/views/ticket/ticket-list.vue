@@ -17,7 +17,7 @@
         <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
           <div class="weui-media-box__bd">
             <p class="weui-media-box__desc">兑换时间：{{item.exist_time}}</p>
-            <p class="weui-media-box__desc" style="margin-top:6px">兑奖码需在2017年10月31日前激活，在2018年2月28日前使用。</p>
+            <p class="weui-media-box__desc" style="margin-top:6px">兑奖码需在2017年10月31日前激活<br>在2018年2月28日前使用</p>
           </div>
         </a>
       </div>
@@ -66,6 +66,9 @@
             let date = new Date(exist_time);
             date.add("d", 2);
             x.exist_time = DateFmt(date, 'yyyy-MM-dd hh:mm:ss');
+            if(x.exist_time.indexOf('NaN'>-1)){
+              x.exist_time = ''
+            }
             x.str = status[x.status];
           }
         })
