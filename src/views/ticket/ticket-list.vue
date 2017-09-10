@@ -66,9 +66,6 @@
             let date = new Date(exist_time);
             date.add("d", 2);
             x.exist_time = DateFmt(date, 'yyyy-MM-dd hh:mm:ss');
-            if(x.exist_time.indexOf('NaN'>-1)){
-              x.exist_time = ''
-            }
             x.str = status[x.status];
           }
         })

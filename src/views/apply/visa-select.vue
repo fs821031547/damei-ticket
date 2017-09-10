@@ -210,9 +210,6 @@
                 }
             },
             placeOrder() {
-                this.$vux.loading.show({
-                    text: '正在下单，请勿重新操作！'
-                })
                 this.checked = !this.checked;
                 let data = {}; //请求参数
                 let dataStatus = {
@@ -266,6 +263,9 @@
                     this.fnToastMsg(dataStatus.msg);
                     return;
                 }
+                this.$vux.loading.show({
+                    text: '正在下单，请勿重新操作！'
+                })
                 data.fromCityName = this.cityValue.join();
                 data.ordTypeName = this.plan_info[0].ordTypeName || '公共';
                 data.planID = this.plan_info[0].planID;
@@ -375,35 +375,35 @@
     .my-panel .weui-media-box__title {
         font-size: 15px;
     }
-    
+
     .my-panel .weui-media-box__desc {
         font-size: 12px;
     }
-    
+
     .slide {
         padding: 0 20px;
         overflow: hidden;
         max-height: 0;
         transition: max-height .5s cubic-bezier(0, 1, 0, 1) -.1s;
     }
-    
+
     .animate {
         max-height: 9999px;
         transition-timing-function: cubic-bezier(0.5, 0, 1, 0);
         transition-delay: 0s;
     }
-    
+
     .my-switch .weui-cell_switch .weui-cell__ft {
         margin-top: -35px;
     }
-    
+
     .weui-icon-checked.checked:before {
         display: block;
         content: '\EA08';
         color: #09BB07;
         font-size: 16px;
     }
-    
+
     .hetong {
         height: 36px;
         line-height: 36px;
@@ -411,17 +411,17 @@
         font-size: 15px;
         color: #666;
     }
-    
+
     .hetong .checked {
         padding: 0 0 0 10px;
         height: 36px;
         display: inline-block;
     }
-    
+
     .hetong .checked .weui-icon-circle {
         font-size: 20px;
     }
-    
+
     .hetong .checked .weui-icon-success-circle {
         font-size: 20px;
     }
