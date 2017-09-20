@@ -8,7 +8,7 @@ import App from './App'
 // import Home from './components/HelloFromVux'
 import routes from './routes'
 import vueComponents from './components'
-import { ConfigPlugin , ConfirmPlugin , ToastPlugin , XButton, LoadingPlugin ,  XHeader, Panel, XInput, Cell, GroupTitle, Group, Radio, XSwitch, Toast, Popup ,Divider } from 'vux'
+import { ConfigPlugin , ConfirmPlugin ,DatetimePlugin , ToastPlugin , XButton, LoadingPlugin ,  XHeader, Panel, XInput, Cell, GroupTitle, Group, Radio, XSwitch, Toast, Popup ,Divider } from 'vux'
 import VueResource from 'vue-resource'
 
 vueComponents(Vue)
@@ -17,6 +17,7 @@ Vue.use(VueResource)
 Vue.use(ToastPlugin)
 Vue.use(ConfirmPlugin)
 Vue.use(LoadingPlugin)
+Vue.use(DatetimePlugin)
 Vue.use(ConfigPlugin, {
   $layout: 'VIEW_BOX' // global config for VUX, since v2.6.0
 })
@@ -32,6 +33,7 @@ Vue.component(XSwitch.name, XSwitch)
 Vue.component(Toast.name, Toast)
 Vue.component(Popup.name, Popup)
 Vue.component(Divider.name, Divider)
+
 
 // esPromise.polyfill()
 Vue.http.options.root = '/sys/api/dm904/dm-activity/'

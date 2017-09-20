@@ -30,8 +30,8 @@ module.exports = {
     quiet: false,
     proxyTable: {
       '/sys': {
-        // target: "http://904.1day.top/",
-        target: "http://dev.op110.com.cn/",
+        target: "http://904test.op110.com.cn",
+        // target: "http://dev.op110.com.cn/",
         changeOrigin: true,
         pathRewrite: {
           '^/sys': '/sys',

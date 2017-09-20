@@ -75,7 +75,9 @@
 
 <script>
   import Vue from 'vue'
-  import { Clocker } from 'vux'
+  import {
+    Clocker
+  } from 'vux'
   export default {
     data() {
       return {
@@ -102,7 +104,7 @@
         return this.$store.getters["mine/mine"];
       },
       ticketSelect() {
-        return this.$store.getters["mine/ticketSelect"];  //正在兑奖的兑奖码
+        return this.$store.getters["mine/ticketSelect"]; //正在兑奖的兑奖码
       },
       userInfo() {
         return this.$store.getters["mine/userInfo"];
@@ -115,6 +117,9 @@
       },
       queryStatus() {
         return this.$route.query.status;
+      },
+      qrcodeData() {
+        return this.$store.getters["mine/qrcodeData"]
       },
       code_info() {
         return this.$store.getters["mine/code_info"];
@@ -133,18 +138,18 @@
       });
     },
     methods: {
-      fnFocus(){
+      fnFocus() {
         console.log('focus');
       },
       fnGiveup() {
         let id = this.ticketSelect.code_id;
         Vue.http.post(
-          'exchange_status',
-          {
+          'exchange_status', {
             status: 4,
             id: id,
-          },
-          { emulateJSON: true }
+          }, {
+            emulateJSON: true
+          }
         ).then(res => {
           let body = res.body;
           if (!body) return;
@@ -152,96 +157,77 @@
             this.fnToastMsg('操作成功');
             //放弃资格后需重新请求个人信息
             this.$store.dispatch('mine/mine_request');
-            this.$router.push({ name: 'ticket', query: { status: true } });
+            this.$router.push({
+              name: 'ticket',
+              query: {
+                status: true
+              }
+            });
           } else {
             this.fnToastMsg(body.msg || '');
           }
         })
       },
       fnPay() {
+        let data = {};
         if (!this.status) {
-          let data = {};
           data.name = this.mine.name;
           data.phone = this.mine.phone;
           data.addr = this.mine.addr;
           data.deptName = this.mine.deptName;
           data.remark = this.userInfo.remark;
           data.id = this.mine.id;
-          data.code_id = this.code_info.code_id || this.ticketSelect.code_id;
+          data.code_id = this.code_info.code_id || this.ticketSelect.code_id || 0;
           if (!data.remark) {
             this.fnToastMsg('请输入美容产品品牌');
             return;
           }
-          Vue.http.post(
-            'complete-person-info',
-            data,
-            { emulateJSON: true }
-          ).then(res => {
-            let body = res.body;
-            if (!body) return;
-            if (body.success) {
-              this.$store.dispatch('mine/mine_request');
-              if (body.fin_ids) {
-                this.$store.dispatch('mine/fin_ids', body.fin_ids);
-              }
-              this.$router.push({ name: 'pay-way', query: { 'names': 'ticket' }, params: { refresh: true } })
-            } else {
-              this.fnToastMsg(body.msg || '');
-            }
-          })
+          this.completeInfo(data);
           return;
         }
 
-        let userId = this.mine.id;
-        let name = this.userInfo.name;
-        let phone = this.userInfo.phone;
-        let money = this.ticketSelect.money;
-        let addr = this.userInfo.addr;
-        let deptName = this.userInfo.deptName;
-        let remark = this.userInfo.remark;
-        let code_id = this.code_info.code_id || this.ticketSelect.code_id;
+        data.id = this.mine.id;
+        data.name = this.userInfo.name;
+        data.phone = this.userInfo.phone;
+        data.money = this.ticketSelect.money;
+        data.addr = this.userInfo.addr;
+        data.deptName = this.userInfo.deptName;
+        data.remark = this.userInfo.remark;
+        data.code_id = this.code_info.code_id || this.ticketSelect.code_id;
 
-        if (!name) {
+        if (!data.name) {
           this.fnToastMsg('请填写姓名');
           return;
         }
-        if (!phone) {
+        if (!data.phone) {
           this.fnToastMsg('请填写手机号码');
           return;
         }
 
-        if (!remark) {
+        if (!data.remark) {
           this.fnToastMsg('请输入美容产品品牌');
           return;
         }
 
-        if (!deptName) {
+        if (!data.deptName) {
           this.fnToastMsg('请填写美容院名称');
           return;
         }
-        if (!addr) {
+        if (!data.addr) {
           this.fnToastMsg('请选择所在省市');
           return;
         }
-        if (phone.length != 11) {
+        if (data.phone.length != 11) {
           this.fnToastMsg('请填写正确的手机号码');
           return;
         }
-
-
+        this.completeInfo(data);
+      },
+      completeInfo(data) {
         Vue.http.post(
-          'complete-person-info',
-          {
-            name: name,
-            phone: phone,
-            id: userId,
-            money: money,
-            addr: addr,
-            deptName: deptName,
-            remark,
-            code_id
-          },
-          { emulateJSON: true }
+          'complete-person-info', data, {
+            emulateJSON: true
+          }
         ).then(res => {
           let body = res.body;
           if (!body) return;
@@ -250,9 +236,40 @@
             if (body.fin_ids) {
               this.$store.dispatch('mine/fin_ids', body.fin_ids);
             }
-            this.$router.push({ name: 'pay-way', query: { 'names': 'ticket' }, params: { refresh: true } })
+            if (this.qrcodeData.money === 0) {
+              this.confirmOrder();
+              return;
+            }
+            this.$router.push({
+              name: 'pay-way',
+              query: {
+                'names': 'ticket'
+              },
+              params: {
+                refresh: true
+              }
+            })
           } else {
             this.fnToastMsg(body.msg || '');
+          }
+        })
+      },
+      confirmOrder() {
+        let exchange_code = this.code_info.code_id || this.ticketSelect.code_id;
+        Vue.http.post(
+          'confirm-order-code', {
+            exchange_code,
+          }, {
+            emulateJSON: true
+          }
+        ).then(res => {
+          let body = res.body;
+          if (body.success) {
+            this.$router.push({
+              name: 'pay-success'
+            });
+          }else{
+            this.fnToastMsg(body.msg || '异常错误');
           }
         })
       },
@@ -280,15 +297,15 @@
         this.userInfo.province = item.cnName;
         this.pickerShow = true;
         Vue.http.post(
-          'city',
-          {
+          'city', {
             id: item.ID
-          },
-          { emulateJSON: true }).then(res => {
-            if (!res.body) return;
-            let data = res.body.rows;
-            this.city = data;
-          })
+          }, {
+            emulateJSON: true
+          }).then(res => {
+          if (!res.body) return;
+          let data = res.body.rows;
+          this.city = data;
+        })
       },
       fnProvinceSelect(item) {
         this.citySelect = '';
@@ -440,4 +457,5 @@
   .ticket .weui-cell__ft {
     color: #000;
   }
+
 </style>

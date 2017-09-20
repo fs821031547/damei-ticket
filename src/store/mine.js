@@ -49,16 +49,20 @@ const getters = {
 
 const actions = {
   request_enter({ state, commit, dispatch }) {
-    Vue.http.get(
-      "entrance",
+    Vue.http.post(
+      "/sys//main?xwl=3448FRF0MLLM",
+      {
+        openId:'openId'
+      },
+       { emulateJSON: true }
     ).then(res => {
     });
   },
   mine_request({ state, commit, dispatch }) {
     let data = {};
-    if (process.env.NODE_ENV !== 'production') {
-      data.key = 'EC7121327EEC21702D0C71E0E19F0829381F22E89B5B763F1D5E26F785D93B23';
-    }
+    // if (process.env.NODE_ENV !== 'production') {
+    //   data.key = 'EC7121327EEC21702D0C71E0E19F0829381F22E89B5B763F1D5E26F785D93B23';
+    // }
     return Vue.http.post(
       "get-person-info",
       data,

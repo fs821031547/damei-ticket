@@ -1,6 +1,7 @@
 import ticket from './views/ticket'
 import apply from './views/apply'
 import visaProgress from './views/visa-progress';
+import plans from './views/plans'
 const routes = [
   {
     name: 'plan',
@@ -85,7 +86,8 @@ const routes = [
   },
   ...ticket,
   ...apply,
-  ...visaProgress
+  ...visaProgress,
+  ...plans,
 ]
 
 

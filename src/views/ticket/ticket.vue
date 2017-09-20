@@ -37,6 +37,12 @@
       },
       status() {
         return this.$route.query.status;
+      },
+      query() {
+        return {
+          startDate: DateFmt(new Date(),"yyyy-MM-dd"), //开始日期
+          endDate: DateFmt(new Date(), "yyyy-MM-dd", "M+1"), //结束日期
+        }
       }
     },
     created() {
@@ -79,6 +85,38 @@
       }
     },
     methods: {
+      startDateClick() {
+        let startDate=this.query.startDate;
+        let _this=this;
+        this.$vux.datetime.show({
+          cancelText: '取消',
+          confirmText: '确定',
+          yearRow: "{value}年",
+          monthRow: "{value}月",
+          dayRow: "{value}日",
+          format: 'YYYY-MM-DD',
+          value: startDate,
+          onConfirm(val) {
+            _this.query.startDate = val;
+          },
+        })
+      },
+      endDateClick() {
+        let endDate=this.query.endDate;
+        let _this=this;
+        this.$vux.datetime.show({
+          cancelText: '取消',
+          confirmText: '确定',
+          yearRow: "{value}年",
+          monthRow: "{value}月",
+          dayRow: "{value}日",
+          format: 'YYYY-MM-DD',
+          value: endDate,
+          onConfirm(val) {
+            _this.query.endDate = val;
+          },
+        })
+      },
       exChange() {
         let wechat_id = this.mine.id;
         console.log(wechat_id);
@@ -94,7 +132,7 @@
 
         this.$store.dispatch('mine/search_exchange_code', data).then(body => {
           // console.log(body.code_status);
-          let status=['','已兑换','已兑换','已兑换','已放弃','已失效','已使用'];
+          let status = ['', '已兑换', '已兑换', '已兑换', '已放弃', '已失效', '已使用'];
           if (body.success && !body.code_info.code_status) {
             this.toastFn('操作成功');
             this.$store.dispatch('mine/code_info', body.code_info);

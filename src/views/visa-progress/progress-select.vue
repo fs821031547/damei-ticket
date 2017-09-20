@@ -4,7 +4,7 @@
     <div style="padding-top:46px">
       <my-pad height="20"></my-pad>
       <div class="bg-white">
-        <cell title="出团通知书" is-link @click.native="$router.push({name:'order-plan-book'})"></cell>
+        <!--<cell title="出团通知书" is-link @click.native="$router.push({name:'order-plan-book'})"></cell>-->
       </div>
       <my-pad height="20"></my-pad>
       <div class="bg-white">

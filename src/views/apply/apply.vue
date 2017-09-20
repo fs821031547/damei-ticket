@@ -317,7 +317,7 @@
           personDates.push(y);
         });
         if (data.fromCityId == undefined || data.fromCityId == '') {
-          dataStatus.msg = '请选择出发地'
+          // dataStatus.msg = '请选择出发地'
         }
         if (dataStatus.msg != '') {
           dataStatus.status = false;
