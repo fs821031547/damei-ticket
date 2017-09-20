@@ -18,5 +18,14 @@ export default [
       }, "plan-select");
     },
   },
+  {
+    name: 'check-list',
+    path: '/check-list',
+    component(resolve) {
+      require.ensure(['./check-list.vue'], () => {
+        resolve(require('./check-list.vue'))
+      }, "check-list");
+    },
+  },
 
 ]

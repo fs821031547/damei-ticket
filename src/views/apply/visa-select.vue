@@ -353,6 +353,8 @@
             }
             this.fnToastMsg(x.msg || errorCode[x.code]);
           }
+        }).catch(x=>{
+          this.$vux.loading.hide()
         })
       },
       fnVisaPrice() {

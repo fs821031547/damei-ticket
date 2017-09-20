@@ -236,7 +236,7 @@
             if (body.fin_ids) {
               this.$store.dispatch('mine/fin_ids', body.fin_ids);
             }
-            if (this.qrcodeData.money === 0) {
+            if (this.qrcodeData.money == 0) {
               this.confirmOrder();
               return;
             }
@@ -255,7 +255,7 @@
         })
       },
       confirmOrder() {
-        let exchange_code = this.code_info.code_id || this.ticketSelect.code_id;
+        let exchange_code = this.code_info.code_id || this.ticketSelect.code_id || 0;
         Vue.http.post(
           'confirm-order-code', {
             exchange_code,

@@ -1,7 +1,8 @@
 <template>
   <div>
     <my-header>我的团期</my-header>
-    <div style="padding-top:46px">
+    <div style="padding:20px;text-align: center">暂无此功能</div>
+    <!--<div style="padding-top:46px">
       <my-pad></my-pad>
       <div class="box-details-list list-3" v-for="item in order_data" @click="orderClick(item)">
         <div class="box-order-list-header header">
@@ -33,10 +34,9 @@
         </div>
       </div>
     </div>
-    <!--<toast v-model="toastShow" type="text" is-show-mask :text="toastMsg" position="middle"></toast>-->
     <my-bottom-box>
       <x-button style="border-radius:0;" type="primary" @click.native="$router.push({name:'order-list'})">选择订单</x-button>
-    </my-bottom-box>
+    </my-bottom-box>-->
   </div>
 </template>
 <script>

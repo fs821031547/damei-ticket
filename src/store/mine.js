@@ -181,13 +181,13 @@ const actions = {
     ).then(res => {
       let body = res.body;
       if (!body) return;
-      if (body.code_info.money) {
+      // if (body.code_info.money) {
         let qrcodeData = {};
         qrcodeData.money = body.code_info.money;
         qrcodeData.type = 0;
         qrcodeData.code_id = body.code_info.code_id;
         dispatch('changeQrcodeData', qrcodeData);
-      }
+      // }
       if (body.code_info.code_id != undefined && body.code_info.code_id != null) {
         dispatch('changeCodeId', body.code_info.code_id);
       }
@@ -230,7 +230,7 @@ const actions = {
     return Vue.http.post(
       'exchange_code_qrcode',
       {
-        amount: (data.money).mul(100),
+        amount: data.money && (Number(data.money)).mul(100),
         type: data.type,
         orderId: data.orderId || '',
         exchange_code: data.code_id || '',

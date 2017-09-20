@@ -80,7 +80,11 @@
           } else {
             this.key = x.key;
           }
+        }else{
+          this.fnToastMsg(x.msg);
         }
+      }).catch(x=>{
+        this.fnToastMsg('接口异常');
       });
       // if (!this.$route.params.refresh) {
       //   this.fnIsPay();

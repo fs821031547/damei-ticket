@@ -11,6 +11,8 @@ import vueComponents from './components'
 import { ConfigPlugin , ConfirmPlugin ,DatetimePlugin , ToastPlugin , XButton, LoadingPlugin ,  XHeader, Panel, XInput, Cell, GroupTitle, Group, Radio, XSwitch, Toast, Popup ,Divider } from 'vux'
 import VueResource from 'vue-resource'
 
+console.log(ConfigPlugin);
+
 vueComponents(Vue)
 Vue.use(VueRouter)
 Vue.use(VueResource)
@@ -45,7 +47,7 @@ if (process.env.APP_HOST) {
 // Vue.http.defaults.paramsSerializer=function(params) {
 //     return qs.stringify(params, {arrayFormat: 'brackets'})
 //   };
-// Vue.http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'; 
+// Vue.http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 
 function DateFmt(date, fmt, fc) { //fc 进行加减操作，类似 M+1
   if (!date) return "";

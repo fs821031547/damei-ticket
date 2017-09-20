@@ -45,7 +45,7 @@
           </h1>
         </div>
         <!--<radio :options="ticketOpt" :value="ticketValue"></radio>-->
-        <checklist label-position="left" :options="ticketOpt" v-model="ticketValue" @on-change="checkChange"></checklist>
+        <checklist label-position="left" :options="ticketOpt" :max=20  v-model="ticketValue" @on-change="checkChange"></checklist>
         <divider v-if="!ticketOpt.length">我是有底线的</divider>
         <my-bottom-box style="padding:20px 10px">
           <x-button type="primary" @click.native="showTicket=!showTicket">确认</x-button>
@@ -220,6 +220,10 @@
           }
         );
       },
+      fnChange(v){
+                console.log('val:',111);
+
+      },
       checkChange(val) {   //选择兑奖码
         let codeArr = [];
         let codeSelect = [];
@@ -233,6 +237,7 @@
           }
 
         })
+
         this.exchangeValue = str;  //存放需要显示的兑奖码字符串
         this.$store.dispatch('apply/ticketArrs', val);  //存放所选兑奖码数组
         val.forEach(ticket => {
@@ -250,7 +255,7 @@
         let data = {};  //请求参数
         let dataStatus = { status: true, msg: '' }; //用户输入数据状态是否正确
         let personDates = [];  //游客信息
-        let exchangeIDs = JSON.parse(this.order.exchangeIDs);
+        let exchangeIDs = this.order.exchangeIDs && JSON.parse(this.order.exchangeIDs);
         let count = 0;
         // let personDates = JSON.stringify(this.personDates);
         data = this.order;
@@ -317,7 +322,7 @@
           personDates.push(y);
         });
         if (data.fromCityId == undefined || data.fromCityId == '') {
-          // dataStatus.msg = '请选择出发地'
+          dataStatus.msg = '请选择出发地'
         }
         if (dataStatus.msg != '') {
           dataStatus.status = false;
