@@ -7,17 +7,64 @@
         v-model="value" start-date="2016-04-01" end-date="2018-05-30" :range="range" :show-last-month="showLastMonth" :show-next-month="showNextMonth"
         :highlight-weekend="highlightWeekend" :return-six-rows="return6Rows" :hide-header="hideHeader" :hide-week-list="hideWeekList"
         :replace-text-list="replaceTextList" :weeks-list="weeksList" :render-function="buildSlotFn" :disable-past="disablePast"
-        :disable-future="disableFuture" :marks="marks" >
+        :disable-future="disableFuture" :marks="marks">
       </inline-calendar>
     </div>
+    <!--<div class="plan-list-row" v-for="item in list">
+      <div class="column1">
+        <div>{{item.date}}</div>
+        <div style="text-align:left">{{item.week}}</div>
+      </div>
+      <div class="column2">
+        <div>{{item.plan}}</div>
+        <div>{{item.city}}</div>
+      </div>
+      <div class="column3">
+        <span style="color: orange">{{item.yuwei}}</span>
+      </div>
+    </div>-->
+
+    <div class="plan-list plan-list-row" v-for="item ,index in planList" @click="fnSelectPlan(item,index)">
+      <div class="mint-cell-wrapper">
+        <div class="mint-cell-title">
+          <span class="mint-cell-text"></span>
+        </div>
+        <div class="mint-cell-value">
+          <div class="column">
+            <icon v-if="planSelect==index" type="success"></icon>
+            <icon v-else type="circle"></icon>
+            <label>　</label>
+          </div>
+          <div class="column1">
+            <div>{{ DateFmt(item.PlanDate , 'MM-dd' )}}</div>
+            <div style="text-align: left;">{{item.weekday}}</div>
+          </div>
+          <div class="column2">
+            <div>团：{{item.planCode}}</div>
+            <div>{{item.fromcityName}}</div>
+          </div>
+          <div class="column3"><span style="color: orange;">余位：{{ item.endNum >=9? '≥9' : item.endNum}}</span></div>
+        </div>
+      </div>
+    </div>
+    <my-pad height="20"></my-pad>
+    <div class="bg-white hetong">
+      <span class="checked" @click.stop.prevent="checkBtn">
+          <check-icon :value="checked" type="plain"></check-icon>
+          </span>
+      <span @click="toVisaTip"><a style="text-decoration:underline;color:#0fa3ed">已阅签证服务说明并同意</a></span>
+    </div>
+    <divider v-if="planList.length==0">没有团期信息</divider>
     <my-bottom-box>
-      <x-button style="border-radius:0;" type="primary" @click.native="$router.push({name:'plan-select'})">下一步</x-button>
+      <x-button style="border-radius:0;" type="primary" @click.native="fnNext">确认所选出发日期</x-button>
     </my-bottom-box>
   </div>
 </template>
 <script>
   import {
-    InlineCalendar
+    InlineCalendar,
+    Icon,
+    CheckIcon
   } from 'vux'
   export default {
     data() {
@@ -40,25 +87,88 @@
         buildSlotFn: () => '',
         disablePast: false,
         disableFuture: false,
-        marks:['2017-09-23','2017-09-21','2017-09-22']
+        marks: [],
+        list: [],
+        planList: [],
+        planSelect: -1,
+        checked: false,
+        planObj: {}, //所选转团团期信息
       }
     },
     created() {
-      this.$store.dispatch('plan/request_plan').then(end=>{
-        // if(){}
+      this.$store.dispatch('plan/request_plan').then(end => {
+        let marks = [];
+        this.list = end;
+        end.forEach(x => {
+          let obj = {};
+          obj.date = DateFmt(x.PlanDate, 'yyyy-MM-dd');
+          obj.color = 'red';
+          obj.bottomDot = true;
+          marks.push(obj);
+        })
+        this.marks = marks;
       });
 
     },
     methods: {
-      onChange() {
-
+      onChange(val) {
+        let planList = [];
+        this.list.forEach(x => {
+          let PlanDate = DateFmt(x.PlanDate, 'yyyy-MM-dd');
+          if (val == PlanDate) {
+            planList.push(x);
+          }
+        });
+        this.planList = planList;
       },
-      onViewChange() {
-
-      }
+      fnNext() {
+        let _this=this;
+        this.$vux.confirm.show({
+          title: '温馨提示',
+          content: '成功选择团期后不可变更确认后电子合同将通过短信立即发给您打开短信中链接直接手写签字即可',
+          cancelText: "取消",
+          confirmText: '确认',
+          onConfirm() {
+            _this.orderChangePlan();
+          }
+        })
+      },
+      orderChangePlan() {
+        let data = {};
+        let oldOrder = this.orderSelect;
+        data.ordID = oldOrder.ordId;
+        data.planCode = oldOrder.planCode;
+        data.planID = oldOrder.planID;
+        data.newPlanCode = this.planObj.planCode;
+        data.newPlanID = this.planObj.id;
+        this.$store.dispatch('plan/order_change_plan', data).then(end => {
+          if(end.success){
+            this.$vux.toast.show({
+              text: '转团成功',
+            })
+          }
+        })
+      },
+      fnSelectPlan(item, index) {
+        this.planSelect = index;
+        this.planObj = item;
+        console.log(item);
+      },
+      onViewChange(val) {
+        console.log('onViewChange:', val);
+      },
+      toVisaTip() {
+        this.$router.push('visa-tip');
+      },
+      checkBtn() {
+        // this.$store.dispatch('apply/changeChecked',);
+        this.checked = !this.checked;
+      },
     },
     components: {
       InlineCalendar,
+      Icon,
+      CheckIcon
     },
     computed: {
       mine() {
@@ -67,12 +177,154 @@
       plan() {
         return this.$store.getters["plan/plan"];
       },
+      orderSelect() {
+        return this.$store.getters["plan/orderSelect"];
+      }
     },
     props: {}
   }
 
 </script>
 <style>
+  .vux-calendar-dot {
+    background-color: #000;
+  }
 
+  .mint-cell-wrapper {
+    background-image: -webkit-linear-gradient(top, #d9d9d9, #d9d9d9 50%, transparent 0);
+    background-image: linear-gradient(180deg, #d9d9d9, #d9d9d9 50%, transparent 0);
+    background-size: 120% 1px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-origin: content-box;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    box-sizing: border-box;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    font-size: 16px;
+    line-height: 1;
+    min-height: inherit;
+    overflow: hidden;
+    padding: 0 10px;
+    width: 100%;
+  }
+
+  .mint-cell-wrapper {
+    -webkit-transition: -webkit-transform .15s ease-in-out;
+    transition: -webkit-transform .15s ease-in-out;
+    transition: transform .15s ease-in-out;
+    transition: transform .15s ease-in-out, -webkit-transform .15s ease-in-out;
+  }
+
+  .plan-list .mint-cell-title {
+    -webkit-box-flex: 0;
+    -ms-flex: none;
+    flex: none;
+  }
+
+  .mint-cell-wrapper {
+    background-origin: border-box;
+  }
+
+  .mint-cell-wrapper {
+    position: relative;
+  }
+
+  .mint-cell-value {
+    color: #888;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }
+
+  .plan-list .mint-cell-value {
+    width: 100%;
+    font-size: smaller;
+  }
+
+  .plan-list-row {
+    display: flex;
+    height: 68px;
+  }
+
+  .plan-list-row .column1 div:nth-child(1) {
+    padding: 12px 0px 6px 0px;
+    color: #000;
+    /*font-size: 1.17em;*/
+  }
+
+  .plan-list-row .column1 div:nth-child(2) {
+    padding: 6px 0px 12px 0px;
+  }
+
+  .plan-list-row .column2 div:nth-child(1) {
+    padding: 12px 0px 6px 0px;
+    color: #000;
+
+    /*width: 14em;*/
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .plan-list-row .column2 div:nth-child(2) {
+    padding: 6px 0px 12px 0px;
+    /*width: 16em;*/
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .plan-list-row {
+    background-color: #FFFFFF;
+  }
+
+  .plan-list .column {
+    flex: 1.5;
+  }
+
+  .plan-list .column1 {
+    flex: 2;
+    height: 58px;
+  }
+
+  .plan-list .column2 {
+    flex: 6;
+    height: 58px;
+  }
+
+  .plan-list .column3 {
+    flex: 3;
+    font-size: 1em;
+    /*margin-right: 15px;*/
+  }
+
+  .hetong {
+    height: 36px;
+    line-height: 36px;
+    /*padding: 0 10px 0 20px;*/
+    font-size: 15px;
+    color: #666;
+  }
+
+  .hetong .checked {
+    padding: 0 0 0 10px;
+    height: 36px;
+    display: inline-block;
+  }
+
+  .hetong .checked .weui-icon-circle {
+    font-size: 20px;
+  }
+
+  .hetong .checked .weui-icon-success-circle {
+    font-size: 20px;
+  }
 
 </style>

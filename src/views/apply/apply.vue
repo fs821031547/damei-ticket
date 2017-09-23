@@ -5,7 +5,7 @@
     <div style="padding-top:46px">
       <my-pad></my-pad>
       <div class="bg-white">
-        <cell title="产品名称" class="apply" :value="code_info.title || '欢乐美国阳光西岸8日精品游'" @click.native="fnViewLine" is-link></cell>
+        <cell title="产品名称" class="apply applys" :value="code_info.title || '欢乐美国阳光西岸8日精品游'" @click.native="fnViewLine" is-link></cell>
         <!--<cell title="出发地" value="请选择出发地" is-link></cell>-->
         <popup-picker title="出发地" :data="cityList" v-model="cityValue" @on-show="onShow" @on-hide="onHide" @on-change="onChange"
           placeholder="请选择出发地"></popup-picker>
@@ -45,20 +45,26 @@
           </h1>
         </div>
         <!--<radio :options="ticketOpt" :value="ticketValue"></radio>-->
-        <checklist label-position="left" :options="ticketOpt" :max=20  v-model="ticketValue" @on-change="checkChange"></checklist>
+        <checklist label-position="left" :options="ticketOpt" :max=20 v-model="ticketValue" @on-change="checkChange"></checklist>
         <divider v-if="!ticketOpt.length">我是有底线的</divider>
         <my-bottom-box style="padding:20px 10px">
           <x-button type="primary" @click.native="showTicket=!showTicket">确认</x-button>
         </my-bottom-box>
       </popup>
 
-      <toast v-model="toastShow" type="text" is-show-mask :text="toastMsg" position="middle"></toast>
+      <toast class="sign" v-model="toastShow" type="text" is-show-mask :text="toastMsg" position="middle"></toast>
     </div>
   </div>
 
 </template>
 <script>
-  import { PopupPicker, Picker, Checklist, PopupRadio, Confirm } from 'vux'
+  import {
+    PopupPicker,
+    Picker,
+    Checklist,
+    PopupRadio,
+    Confirm
+  } from 'vux'
   export default {
     data() {
       return {
@@ -71,13 +77,16 @@
         ticketOpt: [''],
         ticketValue: [],
         showPopup: 1,
-        cityList: [['']],
+        cityList: [
+          ['']
+        ],
         cityValue: [],
         exchangeValue: '请选择',
         toastShow: false,
         toastMsg: '',
         specialStatus: false,
         sexArr: ['男', '女'],
+        islock: [],//存放禁用兑换码
       }
     },
     components: {
@@ -127,7 +136,7 @@
     created() {
       window.scroll(0, 0);
       this.specialStatus = this.specStatus;
-      this.cityValue = this.cityValues;  //城市列表
+      this.cityValue = this.cityValues; //城市列表
       // this.exchangeValue=this.ticketArrs;
       console.log('ticketvalue:' + this.exchangeValue);
       // this.setTicketOpt();
@@ -149,19 +158,25 @@
       },
       fnViewLine() {
         // this.$router.push({name:'sign-true',query:{status:true}});
-        this.$router.push({ name: 'sign-true', query: { status: true } });
+        this.$router.push({
+          name: 'sign-true',
+          query: {
+            status: true
+          }
+        });
 
       },
       fnToastMsg(msg) {
         this.toastShow = true;
         this.toastMsg = msg;
       },
-      requestPlan() {  //获得团期计划信息 如果没有线路ID先得到线路ID
+      requestPlan() { //获得团期计划信息 如果没有线路ID先得到线路ID
         // let lineID = this.code_info.lineID || this.ticketSelect.lineId;  //线路ID
         let lineID = this.mine.exchange_code[0] && this.mine.exchange_code[0].lineId;
         this.$store.dispatch('apply/request_plan', lineID).then(x => {
           this.$store.dispatch('apply/request_city', x[0].planID).then(y => {
-            let arr = [], arr1 = [];
+            let arr = [],
+              arr1 = [];
             y.forEach(z => {
               arr.push(z.fromCityName)
             });
@@ -172,7 +187,7 @@
       },
       setTicketOpt() {
         let ticketArr = [];
-        let code_id = [];   //兑奖码ID
+        let code_id = []; //兑奖码ID
         let codeSelect = []; //所选值
         this.mine.exchange_code.forEach(code => {
           if (code.status == 2) {
@@ -182,14 +197,14 @@
         ticketArr.forEach(ticket => {
           this.mine.exchange_code.forEach(code => {
             if (code.exchang_code == ticket) {
-              code_id.push(code.code_id);     //筛选得到所选兑奖码ID
+              code_id.push(code.code_id); //筛选得到所选兑奖码ID
             }
           })
         })
-        this.ticketOpt = ticketArr;   //兑奖码列表
-        this.ticketValue = this.ticketArrs;  //兑奖码所选值
+        this.ticketOpt = ticketArr; //兑奖码列表
+        this.ticketValue = this.ticketArrs; //兑奖码所选值
       },
-      delTour(i) {  //删除游客
+      delTour(i) { //删除游客
         // this.showPlugin();
         if (this.personDates.length == 1) {
           this.fnToastMsg('游客人数至少有1位');
@@ -197,34 +212,32 @@
         }
         this.personDates.splice(i, 1);
       },
-      addTour() {   //添加游客
+      addTour() { //添加游客
         if (this.personDates.length == 9) {
           this.fnToastMsg('游客最多只能有9位');
           return;
         }
-        this.personDates.push(
-          {
-            name: '',
-            phone: '',
-            identification: '',
-            visa: false,
-            EVUS: '',
-            visaStatusList: ['已有签证', '没有签证'],
-            visaWayList: ['已办EVUS', '办理EVUS（100.00）'],
-            visaWayList1: ['办理签证（1500.00）', '签证保障套餐（2999.00）'],
-            visaStatus: false,
-            visaWayStatus: false,
-            visaVal: '',
-            visaWayVal: '',
-            sex: '男'
-          }
-        );
+        this.personDates.push({
+          name: '',
+          phone: '',
+          identification: '',
+          visa: false,
+          EVUS: '',
+          visaStatusList: ['已有签证', '没有签证'],
+          visaWayList: ['已办EVUS', '办理EVUS（100.00）'],
+          visaWayList1: ['办理签证（1500.00）', '签证保障套餐（2999.00）'],
+          visaStatus: false,
+          visaWayStatus: false,
+          visaVal: '',
+          visaWayVal: '',
+          sex: '男'
+        });
       },
-      fnChange(v){
-                console.log('val:',111);
+      fnChange(v) {
+        console.log('val:', 111);
 
       },
-      checkChange(val) {   //选择兑奖码
+      checkChange(val) { //选择兑奖码
         let codeArr = [];
         let codeSelect = [];
         // let v=val.split('');
@@ -237,13 +250,17 @@
           }
 
         })
-
-        this.exchangeValue = str;  //存放需要显示的兑奖码字符串
-        this.$store.dispatch('apply/ticketArrs', val);  //存放所选兑奖码数组
+        this.islock = [];  //清空已禁用的兑换码
+        this.exchangeValue = str; //存放需要显示的兑奖码字符串
+        this.$store.dispatch('apply/ticketArrs', val); //存放所选兑奖码数组
         val.forEach(ticket => {
           this.mine.exchange_code.forEach(code => {
             if (code.exchang_code == ticket) {
-              codeSelect.push(code.code_id);     //筛选得到所选兑奖码ID
+              if (code.islock == 1) {
+                this.islock.push(code);  //存放禁用兑换码
+                this.fnToastMsg(code.exchang_code+'兑换码不可用');
+              }
+              codeSelect.push(code.code_id); //筛选得到所选兑奖码ID
             }
           })
         })
@@ -252,9 +269,12 @@
         console.log('change', val)
       },
       fnNext() {
-        let data = {};  //请求参数
-        let dataStatus = { status: true, msg: '' }; //用户输入数据状态是否正确
-        let personDates = [];  //游客信息
+        let data = {}; //请求参数
+        let dataStatus = {
+          status: true,
+          msg: ''
+        }; //用户输入数据状态是否正确
+        let personDates = []; //游客信息
         let exchangeIDs = this.order.exchangeIDs && JSON.parse(this.order.exchangeIDs);
         let count = 0;
         // let personDates = JSON.stringify(this.personDates);
@@ -316,7 +336,7 @@
           if (!y.name) {
             dataStatus.msg = '请填写用户姓名'
           }
-          if(!y.name && !y.phone && !y.identification){
+          if (!y.name && !y.phone && !y.identification) {
             dataStatus.msg = '游客信息必须填写'
           }
           personDates.push(y);
@@ -331,10 +351,16 @@
           this.fnToastMsg(dataStatus.msg);
           return;
         }
-        this.$router.push({ name: 'visa-select' });
+        if (this.islock.length>0) {
+          this.fnToastMsg('有选择的兑换码不可用');
+          return;
+        }
+        this.$router.push({
+          name: 'visa-select'
+        });
       },
-      onChange(val) {   // 所选出发城市的变化
-        this.$store.dispatch('apply/cityValue', val);  //保存所选择的城市
+      onChange(val) { // 所选出发城市的变化
+        this.$store.dispatch('apply/cityValue', val); //保存所选择的城市
         let fromCityId = this.plan_city.find(x => {
           return x.fromCityName == val.join();
         })
@@ -356,12 +382,9 @@
         this.$vux.confirm.show({
           title: '提示',
           content: '是否删除此游客信息？',
-          onShow() {
-          },
-          onHide() {
-          },
-          onCancel() {
-          },
+          onShow() {},
+          onHide() {},
+          onCancel() {},
           onConfirm() {
             _this.delTour(i);
           }
@@ -370,12 +393,19 @@
 
     },
 
-    props: {
-    },
+    props: {},
   }
 
 </script>
 <style>
+  .applys .vux-cell-primary {
+    width: 32%;
+    flex: initial;
+  }
+  .applys .weui-cell__ft {
+    width: 68%;
+  }
+
   .my-panel .weui-media-box__title {
     font-size: 16px;
   }
@@ -439,5 +469,8 @@
 
   .apply .weui-cell__ft {
     color: #000;
+  }
+  .sign .weui-toast{
+    z-index: 100002;
   }
 </style>

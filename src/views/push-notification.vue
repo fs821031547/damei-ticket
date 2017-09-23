@@ -10,6 +10,7 @@
   </div>
 </template>
 <script>
+
   export default {
     created() {
 
@@ -41,7 +42,7 @@
         form.style.display = 'none';
         document.body.appendChild(form);
         form.submit();
-        // form.remove(); 
+        // form.remove();
         document.body.removeChild(form);
       },
       fnTip() {

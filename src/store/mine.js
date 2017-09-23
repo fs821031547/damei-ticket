@@ -181,14 +181,14 @@ const actions = {
     ).then(res => {
       let body = res.body;
       if (!body) return;
-      // if (body.code_info.money) {
+      if (body.code_info) {
         let qrcodeData = {};
         qrcodeData.money = body.code_info.money;
         qrcodeData.type = 0;
         qrcodeData.code_id = body.code_info.code_id;
         dispatch('changeQrcodeData', qrcodeData);
-      // }
-      if (body.code_info.code_id != undefined && body.code_info.code_id != null) {
+      }
+      if (body.code_info && body.code_info.code_id != undefined && body.code_info.code_id != null) {
         dispatch('changeCodeId', body.code_info.code_id);
       }
       return body;

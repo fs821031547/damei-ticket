@@ -1,73 +1,99 @@
 <template>
   <div>
     <my-header>我的团期</my-header>
-    <div style="padding:20px;text-align: center">暂无此功能</div>
-    <!--<div style="padding-top:46px">
+    <!--<div style="padding:20px;text-align: center">暂无此功能</div>-->
+    <div style="padding-top:46px">
       <my-pad></my-pad>
       <div class="box-details-list list-3" v-for="item in order_data" @click="orderClick(item)">
         <div class="box-order-list-header header">
-          <div class="left-item">
-            <span class="title-name">欢乐美国阳光西岸8日精品游</span>
+          <div class="left-item" style="width:70%">
+            <span class="title-name">{{item.lineName || '欢乐美国阳光西岸8日精品游'}}</span>
           </div>
-          <div class="right-item" style="color:#666">订单：{{item.ordid}}
+          <div class="right-item" style="color:#666;width:30%">订单：{{item.ordId}}
           </div>
         </div>
         <div class="details-list-row row-2">
-          <div class="left-item">{{item.startTime}}</div>
+          <div class="left-item">{{item.updateTime}}</div>
           <div class="right-item">
-            {{item.num}}人
+            <!--{{item.personDates.length}}人-->
+            1人
           </div>
         </div>
         <div class="details-list-row row-3">
           <div class="left-item">{{item.endTime}}</div>
           <div class="right-item">
-            {{item.fromCity}}
+            {{item.fromCityName}}
           </div>
         </div>
         <div class="box-order-list-header footer">
           <div class="left-item" @click.stop="fnNext">
-            {{item.startTime}}
+            {{item.updateTime}}
           </div>
           <div class="right-item">
-            <a class="title-name" style="color:#666">查看行程>></a>
+            <a class="title-name" style="color:#666" @click.stop="fnViewLine">查看行程>></a>
           </div>
         </div>
       </div>
     </div>
     <my-bottom-box>
       <x-button style="border-radius:0;" type="primary" @click.native="$router.push({name:'order-list'})">选择订单</x-button>
-    </my-bottom-box>-->
+    </my-bottom-box>
   </div>
 </template>
 <script>
   export default {
     data() {
       return {
-        order_data: [{
-            ordid: 10001,
-            startTime: DateFmt(new Date(), 'yyyy-MM-dd hh:mm'),
-            endTime: DateFmt(new Date(), 'yyyy-MM-dd hh:mm'),
-            num: 3,
-            fromCity: '广州出发',
-          },
-          {
-            ordid: 10002,
-            startTime: DateFmt(new Date(), 'yyyy-MM-dd hh:mm'),
-            endTime: DateFmt(new Date(), 'yyyy-MM-dd hh:mm'),
-            num: 3,
-            fromCity: '深圳出发',
-          },
+        order_data: [
+          // {
+          //   ordid: 10001,
+          //   startTime: DateFmt(new Date(), 'yyyy-MM-dd hh:mm'),
+          //   endTime: DateFmt(new Date(), 'yyyy-MM-dd hh:mm'),
+          //   num: 3,
+          //   fromCity: '广州出发',
+          // },
         ],
       }
     },
     created() {
+      // if(!this.mine.id){
+      this.$store.dispatch('mine/mine_request').then(end => {
+        let order = this.mine.order_data;
+        let list = [];
+        order.forEach(x => {
+          if (x.is_change_plan == 1) {
+            list.push(x);
+          }
+        })
+        this.order_data = list;
+      });
+      // }
     },
     methods: {
+      orderClick(item) {
+        this.$store.dispatch('plan/change_plan_select', item);
+        this.$router.push({
+          name: 'plan-info',
+          query: {
+            id: item.ordId
+          }
+        });
+      },
+      fnViewLine() {
+        this.$router.push({
+          name: 'sign-true',
+          query: {
+            status: true
+          }
+        });
 
+      },
     },
     components: {},
     computed: {
-
+      mine() {
+        return this.$store.getters["mine/mine"];
+      },
     },
     props: {}
   }

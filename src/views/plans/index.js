@@ -27,5 +27,14 @@ export default [
       }, "check-list");
     },
   },
+  {
+    name: 'plan-info',
+    path: '/plan-info',
+    component(resolve) {
+      require.ensure(['./plan-info.vue'], () => {
+        resolve(require('./plan-info.vue'))
+      }, "plan-info");
+    },
+  },
 
 ]

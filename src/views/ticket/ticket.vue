@@ -72,6 +72,9 @@
               wechat_id,
               exchange_code,
             };
+            if(x.islock==1){
+              return;
+            }
             this.$store.dispatch('mine/search_exchange_code', data).then(body => {
               if (body.success && !body.code_status) {
                 this.$store.dispatch('mine/code_info', body.code_info);
@@ -138,7 +141,7 @@
             this.$store.dispatch('mine/code_info', body.code_info);
             this.$router.push({ name: 'pay-form', query: { status: 0 } })
           } else {
-            this.toastFn(status[body.code_info.status] || '兑奖码错误');
+            this.toastFn(body.msg);
           }
         });
         // Vue.http.post(

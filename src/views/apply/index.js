@@ -109,5 +109,14 @@ export default [
       }, "pay-complete");
     },
   },
+  {
+    name: 'file',
+    path: '/file',
+    component(resolve) {
+      require.ensure(['./file.vue'], () => {
+        resolve(require('./file.vue'))
+      }, "file");
+    },
+  },
 
 ]

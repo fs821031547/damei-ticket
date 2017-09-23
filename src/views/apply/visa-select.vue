@@ -5,7 +5,7 @@
     <div style="padding-top:46px">
       <my-pad></my-pad>
       <div class="bg-white">
-        <cell title="产品名称" :value="code_info.title || '欢乐美国阳光西岸8日精品游'" @click.native="fnViewLine"></cell>
+        <cell title="产品名称" class="applys" :value="code_info.title || '欢乐美国阳光西岸8日精品游'" @click.native="fnViewLine"></cell>
         <cell title="人数" :value="personDates.length+'人'"></cell>
         <cell title="出发地" :value="fromCityName"></cell>
       </div>
@@ -354,7 +354,8 @@
             this.fnToastMsg(x.msg || errorCode[x.code]);
           }
         }).catch(x=>{
-          this.$vux.loading.hide()
+          this.$vux.loading.hide();
+          this.fnToastMsg('系统异常！');
         })
       },
       fnVisaPrice() {
@@ -386,6 +387,13 @@
 
 </script>
 <style>
+    .applys .vux-cell-primary {
+    width: 32%;
+    flex: initial;
+  }
+  .applys .weui-cell__ft {
+    width: 68%;
+  }
   .my-panel .weui-media-box__title {
     font-size: 15px;
   }

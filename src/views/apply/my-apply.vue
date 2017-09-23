@@ -41,12 +41,14 @@
           </div>
         </div>
         <div class="box-order-list-header footer">
-          <div class="left-item" @click.stop="fnNext">
+          <div class="left-item" @click.stop="fnNext" style="width:30%">
             <a class="title-name">查看行程>></a>
           </div>
-          <div class="right-item">
-            <x-button mini v-if="item.isOK==1" type="primary" size="small" @click.native.stop="$router.push({name:'visa-progress',query:{id:item.ordId}})">查看签证</x-button>
-            <x-button mini v-else type="primary" style="background:grey" @click.native.stop="fnNopay" size="small">查看签证</x-button>
+          <div class="right-item" style="width:70%">
+            <x-button mini type="primary" size="small" @click.native.stop="$router.push({name:'file',query:{id:item.ordId}})">附件下载
+            </x-button>
+            <x-button mini v-if="item.isOK==1" style="margin-top:0" type="default" size="small" @click.native.stop="$router.push({name:'visa-progress',query:{id:item.ordId}})">查看签证</x-button>
+            <x-button mini v-else type="default" style="background:grey;margin-top:0" @click.native.stop="fnNopay" size="small">查看签证</x-button>
           </div>
         </div>
       </div>
