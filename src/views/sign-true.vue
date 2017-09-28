@@ -18,7 +18,10 @@
   </div>
 </template>
 <script>
-  import { Previewer, TransferDom } from 'vux'
+  import {
+    Previewer,
+    TransferDom
+  } from 'vux'
   export default {
     directives: {
       TransferDom
@@ -49,7 +52,11 @@
             // get position of element relative to viewport
             let rect = thumbnail.getBoundingClientRect()
             // w = width
-            return { x: rect.left, y: rect.top + pageYScroll, w: rect.width }
+            return {
+              x: rect.left,
+              y: rect.top + pageYScroll,
+              w: rect.width
+            }
             // Good guide on how to get element coordinates:
             // http://javascript.info/tutorial/coordinates
           }
@@ -61,7 +68,9 @@
         this.$store.dispatch('mine/mine_request').then(x => {
           this.fnInit()
           if (this.mine.order_data && this.mine.order_data.length != 0) {
-            this.$router.push({ name: 'my-apply' });
+            this.$router.push({
+              name: 'my-apply'
+            });
           }
         });
       } else {
@@ -92,13 +101,13 @@
         let arr = [];
         setTimeout(() => {
           let img_dom = document.querySelectorAll('.previewer-demo-img');
-          for(let i=0;i<img_dom.length;i++){
-            let obj={};
-            obj.src=img_dom[i].src;
+          for (let i = 0; i < img_dom.length; i++) {
+            let obj = {};
+            obj.src = img_dom[i].src;
             arr.push(obj);
           }
         }, 100);
-        
+
         return arr;
       }
     },
@@ -129,4 +138,5 @@
     height: 50px;
     line-height: 50px;
   }
+
 </style>

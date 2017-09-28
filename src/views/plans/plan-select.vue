@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div style="padding-bottom:80px">
     <my-header>选择团期</my-header>
-    <div style="padding-top:46px">
+    <div style="top:46px;position: fixed; height:291px;left:0;right:0;z-index:100;overflow: hidden">
       <my-pad></my-pad>
       <inline-calendar ref="calendar" @on-change="onChange" @on-view-change="onViewChange" class="inline-calendar-demo" :show.sync="show"
-        v-model="value" start-date="2016-04-01" end-date="2018-05-30" :range="range" :show-last-month="showLastMonth" :show-next-month="showNextMonth"
+        v-model="value" start-date="2016-04-01" end-date="2020-05-30" :range="range" :show-last-month="showLastMonth" :show-next-month="showNextMonth"
         :highlight-weekend="highlightWeekend" :return-six-rows="return6Rows" :hide-header="hideHeader" :hide-week-list="hideWeekList"
         :replace-text-list="replaceTextList" :weeks-list="weeksList" :render-function="buildSlotFn" :disable-past="disablePast"
         :disable-future="disableFuture" :marks="marks">
@@ -23,7 +23,8 @@
         <span style="color: orange">{{item.yuwei}}</span>
       </div>
     </div>-->
-
+    <my-pad height="337"></my-pad>
+    <divider v-if="planList.length==0">没有团期信息</divider>
     <div class="plan-list plan-list-row" v-for="item ,index in planList" @click="fnSelectPlan(item,index)">
       <div class="mint-cell-wrapper">
         <div class="mint-cell-title">
@@ -48,15 +49,16 @@
       </div>
     </div>
     <my-pad height="20"></my-pad>
-    <div class="bg-white hetong">
-      <span class="checked" @click.stop.prevent="checkBtn">
-          <check-icon :value="checked" type="plain"></check-icon>
-          </span>
-      <span @click="toVisaTip"><a style="text-decoration:underline;color:#0fa3ed">已阅签证服务说明并同意</a></span>
-    </div>
-    <divider v-if="planList.length==0">没有团期信息</divider>
+
     <my-bottom-box>
+      <!--<div class="bg-white hetong">
+        <span class="checked" @click.stop.prevent="checkBtn">
+          <check-icon :value="checked" type="plain"></check-icon>
+          </span> 我已阅读
+        <span @click="toVisaTip"><a style="text-decoration:underline;color:#0fa3ed">电子合同内容</a></span>
+      </div>-->
       <x-button style="border-radius:0;" type="primary" @click.native="fnNext">确认所选出发日期</x-button>
+      <!--<x-button v-else style="border-radius:0;background:#adadad" type="primary">确认所选出发日期</x-button>-->
     </my-bottom-box>
   </div>
 </template>
@@ -90,27 +92,37 @@
         marks: [],
         list: [],
         planList: [],
-        planSelect: -1,
-        checked: false,
+        planSelect: 0,
+        checked: true,
         planObj: {}, //所选转团团期信息
       }
     },
     created() {
-      this.$store.dispatch('plan/request_plan').then(end => {
-        let marks = [];
-        this.list = end;
-        end.forEach(x => {
-          let obj = {};
-          obj.date = DateFmt(x.PlanDate, 'yyyy-MM-dd');
-          obj.color = 'red';
-          obj.bottomDot = true;
-          marks.push(obj);
-        })
-        this.marks = marks;
-      });
-
+      let now = DateFmt(new Date(), 'yyyy-MM-dd');
+      this.fnInit(now);
     },
     methods: {
+      fnInit(now) {
+        this.$store.dispatch('plan/request_plan', now).then(end => {
+          let marks = [];
+          this.list = end;
+          end.forEach(x => {
+            let obj = {};
+            obj.date = DateFmt(x.PlanDate, 'yyyy-MM-dd');
+            obj.color = 'red';
+            obj.bottomDot = true;
+            if (now == DateFmt(new Date(), 'yyyy-MM-dd')) {
+              if (new Date(obj.date).getDate() >= new Date().getDate()) {
+                marks.push(obj);
+              }
+            }else{
+              marks.push(obj);
+            }
+          })
+          this.onChange(now);
+          this.marks = marks;
+        });
+      },
       onChange(val) {
         let planList = [];
         this.list.forEach(x => {
@@ -120,12 +132,26 @@
           }
         });
         this.planList = planList;
+        this.planObj = planList[0];
+        this.planSelect = 0;
       },
       fnNext() {
-        let _this=this;
+        let _this = this;
+        if (!this.planList.length || this.planSelect == -1) {
+          this.$vux.toast.show({
+            text: '请选择团期'
+          })
+          return;
+        }
+        if(this.planObj.endNum < this.orderSelect.personDates.length){
+          this.$vux.toast.show({
+            text: '订单人数大于团期余位人数，不能转团'
+          })
+          return;
+        }
         this.$vux.confirm.show({
           title: '温馨提示',
-          content: '成功选择团期后不可变更确认后电子合同将通过短信立即发给您打开短信中链接直接手写签字即可',
+          content: '请谨慎选择您的团期<br>一经确认无法修改!',
           cancelText: "取消",
           confirmText: '确认',
           onConfirm() {
@@ -134,6 +160,9 @@
         })
       },
       orderChangePlan() {
+        this.$vux.loading.show({
+          text: '正在转团，请勿重新操作！'
+        })
         let data = {};
         let oldOrder = this.orderSelect;
         data.ordID = oldOrder.ordId;
@@ -142,11 +171,33 @@
         data.newPlanCode = this.planObj.planCode;
         data.newPlanID = this.planObj.id;
         this.$store.dispatch('plan/order_change_plan', data).then(end => {
-          if(end.success){
+          this.$vux.loading.hide()
+          if (end.success) {
             this.$vux.toast.show({
               text: '转团成功',
+            });
+            let plan = {};
+            plan = data;
+            plan.personDates = oldOrder.personDates;
+            plan.lineName = end.lineName;
+            plan.to_go = end.to_go; //出发城市
+            plan.to_travel = end.to_travel; //起止城市
+            plan.planDate = end.planDate; //出团日期
+            plan.backDate = DateFmt(end.planDate,'yyyy-MM-dd','d+'+(end.days-1)); //天数
+            this.$store.dispatch('plan/change_plan_select', plan);
+            this.$router.push({
+              name: 'plan-info'
             })
+          } else {
+            this.$vux.toast.show({
+              text: end.msg || '转团失败'
+            });
           }
+        }).catch(end => {
+          this.$vux.loading.hide()
+          this.$vux.toast.show({
+            text: '接口异常'
+          });
         })
       },
       fnSelectPlan(item, index) {
@@ -155,15 +206,22 @@
         console.log(item);
       },
       onViewChange(val) {
+        let month = new Date().getMonth() + 1;
+        let now = DateFmt(new Date(), 'yyyy-MM-dd');
+        if (month == val.month) { //选中今天的团期
+          this.fnInit(now);
+        } else {
+          this.fnInit(val.firstCurrentMonthDate);
+        }
+
         console.log('onViewChange:', val);
       },
       toVisaTip() {
         this.$router.push('visa-tip');
       },
-      checkBtn() {
-        // this.$store.dispatch('apply/changeChecked',);
-        this.checked = !this.checked;
-      },
+      // checkBtn() {
+      //   this.checked = !this.checked;
+      // },
     },
     components: {
       InlineCalendar,
@@ -186,6 +244,9 @@
 
 </script>
 <style>
+  .is-disabled{
+    pointer-events:none
+  }
   .vux-calendar-dot {
     background-color: #000;
   }

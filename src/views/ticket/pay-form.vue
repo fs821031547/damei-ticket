@@ -34,7 +34,8 @@
           </clocker>
         </div>-->
       </div>
-      <x-button type="primary" @click.native="fnPay">立即付款</x-button>
+      <x-button type="primary" @click.native="fnPay">下一步</x-button>
+      <!--<x-button type="primary" v-if="qrcodeData.money == 0" @click.native="$router.push({name:'ticket-tip'})">下一步</x-button>-->
       <!--第一次兑奖的时候不显示放弃资格按钮，用户第一未付款退出后再进来的话 status==1的话 用户可以放弃资格-->
       <!--<x-button v-if="$route.query.status==1" @click.native="fnGiveup">放弃资格</x-button>-->
       <my-pad height="15"></my-pad>
@@ -66,6 +67,22 @@
           </div>
         </div>
       </popup>
+      <popup v-model="showTicketList" height="100%" position="" style="z-index:100000;background:#fff" width="100%">
+        <div class="vux-header" @click="showTicketList=!showTicketList">
+          <div class="vux-header-left">
+            <div class="left-arrow"></div>
+          </div>
+          <h1 class="vux-header-title">
+            <span>激活码激活须知及规范</span>
+          </h1>
+        </div>
+        <div class="question-content">
+          1. 激活码由创科国际提供，属于其出售美容产品组成部分，请尽早激活，以防遗失。<br> 2. 激活码属于该美容产品的组成部分，一旦激活，即视为使用，无法退还激活费用。<br> 3. 激活码的激活须同时缴纳一定的激活费用，激活后即可获得一个“美国阳光西岸8天游”的免费参团旅游资格。该旅游产品的行程内容、服务标准、参团规则由创科国际和广东中信国际旅行社有限公司（优胜旅行）所签订的旅游合同与协议进行规范。<br>          4. 赴美旅游资格有效期截止至2018年4月28日，请尽早报名使用，保证您的权益。<br> 5. 使用赴美旅游资格后，请尽早提供出游旅客合同约束的个人资料并选择出发日期，以便我司尽快安排出游事宜。<br> 6. 一旦选择出发日期，即视为认可且遵守创科国际与广东中信国际旅行社有限公司（优胜旅行）签署的旅游合同。<br>          7. 激活码及赴美旅游资格的规则、赴北美旅游的签证及其他全部事项均受创科国际与广东中信国际旅行社有限公司（优胜旅行）签署的旅游合同的拘束，属该合同不可分割的一部分。<br> 8. 本促销活动的最终解释权归创科国际和广东中信国际旅行社有限公司（优胜旅行）所有。
+        </div>
+        <my-bottom-box style="padding:20px 10px">
+          <x-button type="primary" @click.native="fnNext">同意并确认付款</x-button>
+        </my-bottom-box>
+      </popup>
       <toast v-model="toastShow" type="text" is-show-mask :text="toastMsg" position="middle"></toast>
       <my-footer></my-footer>
     </div>
@@ -93,7 +110,8 @@
         provinceSelect: '',
         citySelect: '',
         pickerShow: false,
-
+        showTicketList: false, // 激活码须知
+        formData:{},
       }
     },
     components: {
@@ -138,9 +156,6 @@
       });
     },
     methods: {
-      fnFocus() {
-        console.log('focus');
-      },
       fnGiveup() {
         let id = this.ticketSelect.code_id;
         Vue.http.post(
@@ -182,7 +197,9 @@
             this.fnToastMsg('请输入美容产品品牌');
             return;
           }
-          this.completeInfo(data);
+          this.showTicketList=true;
+          this.formData=data;
+          // this.completeInfo(data);
           return;
         }
 
@@ -221,7 +238,9 @@
           this.fnToastMsg('请填写正确的手机号码');
           return;
         }
-        this.completeInfo(data);
+        this.formData=data;
+        this.showTicketList=true;
+        // this.completeInfo(data);
       },
       completeInfo(data) {
         Vue.http.post(
@@ -254,6 +273,7 @@
           }
         })
       },
+      //确认单
       confirmOrder() {
         let exchange_code = this.code_info.code_id || this.ticketSelect.code_id || 0;
         Vue.http.post(
@@ -268,10 +288,15 @@
             this.$router.push({
               name: 'pay-success'
             });
-          }else{
+          } else {
             this.fnToastMsg(body.msg || '异常错误');
           }
         })
+      },
+      //跳转到下一页面
+      fnNext(){
+        let data=this.formData;
+        this.completeInfo(data);
       },
       fnToastMsg(msg) {
         this.toastShow = true;
@@ -292,6 +317,7 @@
       openAddress() {
         this.addressShow = !this.addressShow;
       },
+      //选择省份
       selProvince(item) {
         this.provinceSelect = item.cnName;
         this.userInfo.province = item.cnName;
@@ -311,6 +337,7 @@
         this.citySelect = '';
         this.pickerShow = !this.pickerShow;
       },
+      //选择城市
       selCity(item) {
         this.addressShow = false;
         this.citySelect = item.cnName;
@@ -456,6 +483,12 @@
 
   .ticket .weui-cell__ft {
     color: #000;
+  }
+  .question-content {
+    color: #999;
+    padding: 10px 10px 70px;
+    font-size:15px;
+    background: #f4f4f4;
   }
 
 </style>

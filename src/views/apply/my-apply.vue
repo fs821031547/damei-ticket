@@ -25,11 +25,11 @@
           </div>
           <div class="right-item" v-else>
             <span style="color:#09f" v-if="item.isOK==1">已付款</span>
-            <span style="color:#666" v-else>订单超时</span>
+            <span style="color:#666" v-else>订单失效</span>
           </div>
         </div>
         <div class="details-list-row row-2">
-          <div class="left-item">{{item.lineName}}</div>
+          <div class="left-item" style="-webkit-box-flex:3;-webkit-flex:3;flex:3;">{{item.lineName}}</div>
           <div class="right-item">
             {{item.personDates.length}}人
           </div>
@@ -45,7 +45,7 @@
             <a class="title-name">查看行程>></a>
           </div>
           <div class="right-item" style="width:70%">
-            <x-button mini type="primary" size="small" @click.native.stop="$router.push({name:'file',query:{id:item.ordId}})">附件下载
+            <x-button mini type="default" size="small" @click.native.stop="$router.push({name:'file',query:{id:item.ordId}})">附件下载
             </x-button>
             <x-button mini v-if="item.isOK==1" style="margin-top:0" type="default" size="small" @click.native.stop="$router.push({name:'visa-progress',query:{id:item.ordId}})">查看签证</x-button>
             <x-button mini v-else type="default" style="background:grey;margin-top:0" @click.native.stop="fnNopay" size="small">查看签证</x-button>

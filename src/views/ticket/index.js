@@ -10,6 +10,15 @@ export default [
     },
   },
   {
+    name: 'ticket-tip',
+    path: '/ticket-tip',
+    component(resolve) {
+      require.ensure(['./ticket-tip.vue'], () => {
+        resolve(require('./ticket-tip.vue'))
+      }, "ticket-tip");
+    },
+  },
+  {
     name: 'ticket-list',
     path: '/ticket-list',
     component(resolve) {

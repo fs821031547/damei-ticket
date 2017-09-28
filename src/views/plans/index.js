@@ -36,5 +36,14 @@ export default [
       }, "plan-info");
     },
   },
+  {
+    name: 'hetong',
+    path: '/hetong',
+    component(resolve) {
+      require.ensure(['./hetong.vue'], () => {
+        resolve(require('./hetong.vue'))
+      }, "hetong");
+    },
+  },
 
 ]

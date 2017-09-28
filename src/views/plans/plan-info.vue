@@ -13,11 +13,10 @@
       </div>
       <div class="bg-white">
         <cell title="产品名称" is-link :value="plan.lineName || '欢乐美国阳光西岸8日精品游'" class="applys"  @click.native="fnViewLine"></cell>
-        <cell title="出发城市" :value="plan.fromCityName"></cell>
-        <cell title="出发地" :value="plan.city || '广州'"></cell>
-        <cell title="出发日期" :value="plan.updateTime"></cell>
-        <cell title="回团日期" :value="plan.updateTime"></cell>
-
+        <cell title="出发城市" :value="plan.to_go"></cell>
+        <cell title="起止城市" :value="plan.to_travel"></cell>
+        <cell title="出发日期" :value="plan.planDate"></cell>
+        <cell title="回团日期" :value="DateFmt(plan.backDate,'yyyy-MM-dd')"></cell>
       </div>
       <group-title slot="title">报名信息</group-title>
       <div class="bg-white">
@@ -84,12 +83,12 @@
 </script>
 <style>
   .applys .vux-cell-primary {
-    width: 26%;
+    width: 24%;
     flex: initial;
   }
 
   .applys .weui-cell__ft {
-    width: 74%;
+    width: 76%;
   }
 
   .my-panel .weui-media-box__title {

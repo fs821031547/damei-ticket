@@ -64,11 +64,10 @@
           if (x.status != 1) {
             let exist_time = DateFmt(x.exist_time, 'yyyy/MM/dd hh:mm:ss');
             let date = new Date(exist_time);
-            date.add("d", 2);
             x.exist_time = DateFmt(date, 'yyyy-MM-dd hh:mm:ss');
             x.str = status[x.status];
           }
-        })
+        })  
         this.list = list;
       },
       fnNext(item){

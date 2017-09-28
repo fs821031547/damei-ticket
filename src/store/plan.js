@@ -15,11 +15,11 @@ const getters = {
 }
 
 const actions = {
-  request_plan({ state, commit, dispatch }) {
+  request_plan({ state, commit, dispatch },date) {
     return Vue.http.post(
       "get-other-plan",
       {
-        date:'2017-09-01'
+        date,
       },
       { emulateJSON: true }
     ).then(res => {

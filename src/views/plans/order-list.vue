@@ -3,7 +3,7 @@
     <my-header>选择订单</my-header>
     <div style="padding-top:46px">
       <my-pad></my-pad>
-
+      <divider v-if="order.length==0">您还没有订单，请先去报名后就可以选择了</divider>
       <radio style="background: #fff" :options="order" @on-change="onchange"></radio>
     </div>
     <my-bottom-box>
@@ -17,7 +17,7 @@
       return {
         order: [],
         id: '',
-        orderSelect:{},
+        orderSelect: {},
       }
     },
     created() {
@@ -33,26 +33,37 @@
       onchange(v) {
         this.id = v;
         let order = this.mine.order_data;
-        let orderSelect=order.find(x => {
-          return x.ordId==v;
+        let orderSelect = order.find(x => {
+          return x.ordId == v;
         })
-        this.orderSelect=orderSelect;
+        this.orderSelect = orderSelect;
       },
       list() {
-        console.log('this.mine:', this.mine);
         let order = this.mine.order_data;
         let list = [];
         order.forEach(x => {
-          if (x.is_change_plan == 0) {
+          if (x.is_change_plan == 0 && x.isOK == 1) {
             list.push(x.ordId);
           }
         })
-        this.order = list;
+        this.order = list.reverse();
       },
-      fnNext(){
-        let order= this.orderSelect;
-        this.$store.dispatch('plan/change_order',order);
-        this.$router.push({name:'plan-select',query:{id:this.id}})
+      fnNext() {
+        if (!this.id) {
+          this.$vux.toast.show({
+            text: '请选择订单',
+            time: 3000,
+          });
+          return;
+        }
+        let order = this.orderSelect;
+        this.$store.dispatch('plan/change_order', order);
+        this.$router.push({
+          name: 'plan-select',
+          query: {
+            id: this.id
+          }
+        })
       }
     },
     components: {},
