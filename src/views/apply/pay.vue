@@ -33,7 +33,7 @@
   export default {
     data() {
       return {
-        title: '兑奖记录',
+        title: '激活记录',
         showTicket: false,
         ticketOpt: ['..', 'heheh'],
         isPay: false,

@@ -48,7 +48,7 @@ const state = {
   plan_city: [],   //城市信息
   cityValue: [],    //所选城
   cityValues: [],   //城市
-  ticketArrs: [],  //所选中兑奖码
+  ticketArrs: [],  //所选中激活码
   totalMoney: 0, //总金额
   preOrder: {},  //预留单成功数据
   visa: [],

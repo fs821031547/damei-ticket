@@ -43,7 +43,7 @@
   export default {
     data() {
       return {
-        title: '兑奖记录',
+        title: '激活记录',
         list: [{
           title: '游客信息',
         }],

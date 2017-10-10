@@ -3,16 +3,16 @@
     <div style="padding:0 20px">
       <h3 class="my-title">精彩{{ title }}</h3>
       <div class="ticket-input-box">
-        <input type="text" class="ticket-input" placeholder="请输入兑奖码" v-model="ticketCode">
+        <input type="text" class="ticket-input" placeholder="请输入激活码" v-model="ticketCode">
         <p class="ticket-input-tip">
-          <!--兑奖码激活及使用有效期至2018年4月28日逾期作废，请尽早激活使用。-->
+          <!--激活码激活及使用有效期至2018年4月28日逾期作废，请尽早激活使用。-->
         </p>
       </div>
       <div class="my-pad"></div>
       <x-button type="primary" @click.native="exChange">提交</x-button>
       <div class="my-pad"></div>
       <div class="tip" @click="$router.push({name:'ticket-list'})">
-        查看兑奖记录
+        查看激活记录
       </div>
     </div>
     <toast v-model="toastShow" type="text" is-show-mask :text="toastMsg" position="middle"></toast>
@@ -26,7 +26,7 @@
   export default {
     data() {
       return {
-        title: '美国游兑奖',
+        title: '美国游激活',
         ticketCode: '',
       }
     },
@@ -65,7 +65,7 @@
             return;
           }
 
-          if (x.status == 1) {  //兑换未报名3或者报名未付款6
+          if (x.status == 1) {  //激活未报名3或者报名未付款6
             let wechat_id = this.mine.id;
             let exchange_code = x.exchang_code;
             var data = {
@@ -129,13 +129,13 @@
           exchange_code,
         };
         if (!this.ticketCode) {
-          this.toastFn('兑换码未填写');
+          this.toastFn('激活码未填写');
           return;
         }
 
         this.$store.dispatch('mine/search_exchange_code', data).then(body => {
           // console.log(body.code_status);
-          let status = ['', '已兑换', '已兑换', '已兑换', '已放弃', '已失效', '已使用'];
+          let status = ['', '已激活', '已激活', '已激活', '已放弃', '已失效', '已使用'];
           if (body.success && !body.code_info.code_status) {
             this.toastFn('操作成功');
             this.$store.dispatch('mine/code_info', body.code_info);
@@ -153,7 +153,7 @@
         //   if (!body) return;
         //   if (body.success && !body.code_status) {
         //     this.$store.dispatch('mine/code_info',body.code_info);
-        //     this.toastFn('兑换成功');
+        //     this.toastFn('激活成功');
         //     this.$router.push({ name: 'pay-form',query:{status:0} })
         //   } else {
         //     this.toastFn(body.msg);

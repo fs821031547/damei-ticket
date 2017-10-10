@@ -14,7 +14,7 @@
       <img src="../assets/signfalse.jpg" alt="">
     </div>
     <div v-if="!$route.query.status && !status" class="baoming-btn" @click="$router.push({name:'apply',params:{refresh:true}})">立即报名</div>
-    <div v-if="status" class="baoming-btn" @click="$router.push({name:'ticket'})">去兑奖</div>
+    <div v-if="status" class="baoming-btn" @click="$router.push({name:'ticket'})">去激活</div>
   </div>
 </template>
 <script>

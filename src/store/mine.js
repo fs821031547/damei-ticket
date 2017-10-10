@@ -91,7 +91,7 @@ const actions = {
           commit("ticketSelect", { ticketSelect });
           dispatch('changeQrcodeData', qrcodeData);  //二维码参数
           dispatch('fin_ids', ticketSelect.fin_id);  //预留单id
-          dispatch('changeCodeId', ticketSelect.code_id);   //兑换码id
+          dispatch('changeCodeId', ticketSelect.code_id);   //激活码id
           break;
         }
       }

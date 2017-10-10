@@ -70,7 +70,7 @@
   export default {
     data() {
       return {
-        title: '兑奖记录',
+        title: '激活记录',
         list: [{
           title: '游客信息',
         }],
@@ -235,7 +235,7 @@
         }
         // if (data.exchangeIDs && !data.exchangeIDs.length) {
         //   dataStatus.status = false;
-        //   dataStatus.msg = '请选择兑奖码'
+        //   dataStatus.msg = '请选择激活码'
         // }
         this.personDates.forEach(x => {
           let y = {};

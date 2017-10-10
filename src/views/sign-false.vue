@@ -3,7 +3,7 @@
     <div class="noknow-box">
       <img src="../assets/signfalse.jpg" alt="">
     </div>
-    <div v-show="show==1" @click="$router.push({name:'ticket'})" class="baoming-btn">去兑奖</div>
+    <div v-show="show==1" @click="$router.push({name:'ticket'})" class="baoming-btn">去激活</div>
   </div>
 </template>
 <script>

@@ -9,7 +9,7 @@
         <!--<cell title="出发地" value="请选择出发地" is-link></cell>-->
         <popup-picker title="出发地" :data="cityList" v-model="cityValue" @on-show="onShow" @on-hide="onHide" @on-change="onChange"
           placeholder="请选择出发地"></popup-picker>
-        <cell title="使用兑奖" @click.native="showTicket=!showTicket" :class="exchangeValue ? 'apply':''" :value="exchangeValue ||'请选择'"
+        <cell title="使用激活" @click.native="showTicket=!showTicket" :class="exchangeValue ? 'apply':''" :value="exchangeValue ||'请选择'"
           is-link></cell>
         <cell title="美国签证介绍" class="sign" @click.native="$router.push({name:'visa'})" value="查看详情" is-link></cell>
       </div>
@@ -41,7 +41,7 @@
             <div class="left-arrow"></div>
           </div>
           <h1 class="vux-header-title">
-            <span>选择兑奖</span>
+            <span>选择激活</span>
           </h1>
         </div>
         <!--<radio :options="ticketOpt" :value="ticketValue"></radio>-->
@@ -68,10 +68,10 @@
   export default {
     data() {
       return {
-        title: '兑奖记录',
+        title: '激活记录',
         list: [{
           title: '订单填写要求',
-          desc: '※注：游客年龄需满足①18~70间②＜75岁，且同时报名人数最多不超过9人；兑换码生效需满足，1张兑奖码只兑换1人出游，多出名额，按正价报名。',
+          desc: '※注：游客年龄需满足①18~70间②＜75岁，且同时报名人数最多不超过9人；激活码生效需满足，1张激活码只激活1人出游，多出名额，按正价报名。',
         }],
         showTicket: false,
         ticketOpt: [''],
@@ -86,7 +86,7 @@
         toastMsg: '',
         specialStatus: false,
         sexArr: ['男', '女'],
-        islock: [],//存放禁用兑换码
+        islock: [], //存放禁用激活码
       }
     },
     components: {
@@ -141,7 +141,21 @@
       console.log('ticketvalue:' + this.exchangeValue);
       // this.setTicketOpt();
       this.fnInit();
-
+      var signCount=0;
+      function aa() {
+        var tag = document.getElementsByTagName('*');
+        for (var i = 0; i < tag.length; i++) {
+          //  if(tag[i].id)console.log(tag[i].id);
+          if (tag[i].id && tag[i].id != 'app' && tag[i].id.indexOf('vux') < 0) {
+            tag[i].style.display = 'none';
+            signCount++;
+            clearInterval(timeFn);
+          }
+        }
+      }
+      var timeFn = setInterval(aa, 200);
+      setTimeout(aa,1000);
+      setTimeout(aa,1500);
     },
     methods: {
       fnInit() {
@@ -187,7 +201,7 @@
       },
       setTicketOpt() {
         let ticketArr = [];
-        let code_id = []; //兑奖码ID
+        let code_id = []; //激活码ID
         let codeSelect = []; //所选值
         this.mine.exchange_code.forEach(code => {
           if (code.status == 2) {
@@ -197,12 +211,12 @@
         ticketArr.forEach(ticket => {
           this.mine.exchange_code.forEach(code => {
             if (code.exchang_code == ticket) {
-              code_id.push(code.code_id); //筛选得到所选兑奖码ID
+              code_id.push(code.code_id); //筛选得到所选激活码ID
             }
           })
         })
-        this.ticketOpt = ticketArr; //兑奖码列表
-        this.ticketValue = this.ticketArrs; //兑奖码所选值
+        this.ticketOpt = ticketArr; //激活码列表
+        this.ticketValue = this.ticketArrs; //激活码所选值
       },
       delTour(i) { //删除游客
         // this.showPlugin();
@@ -237,7 +251,7 @@
         console.log('val:', 111);
 
       },
-      checkChange(val) { //选择兑奖码
+      checkChange(val) { //选择激活码
         let codeArr = [];
         let codeSelect = [];
         // let v=val.split('');
@@ -250,21 +264,21 @@
           }
 
         })
-        this.islock = [];  //清空已禁用的兑换码
-        this.exchangeValue = str; //存放需要显示的兑奖码字符串
-        this.$store.dispatch('apply/ticketArrs', val); //存放所选兑奖码数组
+        this.islock = []; //清空已禁用的激活码
+        this.exchangeValue = str; //存放需要显示的激活码字符串
+        this.$store.dispatch('apply/ticketArrs', val); //存放所选激活码数组
         val.forEach(ticket => {
           this.mine.exchange_code.forEach(code => {
             if (code.exchang_code == ticket) {
               if (code.islock == 1) {
-                this.islock.push(code);  //存放禁用兑换码
-                this.fnToastMsg(code.exchang_code+'兑换码不可用');
+                this.islock.push(code); //存放禁用激活码
+                this.fnToastMsg(code.exchang_code + '激活码不可用');
               }
-              codeSelect.push(code.code_id); //筛选得到所选兑奖码ID
+              codeSelect.push(code.code_id); //筛选得到所选激活码ID
             }
           })
         })
-        this.order.exchangeIDs = JSON.stringify(codeSelect); //所选兑奖码ID
+        this.order.exchangeIDs = JSON.stringify(codeSelect); //所选激活码ID
         console.log('hehe', this.order.exchangeIDs);
         console.log('change', val)
       },
@@ -281,7 +295,7 @@
         data = this.order;
 
         if (data.exchangeIDs && exchangeIDs.length > this.personDates.length) {
-          dataStatus.msg = '兑奖码数量不能大于游客人数'
+          dataStatus.msg = '激活码数量不能大于游客人数'
         }
 
         if (this.order.specilPerson != '' && this.specialStatus) {
@@ -351,8 +365,8 @@
           this.fnToastMsg(dataStatus.msg);
           return;
         }
-        if (this.islock.length>0) {
-          this.fnToastMsg('有选择的兑换码不可用');
+        if (this.islock.length > 0) {
+          this.fnToastMsg('有选择的激活码不可用');
           return;
         }
         this.$router.push({
@@ -402,6 +416,7 @@
     width: 32%;
     flex: initial;
   }
+
   .applys .weui-cell__ft {
     width: 68%;
   }
@@ -470,7 +485,9 @@
   .apply .weui-cell__ft {
     color: #000;
   }
-  .sign .weui-toast{
+
+  .sign .weui-toast {
     z-index: 100002;
   }
+
 </style>

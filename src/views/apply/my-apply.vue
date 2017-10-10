@@ -67,7 +67,7 @@
   export default {
     data() {
       return {
-        title: '兑奖记录',
+        title: '激活记录',
         order_data: [],
         isPay: false,
         toastMsg: '',

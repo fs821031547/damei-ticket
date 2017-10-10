@@ -1,7 +1,7 @@
 <template>
   <!--<x-header title></x-header>-->
   <div>
-    <x-header :left-options="{backText: ''}">兑奖记录</x-header>
+    <x-header :left-options="{backText: ''}">激活记录</x-header>
     <!--<panel header="图文组合列表" :right="right" :list="list" :type="type"></panel>-->
     <div class="weui-panel weui-panel_access" v-for="item in list" @click="fnNext(item)">
       <div class="weui-panel__hd" style="overflow: hidden;">
@@ -16,8 +16,8 @@
       <div class="weui-panel__bd">
         <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
           <div class="weui-media-box__bd">
-            <p class="weui-media-box__desc">兑换时间：{{item.exist_time}}</p>
-            <p class="weui-media-box__desc" style="margin-top:6px">兑奖码需在2017年10月31日前激活<br>在2018年2月28日前使用</p>
+            <p class="weui-media-box__desc">激活时间：{{item.exist_time}}</p>
+            <p class="weui-media-box__desc" style="margin-top:6px">激活码需在2017年10月31日前激活<br>在2018年2月28日前使用</p>
           </div>
         </a>
       </div>
@@ -33,11 +33,11 @@
   export default {
     data() {
       return {
-        title: '兑奖记录',
+        title: '激活记录',
         type: '1',
-        right: '<span style="color:#0099FF">已兑奖</span>',
+        right: '<span style="color:#0099FF">已激活</span>',
         list: [],
-        status:['', '兑奖中', '已兑换', '使用中', '已放弃', '已失效', '已使用'],
+        status:['', '激活中', '已激活', '使用中', '已放弃', '已失效', '已使用'],
       }
     },
     computed: {
@@ -59,7 +59,7 @@
     methods: {
       fnInit() {
         let list = this.mine.exchange_code;
-        let status = ['', '兑奖中', '已兑换', '已使用', '已放弃', '已失效', '已使用'];
+        let status = ['', '激活中', '已激活', '已使用', '已放弃', '已失效', '已使用'];
         list.forEach(x => {
           if (x.status != 1) {
             let exist_time = DateFmt(x.exist_time, 'yyyy/MM/dd hh:mm:ss');

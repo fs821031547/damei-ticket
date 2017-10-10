@@ -36,7 +36,7 @@
       </div>
       <x-button type="primary" @click.native="fnPay">下一步</x-button>
       <!--<x-button type="primary" v-if="qrcodeData.money == 0" @click.native="$router.push({name:'ticket-tip'})">下一步</x-button>-->
-      <!--第一次兑奖的时候不显示放弃资格按钮，用户第一未付款退出后再进来的话 status==1的话 用户可以放弃资格-->
+      <!--第一次激活的时候不显示放弃资格按钮，用户第一未付款退出后再进来的话 status==1的话 用户可以放弃资格-->
       <!--<x-button v-if="$route.query.status==1" @click.native="fnGiveup">放弃资格</x-button>-->
       <my-pad height="15"></my-pad>
       <div class="tip" @click="$router.push({name:'sign-false',query:{show:0}})">
@@ -122,7 +122,7 @@
         return this.$store.getters["mine/mine"];
       },
       ticketSelect() {
-        return this.$store.getters["mine/ticketSelect"]; //正在兑奖的兑奖码
+        return this.$store.getters["mine/ticketSelect"]; //正在激活的激活码
       },
       userInfo() {
         return this.$store.getters["mine/userInfo"];
