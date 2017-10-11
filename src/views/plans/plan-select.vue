@@ -1,7 +1,9 @@
 <template>
   <div style="padding-bottom:80px">
     <my-header>选择团期</my-header>
-    <div style="top:46px;position: fixed; height:291px;left:0;right:0;z-index:100;overflow: hidden">
+    <div style="top:46px;position: fixed; height:345px;left:0;right:0;z-index:100;overflow: hidden">
+      <my-pad></my-pad>
+      <div style="color:#999;padding: 0 10px;font-size:14px"><span style="color:#333">温馨提示：</span>为了您的正常出行，建议您选择出发距离您美国签证的面谈时间20天以上的团期。</div>
       <my-pad></my-pad>
       <inline-calendar ref="calendar" @on-change="onChange" @on-view-change="onViewChange" class="inline-calendar-demo" :show.sync="show"
         v-model="value" start-date="2016-04-01" end-date="2020-05-30" :range="range" :show-last-month="showLastMonth" :show-next-month="showNextMonth"
@@ -23,7 +25,7 @@
         <span style="color: orange">{{item.yuwei}}</span>
       </div>
     </div>-->
-    <my-pad height="337"></my-pad>
+    <my-pad height="391"></my-pad>
     <divider v-if="planList.length==0">没有团期信息</divider>
     <div class="plan-list plan-list-row" v-for="item ,index in planList" @click="fnSelectPlan(item,index)">
       <div class="mint-cell-wrapper">
@@ -106,16 +108,31 @@
         this.$store.dispatch('plan/request_plan', now).then(end => {
           let marks = [];
           this.list = end;
+          //如果x.num大于0为不满团 等于0满团
+          end.forEach(x=>{
+            x.num=0;
+            end.forEach(y=>{
+              if(x.PlanDate==y.PlanDate){
+                x.num+=y.endNum;
+              }
+            })
+          })
+          // console.log('end:',end);
           end.forEach(x => {
             let obj = {};
             obj.date = DateFmt(x.PlanDate, 'yyyy-MM-dd');
-            obj.color = 'red';
-            obj.bottomDot = true;
+            if (x.num == 0) {
+              obj.color = 'red';
+              obj.bottomDot = false;
+            } else {
+              obj.color = '#04BE02';
+              obj.bottomDot = true;
+            }
             if (now == DateFmt(new Date(), 'yyyy-MM-dd')) {
               if (new Date(obj.date).getDate() >= new Date().getDate()) {
                 marks.push(obj);
               }
-            }else{
+            } else {
               marks.push(obj);
             }
           })
@@ -143,9 +160,9 @@
           })
           return;
         }
-        if(this.planObj.endNum < this.orderSelect.personDates.length){
+        if (this.planObj.endNum < this.orderSelect.personDates.length) {
           this.$vux.toast.show({
-            text: '订单人数大于团期余位人数，不能转团'
+            text: '订单人数大于团期余位人数，不能选团'
           })
           return;
         }
@@ -161,7 +178,7 @@
       },
       orderChangePlan() {
         this.$vux.loading.show({
-          text: '正在转团，请勿重新操作！'
+          text: '正在选团，请勿重新操作！'
         })
         let data = {};
         let oldOrder = this.orderSelect;
@@ -174,7 +191,7 @@
           this.$vux.loading.hide()
           if (end.success) {
             this.$vux.toast.show({
-              text: '转团成功',
+              text: '选团成功',
             });
             let plan = {};
             plan = data;
@@ -183,14 +200,14 @@
             plan.to_go = end.to_go; //出发城市
             plan.to_travel = end.to_travel; //起止城市
             plan.planDate = end.planDate; //出团日期
-            plan.backDate = DateFmt(end.planDate,'yyyy-MM-dd','d+'+(end.days-1)); //天数
+            plan.backDate = DateFmt(end.planDate, 'yyyy-MM-dd', 'd+' + (end.days - 1)); //天数
             this.$store.dispatch('plan/change_plan_select', plan);
             this.$router.push({
               name: 'plan-info'
             })
           } else {
             this.$vux.toast.show({
-              text: end.msg || '转团失败'
+              text: end.msg || '选团失败'
             });
           }
         }).catch(end => {
@@ -244,9 +261,10 @@
 
 </script>
 <style>
-  .is-disabled{
-    pointer-events:none
+  .is-disabled {
+    pointer-events: none
   }
+
   .vux-calendar-dot {
     background-color: #000;
   }

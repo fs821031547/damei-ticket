@@ -36,7 +36,9 @@
 
 </template>
 <script>
-  import { Clocker } from 'vux'
+  import {
+    Clocker
+  } from 'vux'
   export default {
     data() {
       return {
@@ -44,8 +46,7 @@
         isPay: false,
         ordId: '',
         time: DateFmt(new Date(), 'yyyy/MM/dd hh:mm:ss', 'd+2'),
-        order_data: {
-        },
+        order_data: {},
         personDates: [],
         visaWayList: ['已办EVUS', '办理EVUS（100.00）', '办理签证（1500.00）', '签证保障套餐（2999.00）'],
       }
@@ -70,6 +71,9 @@
       order() {
         return this.$store.getters["mine/orderSelect"];
       },
+      qrcodeData() {
+        return this.$store.getters["mine/qrcodeData"]
+      },
     },
     methods: {
       fnOrderData() {
@@ -86,11 +90,36 @@
         // this.$store.dispatch('mine/orderSelect', this.order_data);
       },
       fnConfirmOrder() {
-        this.$router.push({ name: 'pay-way', query: { names: 'order' }, params: { refresh: true } })
+        if (this.qrcodeData.money == 0) {
+          let ordId = this.qrcodeData.orderId;
+          let exchange_code = this.qrcodeData.code_id;
+          this.$store.dispatch("apply/confirmOrder", {
+            ordId: ordId,
+            exchange_code: exchange_code
+          }).then(y => {
+            this.$vux.loading.hide()
+            if (y.success) {
+              this.$router.push({
+                name: 'pay-complete'
+              }); //跳转到付款成功页
+            } else {
+              this.fnToastMsg('订单确认失败');
+            }
+          });
+          return;
+        }
+        this.$router.push({
+          name: 'pay-way',
+          query: {
+            names: 'order'
+          },
+          params: {
+            refresh: true
+          }
+        })
       },
     },
-    props: {
-    }
+    props: {}
   }
 
 </script>
@@ -113,4 +142,5 @@
     height: 24px;
     line-height: 24px;
   }
+
 </style>

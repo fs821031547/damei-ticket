@@ -116,11 +116,12 @@
           ticketLen = 0;
         }
         // console.log(this.order.exchangeIDs);
-        if (this.specStatus && this.order.specilPerson != '' && this.order.specilPerson != undefined && this.order.specilPerson !=
-          null) {
+        //如果 有单房差 并且名单人数位单数  单房差价格为1680
+        if (this.specStatus && this.order.specilPerson && personLen % 2 == 1) {
           specilMoney = 1680;
         } else {
           this.order.specilPerson = '';
+          specilMoney = 0;
         }
         // if (ticketLen > 0) {
         //   ticketLen = JSON.parse(ticketLen).length;

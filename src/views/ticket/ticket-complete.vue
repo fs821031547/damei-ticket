@@ -8,10 +8,10 @@
           <!--<x-input title="姓名" is-type="china-name" placeholder="请输入联系人姓名"></x-input>-->
           <group label-margin-right="2em" class="my-cell">
             <cell title="姓名" :value="mine.name || ''" label-margin-right="2em"></cell>
-            <cell title="手机" :value="mine.phone || ''" ></cell>
+            <cell title="手机" :value="mine.phone || ''"></cell>
             <cell title="美容院" :value="mine.deptName"></cell>
+            <cell title="美容产品品牌" placeholder="请输入美容产品品牌" textAlign="right" :value="$route.query.brand || ''"></cell>
             <cell title="所在省市" :value="mine.addr"></cell>
-            <!--<cell title="美容产品品牌" placeholder="请输入美容产品品牌" textAlign="right" :value="userInfo.remark"></cell>-->
           </group>
           <!--<x-input title="手机" placeholder="请输入联系人手机号" keyboard="number" is-type="china-mobile"></x-input>-->
         </div>
@@ -30,7 +30,10 @@
 
 <script>
   import Vue from 'vue'
-  import { Group, Cell } from 'vux'
+  import {
+    Group,
+    Cell
+  } from 'vux'
   export default {
     data() {
       return {
@@ -53,8 +56,10 @@
         return this.$store.getters["mine/userInfo"];
       },
     },
-    props: {
+    methods: {
+
     },
+    props: {},
 
     components: {
       Cell,
@@ -76,4 +81,5 @@
   .my-cell .weui-cells:after {
     z-index: -1
   }
+
 </style>

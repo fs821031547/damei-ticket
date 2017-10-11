@@ -67,12 +67,12 @@
             x.exist_time = DateFmt(date, 'yyyy-MM-dd hh:mm:ss');
             x.str = status[x.status];
           }
-        })  
+        })
         this.list = list;
       },
       fnNext(item){
         if(item.status==2){
-          this.$router.push({name:'ticket-complete'});
+          this.$router.push({name:'ticket-complete',query:{brand:item.brand}});
         }
       }
     },
