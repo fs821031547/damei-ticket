@@ -123,7 +123,7 @@
             obj.date = DateFmt(x.PlanDate, 'yyyy-MM-dd');
             if (x.num == 0) {
               obj.color = 'red';
-              obj.bottomDot = false;
+              obj.bottomDot = true;
             } else {
               obj.color = '#04BE02';
               obj.bottomDot = true;

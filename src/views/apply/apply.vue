@@ -1,15 +1,21 @@
 <template>
   <!--<x-header title></x-header>-->
-  <div style="padding-bottom:50px;overflow-x:hidden">
+  <div style="padding-bottom:50px;overflow-x:hidden;">
     <my-header>在线报名</my-header>
-    <div style="padding-top:46px">
+    <div id="vux-apply-box" style="position: absolute;
+    top: 46px;
+    z-index: 10000000;
+    left: 0;
+    background: #f2f2f2;
+    width:100%;
+    right: 0;">
       <my-pad></my-pad>
       <div class="bg-white">
         <cell title="产品名称" class="apply applys" :value="code_info.title || '欢乐美国阳光西岸8日精品游'" @click.native="fnViewLine" is-link></cell>
         <!--<cell title="出发地" value="请选择出发地" is-link></cell>-->
         <popup-picker title="出发地" :data="cityList" v-model="cityValue" @on-show="onShow" @on-hide="onHide" @on-change="onChange"
           placeholder="请选择出发地"></popup-picker>
-        <cell title="使用激活" @click.native="showTicket=!showTicket" :class="exchangeValue ? 'apply':''" :value="exchangeValue ||'请选择'"
+        <cell title="使用激活" @click.native="fnShowTicket()" :class="exchangeValue ? 'apply':''" :value="exchangeValue ||'请选择'"
           is-link></cell>
         <cell title="美国签证介绍" class="sign" @click.native="$router.push({name:'visa'})" value="查看详情" is-link></cell>
       </div>
@@ -32,11 +38,15 @@
       <div class="add-tour">
         <x-button type="default" @click.native="addTour">添加报名</x-button>
       </div>
+      <my-pad></my-pad>
+      <my-pad></my-pad>
+      <my-pad></my-pad>
+      <my-pad></my-pad>
       <my-bottom-box>
         <x-button type="primary" style="border-radius:0" @click.native="fnNext">下一步</x-button>
       </my-bottom-box>
-      <popup v-model="showTicket" height="100%" position="" style="z-index:100000;background:#fff" width="100%">
-        <div class="vux-header" @click="showTicket=!showTicket">
+      <popup v-model="showTicket" height="100%" position="" style="z-index:100000009!important;background:#fff" width="100%">
+        <div class="vux-header" @click="fnShowTicket">
           <div class="vux-header-left">
             <div class="left-arrow"></div>
           </div>
@@ -48,7 +58,7 @@
         <checklist label-position="left" :options="ticketOpt" :max=20 v-model="ticketValue" @on-change="checkChange"></checklist>
         <divider v-if="!ticketOpt.length">我是有底线的</divider>
         <my-bottom-box style="padding:20px 10px">
-          <x-button type="primary" @click.native="showTicket=!showTicket">确认</x-button>
+          <x-button type="primary" @click.native="fnShowTicket">确认</x-button>
         </my-bottom-box>
       </popup>
 
@@ -141,7 +151,8 @@
       console.log('ticketvalue:' + this.exchangeValue);
       // this.setTicketOpt();
       this.fnInit();
-      var signCount=0;
+      var signCount = 0;
+
       function aa() {
         var tag = document.getElementsByTagName('*');
         for (var i = 0; i < tag.length; i++) {
@@ -154,8 +165,8 @@
         }
       }
       var timeFn = setInterval(aa, 200);
-      setTimeout(aa,1000);
-      setTimeout(aa,1500);
+      setTimeout(aa, 1000);
+      setTimeout(aa, 1500);
     },
     methods: {
       fnInit() {
@@ -169,6 +180,16 @@
           this.requestPlan();
           this.setTicketOpt();
         }
+      },
+      fnShowTicket(){
+        this.showTicket=!this.showTicket;
+        let applyBox=document.getElementById('vux-apply-box');
+        if(this.showTicket){
+          applyBox.style.zIndex='10000002';
+        }else{
+          applyBox.style.zIndex='10000000';
+        }
+
       },
       fnViewLine() {
         // this.$router.push({name:'sign-true',query:{status:true}});
@@ -406,8 +427,11 @@
       },
 
     },
-
     props: {},
+    beforeRouteLeave(to, from, next) {
+      let appBox=document.getElementById('vux-apply-box');
+      appBox.style.zIndex=0;
+    },
   }
 
 </script>
@@ -490,4 +514,20 @@
     z-index: 100002;
   }
 
+  .vux-popup-dialog {
+    z-index: 10000009!important;
+  }
+
+  .vux-popup-mask {
+    /*z-index: 10000001!important;*/
+  }
+  .weui-dialog{
+    z-index: 10000002!important;
+  }
+  .vux-popup-mask.vux-popup-show{
+    z-index:10000001!important;
+  }
+  .weui-mask{
+    z-index: 10000001!important;
+  }
 </style>

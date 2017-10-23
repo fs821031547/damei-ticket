@@ -1,6 +1,6 @@
 <template>
   <!--<x-header title></x-header>-->
-  <div style="padding-bottom:50px;">
+  <div style="padding-bottom:100px;">
     <x-header :left-options="{backText: ''}" style="position:absolute;left: 0px; top: 0px;z-index: 1001; width:100%;">选择签证</x-header>
     <div style="padding-top:46px">
       <my-pad></my-pad>
@@ -18,27 +18,45 @@
           @click.native="item.visaStatus = !item.visaStatus"></cell>
         <div class="slide" :class="item.visaStatus ? 'animate':'' ">
           <label v-for="visa,visaIndex in item.visaStatusList" @click="visaBoxChange(index,visaIndex)" class="weui-cell weui-cell_radio weui-check__label">
-            <div class="weui-cell__bd"><p> <span class="vux-radio-label">{{ visa }}</span></p></div>
-            <div class="weui-cell__ft"><input type="radio"  class="weui-check">
-              <span class="weui-icon-checked" :id="'visa'+index+visaIndex"></span></div>
+            <div class="weui-cell__bd">
+              <p>
+                <span class="vux-radio-label">{{ visa }}</span>
+              </p>
+            </div>
+            <div class="weui-cell__ft">
+              <input type="radio" class="weui-check">
+              <span class="weui-icon-checked" :id="'visa'+index+visaIndex"></span>
+            </div>
           </label>
         </div>
         <cell title="签证办理" :value="item.visaWayVal || '请选择'" is-link :border-intent="false" :arrow-direction="item.visaWayStatus ? 'up' : 'down'"
           @click.native="item.visaWayStatus = !item.visaWayStatus"></cell>
         <div v-if="item.visaVal=='已有签证'" class="slide" :class="item.visaWayStatus ? 'animate':'' ">
           <label v-for="way,wayIndex in item.visaWayList" @click="visaWayChange(index,wayIndex)" class="weui-cell weui-cell_radio weui-check__label">
-            <div class="weui-cell__bd"><p> <span class="vux-radio-label">{{ way }}</span></p></div>
-            <div class="weui-cell__ft"><input type="radio"  class="weui-check">
-              <span class="weui-icon-checked" :id="'label'+index+wayIndex"></span></div>
+            <div class="weui-cell__bd">
+              <p>
+                <span class="vux-radio-label">{{ way }}</span>
+              </p>
+            </div>
+            <div class="weui-cell__ft">
+              <input type="radio" class="weui-check">
+              <span class="weui-icon-checked" :id="'label'+index+wayIndex"></span>
+            </div>
           </label>
         </div>
         <div v-else class="slide" :class="item.visaWayStatus ? 'animate':'' ">
           <label v-for="way,wayIndex in item.visaWayList1" style="padding:0" class="weui-cell weui-cell_radio weui-check__label">
-            <div class="weui-cell__bd"  style="pointer-events:all;padding:10px 15px 10px 0"  @click="visaWayChange(index,wayIndex)"><p> <span class="vux-radio-label">{{ way }}</span></p></div>
-            <div class="weui-cell__ft"><input type="radio"  class="weui-check">
-              <span class="weui-icon-checked" style="pointer-events:all" @click="visaWayChange(index,wayIndex)" :id="'label'+index+wayIndex"></span></div>
-              <!--<icon  type="info-circle"></icon>-->
-              <i v-if="item.visaVal=='没有签证'" style="pointer-events: all;" @click.stop.prevent="$router.push({name:'visa'})" class="weui-icon weui_icon_info-circle weui-icon-info-circle"></i>
+            <div class="weui-cell__bd" style="pointer-events:all;padding:10px 15px 10px 0" @click="visaWayChange(index,wayIndex)">
+              <p>
+                <span class="vux-radio-label">{{ way }}</span>
+              </p>
+            </div>
+            <div class="weui-cell__ft">
+              <input type="radio" class="weui-check">
+              <span class="weui-icon-checked" style="pointer-events:all" @click="visaWayChange(index,wayIndex)" :id="'label'+index+wayIndex"></span>
+            </div>
+            <!--<icon  type="info-circle"></icon>-->
+            <i v-if="item.visaVal=='没有签证'" style="pointer-events: all;" @click.stop.prevent="$router.push({name:'visa'})" class="weui-icon weui_icon_info-circle weui-icon-info-circle"></i>
           </label>
         </div>
       </group>
@@ -46,14 +64,20 @@
       <div class="bg-white hetong">
         <span class="checked" @click.stop.prevent="checkBtn">
           <check-icon :value="checked" type="plain"></check-icon>
-          </span>
-        <span @click="toVisaTip"> <a style="text-decoration:underline;color:#0fa3ed">已阅签证服务说明并同意</a></span>
+        </span>
+        <span @click="toVisaTip">
+          <a style="text-decoration:underline;color:#0fa3ed">已阅签证服务说明并同意</a>
+        </span>
       </div>
-      <my-bottom-box>
-        <div class="footer">
-          <div class="footer-money">总金额：<span class="orange">{{ totalMoney ||　money}}</span></div>
-          <x-button v-if="checked" type="primary" @click.native="placeOrder" style="border-radius:0;width:50%;float:left;">提交</x-button>
-          <x-button v-else type="primary" ref="submit" style="border-radius:0;float:left;width:50%;background:#adadad">提交</x-button>
+      <my-bottom-box style="right:0">
+        <div class="footer" style="height:42px;overflow: hidden;">
+          <div class="footer-money">总金额：
+            <span class="orange">{{ totalMoney ||　money}}</span>
+          </div>
+          <div v-if="checked" class="footer-money" @click="placeOrder" style="background: #1aad19;color:#fff;">提交</div>
+          <div v-else class="footer-money" style="background: #adadad;color:#fff;">提交</div>
+          <!-- <x-button v-if="checked" type="primary" @click.native="placeOrder" style="border-radius:0;width:50%;float:left;">提交</x-button>
+          <x-button v-else type="primary" ref="submit" style="border-radius:0;float:left;width:50%;background:#adadad">提交</x-button> -->
         </div>
       </my-bottom-box>
       <toast v-model="toastShow" type="text" is-show-mask :text="toastMsg" position="middle"></toast>
@@ -354,7 +378,7 @@
             }
             this.fnToastMsg(x.msg || errorCode[x.code]);
           }
-        }).catch(x=>{
+        }).catch(x => {
           this.$vux.loading.hide();
           this.fnToastMsg('系统异常！');
         })
@@ -383,18 +407,21 @@
 
       }
     },
-    props: {}
+    props: {},
+
   }
 
 </script>
 <style>
-    .applys .vux-cell-primary {
+  .applys .vux-cell-primary {
     width: 32%;
     flex: initial;
   }
+
   .applys .weui-cell__ft {
     width: 68%;
   }
+
   .my-panel .weui-media-box__title {
     font-size: 15px;
   }

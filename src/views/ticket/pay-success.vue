@@ -10,9 +10,9 @@
       <!--<p class="weui-msg__desc">您已成功支付<span class="red">RMB {{ code_info.money || '0' }} </span>获得了精彩美国游资格1个。</p>-->
       <!--<p class="weui-msg__desc">您已成功支付RMB {{ code_info.money || '0' }} 获得了精彩{{ code_info.title || '美国游' }}资格1个。</p>-->
     </div>
-    <div class="weui-msg__text-area">
+    <!-- <div class="weui-msg__text-area">
       <p class="weui-msg__desc" style="font-size:14px;">※注：每个美国游资格，只供1人使用，若想多人同时报名，超出名额按8400.00收取。</p>
-    </div>
+    </div> -->
     <div class="weui-msg__opr-area">
       <p class="weui-btn-area">
         <x-button type="primary" @click.native="fnNext">立即报名</x-button>
