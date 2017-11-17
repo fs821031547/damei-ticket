@@ -1,7 +1,7 @@
 <template>
   <div>
     <my-header>选择订单</my-header>
-    <div style="padding-top:46px">
+    <div class="my-orderlist-fixed">
       <my-pad></my-pad>
       <divider v-if="order.length==0">您还没有订单，请先去报名后就可以选择了</divider>
       <radio style="background: #fff" :options="order" @on-change="onchange"></radio>
@@ -79,5 +79,24 @@
 </script>
 <style>
 
+.my-orderlist-fixed{
+  position: absolute;
+  z-index:10000000000;
+  top:46px;
+  left:0;
+  right:0;
+  bottom:0;
+  padding-bottom:60px;
+  background:#f2f2f2;
+}
+.my-bottom-box{
+  z-index:10000000001!important;
+}
 
+.weui-toast{
+  z-index:10000000001!important;
+}
+.weui-dialog{
+    z-index:10000000001!important;
+  }
 </style>

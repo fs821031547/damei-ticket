@@ -14,33 +14,40 @@
         </div>
         <div class="ticket-form-foot">※剩余有效付款时间：<span class="red">47小时59分59秒。</span></div>
       </div>
-      <x-button type="primary" @click.native="$router.push({name:'pay-way'})">立即付款</x-button>
+      <x-button type="primary" @click.native="fnPay">立即付款</x-button>
       <x-button @click.native="$router.push({name:'ticket'})">放弃资格</x-button>
-      <div class="my-pad"></div>  
+      <div class="my-pad"></div>
       <div class="tip" @click="$router.push({name:'ticket-list'})">
         查看线路
       </div>
       <my-footer></my-footer>
     </div>
   </my-pad-box>
-  
+
 </template>
 
 <script>
   import Vue from 'vue'
   import { Group, Cell } from 'vux'
+  import mixin from '../mixin.js'
   export default {
     data() {
       return {
         title: '恭喜您'
       }
     },
+    mixins:[mixin],
     created() {
       // Vue.http.post(
       //   "sys/main?xwl=343XORN1IN3S",
       // ).then(res => {
       //   if (!res.body) return;
       // })
+    },
+    methods: {
+      fnPay(){
+        this.fnReqPay(1);
+      }
     },
     props: {
     },

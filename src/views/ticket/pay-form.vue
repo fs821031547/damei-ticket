@@ -95,6 +95,7 @@
   import {
     Clocker
   } from 'vux'
+  import mixin from '../mixin.js'
   export default {
     data() {
       return {
@@ -114,6 +115,7 @@
         formData:{},
       }
     },
+    mixins:[mixin],
     components: {
       Clocker,
     },
@@ -259,15 +261,16 @@
               this.confirmOrder();
               return;
             }
-            this.$router.push({
-              name: 'pay-way',
-              query: {
-                'names': 'ticket'
-              },
-              params: {
-                refresh: true
-              }
-            })
+            this.fnReqPay(1);
+            // this.$router.push({
+            //   name: 'pay-way',
+            //   query: {
+            //     'names': 'ticket'
+            //   },
+            //   params: {
+            //     refresh: true
+            //   }
+            // })
           } else {
             this.fnToastMsg(body.msg || '');
           }

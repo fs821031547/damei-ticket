@@ -1,7 +1,7 @@
 <template>
   <div style="padding-bottom:80px">
     <my-header>选择团期</my-header>
-    <div style="top:46px;position: fixed; height:345px;left:0;right:0;z-index:100;overflow: hidden">
+    <div style="top:46px;position: fixed; height:345px;left:0;right:0;z-index:10000000000;overflow: hidden">
       <my-pad></my-pad>
       <div style="color:#999;padding: 0 10px;font-size:14px"><span style="color:#333">温馨提示：</span>为了您的正常出行，建议您选择出发距离您美国签证的面谈时间20天以上的团期。</div>
       <my-pad></my-pad>
@@ -52,7 +52,7 @@
     </div>
     <my-pad height="20"></my-pad>
 
-    <my-bottom-box>
+    <my-bottom-box style="z-index:10000000000">
       <!--<div class="bg-white hetong">
         <span class="checked" @click.stop.prevent="checkBtn">
           <check-icon :value="checked" type="plain"></check-icon>
@@ -405,5 +405,11 @@
   .hetong .checked .weui-icon-success-circle {
     font-size: 20px;
   }
+  .weui-toast{
+  z-index:10000000001!important;
+}
 
+  .weui-dialog{
+    z-index:10000000001!important;
+  }
 </style>

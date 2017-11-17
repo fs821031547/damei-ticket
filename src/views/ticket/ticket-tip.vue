@@ -8,22 +8,25 @@
   </div>
 </template>
 <script>
+  import mixin from '../mixin.js'
   export default {
     created() {
 
     },
+    mixins:[mixin],
     computed: {},
     methods: {
       fnNext() {
-        this.$router.push({
-          name: 'pay-way',
-          query: {
-            'names': 'ticket'
-          },
-          params: {
-            refresh: true
-          }
-        })
+        this.fnReqPay(1);
+        // this.$router.push({
+        //   name: 'pay-way',
+        //   query: {
+        //     'names': 'ticket'
+        //   },
+        //   params: {
+        //     refresh: true
+        //   }
+        // })
       },
 
     }

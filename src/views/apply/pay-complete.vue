@@ -1,5 +1,5 @@
 <template>
-  <div class="weui-msg">
+  <div class="weui-msg my-box">
     <div class="weui-msg__icon-area">
       <icon type="success" is-msg></icon>
     </div>
@@ -39,7 +39,7 @@
       code_info(){
         return this.$store.getters["mine/code_info"]
       },
-      
+
     },
     props: {
     },
@@ -51,6 +51,13 @@
 </script>
 
 <style lang="less" scoped>
+    .weui-msg.my-box{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    z-index:10000000000;
+  }
   .weui-msg {
     padding-top: 36px;
     text-align: center;

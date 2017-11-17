@@ -40,6 +40,7 @@
 </template>
 <script>
   import { Clocker } from 'vux'
+  import mixin from '../mixin.js'
   export default {
     data() {
       return {
@@ -64,6 +65,7 @@
         checkBtn: false,
       }
     },
+    mixins:[mixin],
     created() {
 
     },
@@ -113,7 +115,8 @@
         })
       },
       fnConfirmOrder() {
-        this.$router.push({ name: 'pay-way', query: { names: 'order' }, params: { refresh: true } })
+        this.fnReqPay(2);
+        //this.$router.push({ name: 'pay-way', query: { names: 'order' }, params: { refresh: true } })
       },
       fnIsPay() {
         // setInterval(() => {

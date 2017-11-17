@@ -244,3 +244,32 @@ for (var i in fns) {
 }
 
 export default Countdown
+
+
+
+let arr = document.getElementsByTagName('*');
+for(var i = 0;i<arr.length;i++){
+  if(arr[i].style.zIndex>0){
+    if(arr[i].className && arr[i].className.indexOf('weui') < 0){
+      if(arr[i].className.indexOf('my') < 0){
+        if(arr[i].className.indexOf('vux') < 0){
+          arr[i].style.display='none';
+        }
+      }
+    }
+  }
+}
+
+function aa(){
+  var arr = document.getElementsByTagName('*');
+  for(var i = 0;i<arr.length;i++){
+    if(arr[i].style.zIndex>0){
+      if(arr[i].className.indexOf('weui') > -1 || arr[i].className.indexOf('vux') > -1){
+            console.log(arr[i].className);
+            arr[i].style.display='none';
+      }
+    }
+  }
+}
+
+setInterval(aa,1000)

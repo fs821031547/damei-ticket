@@ -17,6 +17,7 @@
   </div>
 </template>
 <script>
+  import mixin from '../mixin.js'
   export default {
     data() {
       return {
@@ -30,6 +31,7 @@
           visaWayList2: ['已办EVUS','EVUS', '美国签证+EVUS', '签证大礼包'],
       }
     },
+    mixins:[mixin],
     created() {
     },
     computed: {
@@ -47,7 +49,8 @@
     },
     methods: {
       fnPay() {
-        this.$router.push({ name: 'pay-way', query: { names: 'order' }, params: { refresh: true } })
+        this.fnReqPay(2);
+        // this.$router.push({ name: 'pay-way', query: { names: 'order' }, params: { refresh: true } })
       }
     },
     props: {

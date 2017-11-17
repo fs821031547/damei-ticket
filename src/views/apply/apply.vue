@@ -2,7 +2,8 @@
   <!--<x-header title></x-header>-->
   <div style="padding-bottom:50px;overflow-x:hidden;">
     <my-header>在线报名</my-header>
-    <div id="vux-apply-box" style="position: absolute;
+    <div id="vux-apply-box" style="
+    position: absolute;
     top: 46px;
     z-index: 10000000;
     left: 0;
@@ -43,7 +44,8 @@
       <my-pad></my-pad>
       <my-pad></my-pad>
       <my-bottom-box>
-        <x-button type="primary" style="border-radius:0" @click.native="fnNext">下一步</x-button>
+          <button class="weui-btn weui-btn_primary" @click="fnNext" style="border-radius: 0px;"> 下一步</button>
+        <!-- <x-button type="primary" style="border-radius:0;" @click.native="fnNext">下一步</x-button> -->
       </my-bottom-box>
       <popup v-model="showTicket" height="100%" position="" style="z-index:100000009!important;background:#fff" width="100%">
         <div class="vux-header" @click="fnShowTicket">
@@ -300,8 +302,6 @@
           })
         })
         this.order.exchangeIDs = JSON.stringify(codeSelect); //所选激活码ID
-        console.log('hehe', this.order.exchangeIDs);
-        console.log('change', val)
       },
       fnNext() {
         let data = {}; //请求参数
@@ -390,6 +390,10 @@
           this.fnToastMsg('有选择的激活码不可用');
           return;
         }
+        if(exchangeIDs.length==0){
+          this.fnToastMsg('请选择激活码');
+          return;
+        }
         this.$router.push({
           name: 'visa-select'
         });
@@ -428,14 +432,11 @@
 
     },
     props: {},
-    beforeRouteLeave(to, from, next) {
-      let appBox=document.getElementById('vux-apply-box');
-      appBox.style.zIndex=0;
-    },
   }
 
 </script>
 <style>
+
   .applys .vux-cell-primary {
     width: 32%;
     flex: initial;

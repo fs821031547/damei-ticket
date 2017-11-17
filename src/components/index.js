@@ -5,7 +5,7 @@ import bottom from "./bottom.vue";
 import header from "./header.vue";
 import footer from "./footer.vue";
 import cell from "./cell.vue";
-
+import pay from "./mypay.vue";
 
 export default function(Vue){
     //注册自定义组件
@@ -16,4 +16,5 @@ export default function(Vue){
     Vue.component(header.name, header);
     Vue.component(footer.name, footer);
     Vue.component(cell.name, cell);
+    Vue.component(pay.name, pay);
 }

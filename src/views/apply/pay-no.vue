@@ -16,16 +16,6 @@
       </group>
       <my-pad></my-pad>
     </div>
-    <!--<div class="daoji-time" v-if="order.isOK==0">※剩余有效付款时间：
-      <clocker :time="time" format="%H 小时 %M 分 %S 秒" class="red" slot="value">
-        <span class="day">%_H1</span>
-        <span class="day">%_H2</span>时
-        <span class="day">%_M1</span>
-        <span class="day">%_M2</span>分
-        <span class="day">%_S1</span>
-        <span class="day">%_S2</span>秒
-      </clocker>
-    </div>-->
     <my-bottom-box>
       <div class="footer">
         <div class="footer-money">总金额：<span class="orange">{{ NumFmt(order.order.billBak,2)}}</span></div>
@@ -39,6 +29,7 @@
   import {
     Clocker
   } from 'vux'
+  import mixin from '../mixin.js'
   export default {
     data() {
       return {
@@ -51,6 +42,7 @@
         visaWayList: ['已办EVUS', '办理EVUS（100.00）', '办理签证（1500.00）', '签证保障套餐（2999.00）'],
       }
     },
+    mixins:[mixin],
     components: {
       Clocker,
     },
@@ -108,15 +100,16 @@
           });
           return;
         }
-        this.$router.push({
-          name: 'pay-way',
-          query: {
-            names: 'order'
-          },
-          params: {
-            refresh: true
-          }
-        })
+        this.fnReqPay(2);
+        // this.$router.push({
+        //   name: 'pay-way',
+        //   query: {
+        //     names: 'order'
+        //   },
+        //   params: {
+        //     refresh: true
+        //   }
+        // })
       },
     },
     props: {}

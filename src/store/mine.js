@@ -230,12 +230,14 @@ const actions = {
     return Vue.http.post(
       'exchange_code_qrcode',
       {
-        amount: data.money && (Number(data.money)).mul(100),
+        // amount: data.money && (Number(data.money)).mul(100),
+        amount: 1,
         type: data.type,
         orderId: data.orderId || '',
         exchange_code: data.code_id || '',
         id: data.id || '',
-        userListId: data.userListId || ''
+        userListId: data.userListId || '',
+        backUrl:data.backUrl,
       },
       { emulateJSON: true }
     ).then(res => {
