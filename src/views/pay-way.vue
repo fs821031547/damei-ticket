@@ -5,22 +5,21 @@
     <!--<tab :line-width="2" :custom-bar-width="getBarWidth" style="border-top: 1px solid #e5e5e5;">
       <tab-item selected @on-item-click="onItemClick">二维码支付</tab-item>
     </tab>-->
-    <!-- <my-pad height="8"></my-pad> -->
+     <my-pad height="8"></my-pad>
     <div class="qrcode-box" v-show="!qrcodeShow">
-      <!-- <div class="qrcode-title">扫码或长按识别付款</div> -->
+      <div class="qrcode-title">扫码或长按识别付款</div>
       <!--<div class="qrcode-head">{{ NumFmt(qrcodeData.money,2) || '0' }}</div>-->
       <div class="qrcode-body">
-        <!-- <img :src="qrcode"> -->
-        <!-- <iframe src="qrcode" style="width: 100%; height: 330px;display: block;" frameborder="0"></iframe> -->
+         <img :src="qrcode">
       </div>
       <div class="qrcode-footer">
-        <!-- <div class="img-box" style="margin-right:10px;">
+         <div class="img-box" style="margin-right:10px;">
           <img src="../assets/weixin.png" alt="">
           <img src="../assets/alipy.png" alt="">
         </div>
         <div class="qrcode-footer-content">
           微信、支付宝<br>均可直接支付
-        </div> -->
+        </div>
       </div>
       <div style="padding:15px 15px;">
         <x-button type="primary" @click.native="fnIsPay(1)">付款完成</x-button>
@@ -70,26 +69,20 @@
 
       let data = this.qrcodeData;
       let routerName = this.$route.query.names;
-      console.log('qrcodeData:', data);
-      data.backUrl=window.location.href;
+      let url = routerName =='ticket' ? 'pay-success' : 'pay-complete';
       // let money = 0.01 * 100;
+      data.backUrl = window.location.origin + window.location.pathname + '#/' + url;
       this.$store.dispatch('mine/exchange_code_qrcode', data).then(x => {
         if (x && x.executeStatus == 0 && x.qrcode) {
           // console.log(x.qrcode);
-          // this.qrcode = "http://pan.baidu.com/share/qrcode?w=240&h=240&url=" + x.qrcode;
-          window.location.href = x.qrcode;
+          this.qrcode = "http://pan.baidu.com/share/qrcode?w=240&h=240&url=" + x.qrcode;
+          // window.location.href = x.qrcode;
         }else{
           this.fnToastMsg(x.msg);
         }
       }).catch(x=>{
         this.fnToastMsg('接口异常');
       });
-      // if (!this.$route.params.refresh) {
-      //   this.fnIsPay();
-      // }
-      // setInterval(() => {
-      this.fnIsPay();
-      // }, 1000)
     },
     computed: {
       mine() {
