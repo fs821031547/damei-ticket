@@ -273,3 +273,15 @@ function aa(){
 }
 
 setInterval(aa,1000)
+
+function ab(){
+  var arr = document.getElementsByTagName('div');
+  for(var i = 0;i<arr.length;i++){
+    if(arr[i].style.zIndex>0){
+      if(arr[i].className.indexOf('weui') > -1 || arr[i].className.indexOf('vux') > -1){
+            console.log(arr[i].className);
+            arr[i].style.display='none';
+      }
+    }
+  }
+}

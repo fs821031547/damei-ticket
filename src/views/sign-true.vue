@@ -65,7 +65,7 @@
     },
     created() {
       if (!this.mine.id) {
-        this.$store.dispatch('mine/mine_request').then(x => {
+        this.$store.dispatch('mine/mine_request','apply').then(x => {
           this.fnInit()
           if (this.mine.order_data && this.mine.order_data.length != 0) {
             this.$router.push({

@@ -22,7 +22,7 @@
     },
     created() {
       if (!this.mine.id) {
-        this.$store.dispatch('mine/mine_request').then(x => {
+        this.$store.dispatch('mine/mine_request','apply').then(x => {
           this.list();
         });
       } else {

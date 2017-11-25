@@ -58,11 +58,12 @@ const actions = {
     ).then(res => {
     });
   },
-  mine_request({ state, commit, dispatch }) {
+  mine_request({ state, commit, dispatch },arg) {
     let data = {};
     // if (process.env.NODE_ENV !== 'production') {
     //   data.key = 'EC7121327EEC21702D0C71E0E19F0829381F22E89B5B763F1D5E26F785D93B23';
     // }
+    console.log('arg:',arg);
     return Vue.http.post(
       "get-person-info",
       data,
@@ -95,64 +96,55 @@ const actions = {
           break;
         }
       }
-
       //[code_id:1,ordId:1,status:3,code_id:2,ordId:1,status:3,code_id:1,ordId:3,status:3]
-      let ordIds = [];
-      let codes = [];
-      code.forEach(x => {
-        if (x.status == 3) {
-          codes.push(x);
-        }
-      });
-      codes.forEach(x => {
-        // ordIds=
-        if (ordIds.length == 0) {
-
-          ordIds.push({ ordId: x.order_id, code_id: '' });
-        } else {
-          let obj = { code_id: '' };
-          obj.ordId = x.ordId;
-          let noId = ordIds.find(y => {
-            return y.ordId == x.order_id;
-          })
-          if (noId == undefined) {
-            obj.ordId = x.order_id;
-            ordIds.push(obj);
+      if(arg!==undefined){
+        let ordIds = [];
+        let codes = [];
+        code.forEach(x => {
+          if (x.status == 3) {
+            codes.push(x);
           }
-        }
-      })
-      console.log('1111111111');
-      console.log(ordIds);
-      console.log('1111111111');
-      code.forEach(x => {
-        for (var j = 0; j < ordIds.length; j++) {
-          if (ordIds[j].ordId == x.order_id) {
-            if (!ordIds[j].code_id) {
-              ordIds[j].code_id = x.code_id;
-            } else {
-              ordIds[j].code_id = ',' + x.code_id;
+        });
+        codes.forEach(x => {
+          // ordIds=
+          if (ordIds.length == 0) {
+
+            ordIds.push({ ordId: x.order_id, code_id: '' });
+          } else {
+            let obj = { code_id: '' };
+            obj.ordId = x.ordId;
+            let noId = ordIds.find(y => {
+              return y.ordId == x.order_id;
+            })
+            if (noId == undefined) {
+              obj.ordId = x.order_id;
+              ordIds.push(obj);
             }
           }
-        }
-      })
-      // mine.order_data.forEach(x=>{
-      //   ordIds.forEach(y=>{
-
-      //   })
-      // })
-      // console.log();
-      for (var k = 0; k < mine.order_data.length; k++) {
-        ordIds.forEach(y => {
-          if (y.ordId == mine.order_data[k].ordId) {
-            mine.order_data[k].code_id = y.code_id;
-
+        })
+        console.log('1111111111');
+        console.log(ordIds);
+        console.log('1111111111');
+        code.forEach(x => {
+          for (var j = 0; j < ordIds.length; j++) {
+            if (ordIds[j].ordId == x.order_id) {
+              if (!ordIds[j].code_id) {
+                ordIds[j].code_id = x.code_id;
+              } else {
+                ordIds[j].code_id = ',' + x.code_id;
+              }
+            }
           }
         })
-      }
-      console.log('order_data:', mine.order_data);
-      // ordIds.forEach(x=>{
+        for (var k = 0; k < mine.order_data.length; k++) {
+          ordIds.forEach(y => {
+            if (y.ordId == mine.order_data[k].ordId) {
+              mine.order_data[k].code_id = y.code_id;
 
-      // })
+            }
+          })
+        }
+      }
       commit("change_mine", { mine });
       return ticketSelect || {};
     });

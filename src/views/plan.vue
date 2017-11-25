@@ -59,7 +59,7 @@
     },
     created() {
       // if(!this.mine.id){
-      this.$store.dispatch('mine/mine_request').then(end => {
+      this.$store.dispatch('mine/mine_request','apply').then(end => {
         let order = this.mine.order_data;
         let list = [];
         order.forEach(x => {
