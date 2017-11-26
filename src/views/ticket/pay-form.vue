@@ -245,6 +245,9 @@
         // this.completeInfo(data);
       },
       completeInfo(data) {
+        this.$vux.loading.show({
+          text: '正在确认，请您耐心等待'
+        });
         Vue.http.post(
           'complete-person-info', data, {
             emulateJSON: true
@@ -252,6 +255,7 @@
         ).then(res => {
           let body = res.body;
           if (!body) return;
+          this.$vux.loading.hide();
           if (body.success) {
             this.$store.dispatch('mine/mine_request');
             if (body.fin_ids) {
@@ -262,18 +266,12 @@
               return;
             }
             this.fnReqPay(1);
-            // this.$router.push({
-            //   name: 'pay-way',
-            //   query: {
-            //     'names': 'ticket'
-            //   },
-            //   params: {
-            //     refresh: true
-            //   }
-            // })
           } else {
             this.fnToastMsg(body.msg || '');
           }
+        }).catch(x=>{
+          this.$vux.loading.hide();
+          this.fnToastMsg(接口异常 || '');
         })
       },
       //确认单
