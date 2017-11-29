@@ -2,7 +2,7 @@
   <!--<x-header title></x-header>-->
 
   <div style="padding-bottom:50px;">
-    <x-header :left-options="{backText: ''}" style="position:absolute;left: 0px; top: 0px;z-index: 1001; width:100%;">已选团期信息</x-header>
+    <x-header :left-options="{backText: ''}" style="position:absolute;left: 0px; top: 0px;z-index: 10000001; width:100%;">已选团期信息</x-header>
     <div style="padding-top:46px">
       <my-pad></my-pad>
       <div class="plan-tips-box">

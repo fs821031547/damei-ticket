@@ -1,7 +1,7 @@
 <template>
   <!--<x-header title></x-header>-->
   <div style="padding-bottom:50px;">
-    <x-header style="position:absolute;left: 0px; top: 0px;z-index: 1001; width:100%;">报名信息</x-header>
+    <x-header style="position:absolute;left: 0px; top: 0px;z-index: 10000001; width:100%;">报名信息</x-header>
     <div style="padding-top:46px">
       <my-pad></my-pad>
       <group title="产品信息">
@@ -44,7 +44,6 @@
     created() {
       if (!this.mine.id) {
         this.$store.dispatch("mine/mine_request").then(x => {
-
           this.fnOrderData();
         });
       } else {
@@ -58,7 +57,7 @@
       //     y.addTime = DateFmt(new Date(y.addTime), 'yyyy/MM/dd hh:mm');
       //   });
       // },
-      fnOrderData() {
+      fnOrderData() {   //初始化信息页面
         // this.order_data = this.mine.order_data;
         let personDates = this.order.personDates.map(y => {
           if (typeof y == 'string') {

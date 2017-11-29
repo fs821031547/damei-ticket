@@ -39,56 +39,55 @@ export default {
 
     },
     fnReqPay(url) {
+      console.log('正在跳转到付款页，请您耐心等待1');
       this.$vux.loading.show({
         text: '正在跳转到付款页，请您耐心等待'
       });
-      if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-        if (url == 1) { //兑奖码
-          url = 'pay-success'
-        } else if (url == 2) { //订单
-          url = 'pay-complete'
+      if (url == 1) { //兑奖码
+        url = 'pay-success'
+      } else if (url == 2) { //订单
+        url = 'pay-complete'
+      }
+      let data = this.qrcodeData;
+      data.backUrl = window.location.origin + window.location.pathname + '#/' + url;
+      return this.$store.dispatch('mine/exchange_code_qrcode', data).then(x => {
+        this.$vux.loading.hide();
+        if (x && x.executeStatus == 0 && x.qrcode) {
+          // console.log(x.qrcode);
+          // this.qrcode = "http://pan.baidu.com/share/qrcode?w=240&h=240&url=" + x.qrcode;
+          // window.location.href = x.qrcode;
+          window.location.href = '/sys/?xwl=144REY7M9Z3I&payid=' + x.key;
+        } else {
+          this.toastFn(x.msg);
         }
-        let data = this.qrcodeData;
-        data.backUrl = window.location.origin + window.location.pathname + '#/' + url;
-        return this.$store.dispatch('mine/exchange_code_qrcode', data).then(x => {
-          this.$vux.loading.hide();
-          if (x && x.executeStatus == 0 && x.qrcode) {
-            // console.log(x.qrcode);
-            // this.qrcode = "http://pan.baidu.com/share/qrcode?w=240&h=240&url=" + x.qrcode;
-            // window.location.href = x.qrcode;
-            window.location.href = '/sys/?xwl=144REY7M9Z3I&payid=' + x.key;
-          } else {
-            this.toastFn(x.msg);
-          }
-        }).catch(x => {
-          this.$vux.loading.hide();
-          this.toastFn('接口异常');
-        });
-      }
-      if (url == 1) {
+      }).catch(x => {
         this.$vux.loading.hide();
-        this.$router.push({
-          name: 'pay-way',
-          query: {
-            'names': 'ticket'
-          },
-          params: {
-            refresh: true
-          }
-        })
+        this.toastFn('接口异常');
+      });
+      // if (url == 1) {
+      //   this.$vux.loading.hide();
+      //   this.$router.push({
+      //     name: 'pay-way',
+      //     query: {
+      //       'names': 'ticket'
+      //     },
+      //     params: {
+      //       refresh: true
+      //     }
+      //   })
 
-      } else {
-        this.$vux.loading.hide();
-        this.$router.push({
-          name: 'pay-way',
-          query: {
-            names: 'order'
-          },
-          params: {
-            refresh: true
-          }
-        })
-      }
+      // } else {
+      //   this.$vux.loading.hide();
+      //   this.$router.push({
+      //     name: 'pay-way',
+      //     query: {
+      //       names: 'order'
+      //     },
+      //     params: {
+      //       refresh: true
+      //     }
+      //   })
+      // }
 
     }
   }

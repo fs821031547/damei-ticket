@@ -391,7 +391,7 @@
           return;
         }
         if(exchangeIDs.length==0){
-          this.fnToastMsg('请选择激活码');
+          this.fnToastMsg('需选择激活码才能进行下一步');
           return;
         }
         this.$router.push({

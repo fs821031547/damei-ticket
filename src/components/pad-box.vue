@@ -1,5 +1,5 @@
 <template>
-  <div style="height: calc(100% - 20px);padding:20px 15px 0">
+  <div style="height: calc(100% - 20px);padding:20px 15px 0;position: absolute;z-index:9999999;left:0;right:0;">
     <div class="my-pad-box">
         <slot></slot>
     </div>

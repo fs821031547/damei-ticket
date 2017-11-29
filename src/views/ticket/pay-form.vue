@@ -1,6 +1,6 @@
 <template>
   <my-pad-box>
-    <div style="padding:0 15px">
+    <div style="padding:0 15px;">
       <h3 class="my-title">{{ title }}</h3>
       <div class="ticket-form">
         <p class="ticket-form-head" style="font-size:16px;text-align:center">
@@ -42,7 +42,7 @@
       <div class="tip" @click="$router.push({name:'sign-false',query:{show:0}})">
         查看线路
       </div>
-      <popup v-model="addressShow" height="400px" style="z-index:100000;background:#fff" width="100%">
+      <popup v-model="addressShow" height="400px" style="z-index:10000000;background:#fff" width="100%">
         <div class="vux-popup-picker-container">
           <div class="vux-popup-picker-header">
             <div class="vux-flexbox vux-flex-row">
@@ -93,7 +93,8 @@
 <script>
   import Vue from 'vue'
   import {
-    Clocker
+    Clocker,
+    Loading
   } from 'vux'
   import mixin from '../mixin.js'
   export default {
@@ -271,7 +272,7 @@
           }
         }).catch(x=>{
           this.$vux.loading.hide();
-          this.fnToastMsg(接口异常 || '');
+          this.fnToastMsg('接口异常' || '');
         })
       },
       //确认单
@@ -292,6 +293,8 @@
           } else {
             this.fnToastMsg(body.msg || '异常错误');
           }
+        }).catch(x=>{
+          this.fnToastMsg('接口异常' || '');
         })
       },
       //跳转到下一页面
@@ -491,5 +494,14 @@
     font-size:15px;
     background: #f4f4f4;
   }
+
+</style>
+<style>
+    .vux-loading .weui-toast {
+    z-index: 100000001;
+}
+.weui-mask_transparent{
+  z-index: 100000001
+}
 
 </style>

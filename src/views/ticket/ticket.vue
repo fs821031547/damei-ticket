@@ -84,7 +84,7 @@
           } else {
             this.$router.push({ name: 'ticket', query: { status: x.status } })
           }
-        });
+        })
       }
     },
     methods: {

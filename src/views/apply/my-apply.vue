@@ -103,8 +103,10 @@
       fnInit() {
         this.$store.dispatch("mine/mine_request").then(x => {
           // console.log(this.$route.name);
-          this.fnOrder_data();
+          this.fnOrder_data();  //初始化订单信息
           console.log('fninit',this.mine);
+        }).catch(x=>{
+          this.fnToastMsg('接口异常');
         });
       },
       fnNopay() {
