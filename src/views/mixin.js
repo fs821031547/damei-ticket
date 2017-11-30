@@ -38,7 +38,37 @@ export default {
       });
 
     },
-    fnReqPay(url) {
+    onBridgeReady(arg) {   //调用微信支付接口
+      let data=arg;
+      // let packages=data.package_info;
+      // let packageStr= packages.slice(0,10)+packages.slice(26);
+      function onBridgeReady() {
+        WeixinJSBridge.invoke(
+          'getBrandWCPayRequest', {
+            "appId": data.appId,
+            "timeStamp": data.timeStamp,
+            "nonceStr": data.nonceStr,
+            "package": data.package_info,
+            "signType": data.signType, //微信签名方式：
+            "paySign": data.paySign,
+          },
+          function (res) {
+            if (res.err_msg == "get_brand_wcpay_request:ok") {} // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+          }
+        );
+      }
+      if (typeof WeixinJSBridge == "undefined") {
+        if (document.addEventListener) {
+          document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+        } else if (document.attachEvent) {
+          document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+          document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+        }
+      } else {
+        onBridgeReady();
+      }
+    },
+    fnReqPay(url) {  //跳转到支付接口
       console.log('正在跳转到付款页，请您耐心等待1');
       this.$vux.loading.show({
         text: '正在跳转到付款页，请您耐心等待'
@@ -52,14 +82,21 @@ export default {
       data.backUrl = window.location.origin + window.location.pathname + '#/' + url;
       return this.$store.dispatch('mine/exchange_code_qrcode', data).then(x => {
         this.$vux.loading.hide();
-        if (x && x.executeStatus == 0 && x.qrcode) {
+        if(x.success){
+          this.onBridgeReady(x);
+        }else{
+          this.toastFn(x.msg);
+        }
+        // this.$store.dispatch('mine/qrcodeHtml',x);
+        // this.$router.push({name:'qrcode'})
+        // if (x && x.executeStatus == 0 && x.qrcode) {
           // console.log(x.qrcode);
           // this.qrcode = "http://pan.baidu.com/share/qrcode?w=240&h=240&url=" + x.qrcode;
           // window.location.href = x.qrcode;
-          window.location.href = '/sys/?xwl=144REY7M9Z3I&payid=' + x.key;
-        } else {
-          this.toastFn(x.msg);
-        }
+          // window.location.href = '/sys/?xwl=144REY7M9Z3I&payid=' + x.key;
+        // } else {
+          // this.toastFn(x.msg);
+        // }
       }).catch(x => {
         this.$vux.loading.hide();
         this.toastFn('接口异常');

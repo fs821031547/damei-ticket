@@ -67,6 +67,15 @@ const routes = [
     },
   },
   {
+    name: 'qrcode',
+    path: '/qrcode',
+    component(resolve) {
+        require.ensure(['./views/qrcode.vue'], () => {
+          resolve(require('./views/qrcode.vue'))
+        }, "qrcode");
+    },
+  },
+  {
     name: 'push-notification',
     path: '/push-notification',
     component(resolve) {

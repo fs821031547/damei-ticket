@@ -27,6 +27,7 @@ const state = {
   lineID: '',
   clickStatus: false,  //按钮点击状态
   address: [],
+  qrcodeHtml:'',
 }
 
 const getters = {
@@ -44,6 +45,7 @@ const getters = {
   lineID: state => state.lineID,
   clickStatus: state => state.clickStatus,
   address: state => state.address,
+  qrcodeHtml: state => state.qrcodeHtml,
 
 }
 
@@ -58,6 +60,10 @@ const actions = {
     ).then(res => {
     });
   },
+  qrcodeHtml({ state, commit, dispatch },data) {
+    state.qrcodeHtml=data;
+  },
+
   mine_request({ state, commit, dispatch },arg) {
     let data = {};
     // if (process.env.NODE_ENV !== 'production') {
@@ -220,7 +226,8 @@ const actions = {
       return accMul(arg, this);
     }
     return Vue.http.post(
-      'exchange_code_qrcode',
+      // 'exchange_code_qrcode',
+      'wx-pay',
       {
         amount: data.money && (Number(data.money)).mul(100),
         type: data.type,
