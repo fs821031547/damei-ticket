@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    html{
+      height: 100%;
+    }
+    div, p {
+    box-sizing: border-box;
+}
+body {
+    line-height: 1.6;
+    height: 100%;
+    font-family: -apple-system-font,Helvetica Neue,sans-serif;
+}
+* {
+    margin: 0;
+    padding: 0;
+}
+    .vux-header {
+    position: relative;
+    padding: 3px 0;
+    box-sizing: border-box;
+    background-color: #35495e;
+}
+
+
+    .vux-header {
+    background-color: #fff!important;
+}
+.vux-header .vux-header-left, .vux-header .vux-header-right {
+    position: absolute;
+    top: 14px;
+    display: block;
+    font-size: 14px;
+    line-height: 21px;
+    color: #ccc;
+}
+.vux-header .vux-header-left {
+    left: 18px;
+}
+.vux-header .vux-header-left .left-arrow {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: -5px;
+    left: -5px;
+}
+.vux-header .vux-header-left .left-arrow:before {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 1px solid #ccc;
+    border-width: 1px 0 0 1px;
+    -webkit-transform: rotate(315deg);
+    transform: rotate(315deg);
+    top: 8px;
+    left: 7px;
+}
+.vux-header-title-area, .vux-header .vux-header-title {
+    margin: 0 88px;
+    height: 40px;
+    width: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.vux-header .vux-header-title>span {
+    display: inline-block;
+}
+.vux-header .vux-header-title {
+    line-height: 40px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 400;
+    color: #fff;
+}
+.vux-header .vux-header-title {
+    color: #000!important;
+}
+.question-content{
+    color: #999;
+    padding: 10px 10px 70px;
+    font-size: 15px;
+    background: #f4f4f4;
+    text-align: center;
+    height: calc(100% - 46px);
+    }
+  </style>
+  <!-- <script src="https://cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script> -->
+</head>
+
+<body>
+  <div data-v-43013fb8=""  class="vux-header">
+    <div data-v-43013fb8="" class="vux-header-left">
+      <div data-v-43013fb8="" onclick="fnBack()" class="left-arrow"></div>
+    </div>
+    <h1 data-v-43013fb8="" class="vux-header-title">
+      <!-- <span data-v-43013fb8="">正在支付...</span> -->
+    </h1>
+  </div>
+  <div class="question-content">
+    <!-- 您如果已取消或支付失败，请返回重新支付！！ -->
+  </div>
+
+  <script>
+    function fnBack() {
+      window.history.go(-1)
+    }
+    window.onload = function () {
+      // iframe.setAttribute('src','demo.html');
+      // document.getElementById('demo').appendChild(iframe);
+      var data = localStorage.getItem('payInfo');
+      data = JSON.parse(data);
+
+      function onBridgeReady() {
+        WeixinJSBridge.invoke(
+          'getBrandWCPayRequest', {
+            "appId": data.appId,
+            "timeStamp": data.timeStamp,
+            "nonceStr": data.nonceStr,
+            "package": data.package_info,
+            "signType": data.signType, //微信签名方式：
+            "paySign": data.paySign,
+          },
+          function (res) {
+            if (res.err_msg == "get_brand_wcpay_request:ok") {
+              window.location.href = data.backUrl; //支付成功
+            } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+              alert('已取消');
+            } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+              alert('支付失败');
+            } else {
+              alert('未知异常');
+            }
+          }
+        );
+      }
+      if (typeof WeixinJSBridge == "undefined") {
+        if (document.addEventListener) {
+          document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+        } else if (document.attachEvent) {
+          document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+          document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+        }
+      } else {
+        onBridgeReady();
+      }
+    }
+
+  </script>
+</body>
+
+</html>

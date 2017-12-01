@@ -42,6 +42,8 @@
       <div class="tip" @click="$router.push({name:'sign-false',query:{show:0}})">
         查看线路
       </div>
+      <!-- <iframe :src="iframeHtml" style="display: none"></iframe> -->
+      <div id="iframe"></div>
       <popup v-model="addressShow" height="400px" style="z-index:10000000;background:#fff" width="100%">
         <div class="vux-popup-picker-container">
           <div class="vux-popup-picker-header">
@@ -208,9 +210,9 @@
             this.fnToastMsg('请输入美容产品品牌');
             return;
           }
-          this.showTicketList = true;
+          // this.showTicketList = true;
           this.formData = data;
-          // this.completeInfo(data);
+          this.completeInfo(data);
           return;
         }
 
@@ -250,12 +252,13 @@
           return;
         }
         this.formData = data;
-        this.showTicketList = true;
-        // this.completeInfo(data);
+        // this.showTicketList = true;
+        this.completeInfo(data);
       },
+      //完善信息
       completeInfo(data) {
         this.$vux.loading.show({
-          text: '正在确认，请您耐心等待'
+          text: '正在完善个人信息，请您耐心等待'
         });
         Vue.http.post(
           'complete-person-info', data, {
@@ -267,16 +270,12 @@
           this.$vux.loading.hide();
           if (body.success) {
             this.$store.dispatch('mine/mine_request');
+            this.showTicketList = true;
             if (body.fin_ids) {
               this.$store.dispatch('mine/fin_ids', body.fin_ids);
             }
-            if (this.qrcodeData.money == 0) {
-              this.confirmOrder();
-              return;
-            }
-            this.fnReqPay(1);
           } else {
-            this.fnToastMsg(body.msg || '');
+            this.fnToastMsg(body.msg || '系统异常');
           }
         }).catch(x => {
           this.$vux.loading.hide();
@@ -307,8 +306,12 @@
       },
       //跳转到下一页面
       fnNext() {
-        let data = this.formData;
-        this.completeInfo(data);
+        // let data = this.formData;
+        if (this.qrcodeData.money == 0) {   //激活码金额为0 不用支付，直接确认
+              this.confirmOrder();
+              return;
+        }
+        this.fnReqPay(1);   //请求支付  mixin.js
       },
       fnToastMsg(msg) {
         this.toastShow = true;

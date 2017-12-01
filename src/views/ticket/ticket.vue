@@ -28,6 +28,7 @@
       return {
         title: '美国游激活',
         ticketCode: '',
+
       }
     },
     mixins: [mixin],
@@ -59,7 +60,6 @@
           // if (this.$route.name != 'ticket' && this.$route.name != 'pay-form') {
           //   return;
           // }
-
           if (!x.status) {
             this.$router.push({ name: 'ticket' })
             return;

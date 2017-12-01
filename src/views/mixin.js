@@ -4,6 +4,7 @@ export default {
     return {
       toastShow: false,
       toastMsg: '',
+      iframeHtml:'',
     }
   },
   computed: {
@@ -69,7 +70,6 @@ export default {
       }
     },
     fnReqPay(url) {  //跳转到支付接口
-      console.log('正在跳转到付款页，请您耐心等待1');
       this.$vux.loading.show({
         text: '正在跳转到付款页，请您耐心等待'
       });
@@ -83,7 +83,12 @@ export default {
       return this.$store.dispatch('mine/exchange_code_qrcode', data).then(x => {
         this.$vux.loading.hide();
         if(x.success){
-          this.onBridgeReady(x);
+          x.backUrl=data.backUrl;  //付款成功回调页面地址
+          let payInfo=JSON.stringify(x);
+          window.localStorage.setItem('payInfo',payInfo);
+          window.location.href='pay.html';
+          // this.iframeHtml='pay.html';
+          // this.onBridgeReady(x);
         }else{
           this.toastFn(x.msg);
         }
