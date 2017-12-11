@@ -83,7 +83,7 @@ export default {
       return this.$store.dispatch('mine/exchange_code_qrcode', data).then(x => {
         this.$vux.loading.hide();
         if(x.success){
-          x.backUrl=data.backUrl;  //付款成功回调页面地址
+          x.backUrl=data.backUrl;  //支付成功的回调的地址
           let payInfo=JSON.stringify(x);
           window.localStorage.setItem('payInfo',payInfo);
           window.location.href='pay.html';

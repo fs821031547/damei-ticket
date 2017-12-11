@@ -5,6 +5,7 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   export default {
     name: 'app',
     computed: {
@@ -13,17 +14,55 @@
       }
     },
     created() {
-
       let mine = this.$store.getters["mine/mine"];
       // console.log(process.env);
       if (process.env.NODE_ENV == 'development') {
         this.$store.dispatch('mine/request_enter');
       }
-
       let url;
       // console.log(this.$route);
-
-
+      //请求后处理
+      Vue.http.interceptors.push((req, next) => {
+        // console.log('req:',req)
+        next((res) => {
+          // console.log('res:', res)
+          let body={};
+          if(res.status!==200){
+            if(res.bodyText.length>200){
+              res.bodyText=res.bodyText.slice(0,200)
+            }
+            body.errorMsg= res.bodyText;
+            body.sysName = req.url;
+            this.toBad('errored',body)
+          }else{
+            let url=['search-exchange-code'];
+            if(url.includes(req.url)&&res.bodyText==''){
+              body.errorMsg= '未知错误！';
+              body.sysName = req.url;
+              this.toBad('errored',body)
+            }
+          }
+          return res;
+        });
+      });
+    },
+    methods: {
+      toBad(view, body) {
+        if (view && body) {
+          setTimeout(() => {
+            this.$router.replace({
+              name: view,
+              params: {
+                errorCode: body.errorCode,
+                errorMsg: body.errorMsg,
+                sysName: body.sysName,
+                domain: body.domain,
+                sign: body.sign || false,
+              }
+            })
+          }, 0); //使请求流程走完，再进行页面跳转
+        }
+      },
     }
   }
 

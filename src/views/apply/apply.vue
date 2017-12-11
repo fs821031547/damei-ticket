@@ -2,22 +2,14 @@
   <!--<x-header title></x-header>-->
   <div style="padding-bottom:50px;overflow-x:hidden;">
     <my-header>在线报名</my-header>
-    <div id="vux-apply-box" style="
-    position: absolute;
-    top: 46px;
-    z-index: 10000000;
-    left: 0;
-    background: #f2f2f2;
-    width:100%;
-    right: 0;">
+    <div id="vux-apply-box" style="padding-top: 46px">
       <my-pad></my-pad>
       <div class="bg-white">
         <cell title="产品名称" class="apply applys" :value="code_info.title || '欢乐美国阳光西岸8日精品游'" @click.native="fnViewLine" is-link></cell>
         <!--<cell title="出发地" value="请选择出发地" is-link></cell>-->
         <popup-picker title="出发地" :data="cityList" v-model="cityValue" @on-show="onShow" @on-hide="onHide" @on-change="onChange"
           placeholder="请选择出发地"></popup-picker>
-        <cell title="使用激活" @click.native="fnShowTicket()" :class="exchangeValue ? 'apply':''" :value="exchangeValue ||'请选择'"
-          is-link></cell>
+        <cell title="使用激活" @click.native="fnShowTicket()" :class="exchangeValue ? 'apply':''" :value="exchangeValue ||'请选择'" is-link></cell>
         <cell title="美国签证介绍" class="sign" @click.native="$router.push({name:'visa'})" value="查看详情" is-link></cell>
       </div>
       <panel :list="list" class="my-panel" style="background-color: #f2f2f2;margin-top:0"></panel>
@@ -44,7 +36,7 @@
       <my-pad></my-pad>
       <my-pad></my-pad>
       <my-bottom-box>
-          <button class="weui-btn weui-btn_primary" @click="fnNext" style="border-radius: 0px;"> 下一步</button>
+        <button class="weui-btn weui-btn_primary" @click="fnNext" style="border-radius: 0px;"> 下一步</button>
         <!-- <x-button type="primary" style="border-radius:0;" @click.native="fnNext">下一步</x-button> -->
       </my-bottom-box>
       <popup v-model="showTicket" height="100%" position="" style="z-index:100000009!important;background:#fff" width="100%">
@@ -183,13 +175,13 @@
           this.setTicketOpt();
         }
       },
-      fnShowTicket(){
-        this.showTicket=!this.showTicket;
-        let applyBox=document.getElementById('vux-apply-box');
-        if(this.showTicket){
-          applyBox.style.zIndex='10000002';
-        }else{
-          applyBox.style.zIndex='10000000';
+      fnShowTicket() {
+        this.showTicket = !this.showTicket;
+        let applyBox = document.getElementById('vux-apply-box');
+        if (this.showTicket) {
+          applyBox.style.zIndex = '10000002';
+        } else {
+          applyBox.style.zIndex = '10000000';
         }
 
       },
@@ -390,7 +382,7 @@
           this.fnToastMsg('有选择的激活码不可用');
           return;
         }
-        if(exchangeIDs.length==0){
+        if (exchangeIDs.length == 0) {
           this.fnToastMsg('需选择激活码才能进行下一步');
           return;
         }
@@ -436,7 +428,6 @@
 
 </script>
 <style>
-
   .applys .vux-cell-primary {
     width: 32%;
     flex: initial;
@@ -522,13 +513,17 @@
   .vux-popup-mask {
     /*z-index: 10000001!important;*/
   }
-  .weui-dialog{
+
+  .weui-dialog {
     z-index: 10000002!important;
   }
-  .vux-popup-mask.vux-popup-show{
-    z-index:10000001!important;
-  }
-  .weui-mask{
+
+  .vux-popup-mask.vux-popup-show {
     z-index: 10000001!important;
   }
+
+  .weui-mask {
+    z-index: 10000001!important;
+  }
+
 </style>

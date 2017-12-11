@@ -93,6 +93,15 @@ const routes = [
       }, "pay-info");
     },
   },
+  {
+    name: 'errored',
+    path: '/errored',
+    component(resolve) {
+      require.ensure(['./views/errored.vue'], () => {
+        resolve(require('./views/errored.vue'))
+      }, "errored");
+    },
+  },
   ...ticket,
   ...apply,
   ...visaProgress,
