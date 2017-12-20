@@ -14,18 +14,11 @@
       }
     },
     created() {
-      let mine = this.$store.getters["mine/mine"];
-      // console.log(process.env);
-      if (process.env.NODE_ENV == 'development') {
-        this.$store.dispatch('mine/request_enter');
-      }
-      let url;
-      // console.log(this.$route);
-      //请求后处理
+        //请求后处理
       Vue.http.interceptors.push((req, next) => {
         // console.log('req:',req)
         next((res) => {
-          // console.log('res:', res)
+          console.log('res:', res)
           let body={};
           if(res.status!==200){
             if(res.bodyText.length>200){
@@ -36,7 +29,16 @@
             this.toBad('errored',body)
           }else{
             let url=['search-exchange-code'];
+            if(url.includes(req.url)&&res.bodyText==='新用户,无数据'){
+              return res;
+            }
             if(url.includes(req.url)&&res.bodyText==''){
+              body.errorMsg= '未知错误！';
+              body.sysName = req.url;
+              this.toBad('errored',body);
+              return res;
+            }
+            if(url.includes(req.url)&&res.bodyText[0]!='{'){
               body.errorMsg= '未知错误！';
               body.sysName = req.url;
               this.toBad('errored',body)
@@ -45,6 +47,14 @@
           return res;
         });
       });
+      let mine = this.$store.getters["mine/mine"];
+      // console.log(process.env);
+      if (process.env.NODE_ENV == 'development') {
+        this.$store.dispatch('mine/request_enter');
+      }
+      this.$store.dispatch('mine/requestPayType');
+      // console.log(this.$route);
+
     },
     methods: {
       toBad(view, body) {

@@ -11,6 +11,10 @@ export default {
     qrcodeData() {
       return this.$store.getters["mine/qrcodeData"]
     },
+    //支付渠道
+    payType(){
+      return this.$store.getters["mine/payType"]
+    }
   },
   methods: {
     toastFn(msg) {
@@ -69,10 +73,33 @@ export default {
         onBridgeReady();
       }
     },
-    fnReqPay(url) {  //跳转到支付接口
-      this.$vux.loading.show({
-        text: '正在跳转到付款页，请您耐心等待'
-      });
+    fnQrcodePay(url){
+      if (url == 1) {
+        this.$vux.loading.hide();
+        this.$router.push({
+          name: 'pay-way',
+          query: {
+            'names': 'ticket'
+          },
+          params: {
+            refresh: true
+          }
+        })
+
+      } else {
+        this.$vux.loading.hide();
+        this.$router.push({
+          name: 'pay-way',
+          query: {
+            names: 'order'
+          },
+          params: {
+            refresh: true
+          }
+        })
+      }
+    },
+    fnWeiXinPay(url){
       if (url == 1) { //兑奖码
         url = 'pay-success'
       } else if (url == 2) { //订单
@@ -87,13 +114,9 @@ export default {
           let payInfo=JSON.stringify(x);
           window.localStorage.setItem('payInfo',payInfo);
           window.location.href='pay.html';
-          // this.iframeHtml='pay.html';
-          // this.onBridgeReady(x);
         }else{
           this.toastFn(x.msg);
         }
-        // this.$store.dispatch('mine/qrcodeHtml',x);
-        // this.$router.push({name:'qrcode'})
         // if (x && x.executeStatus == 0 && x.qrcode) {
           // console.log(x.qrcode);
           // this.qrcode = "http://pan.baidu.com/share/qrcode?w=240&h=240&url=" + x.qrcode;
@@ -106,31 +129,20 @@ export default {
         this.$vux.loading.hide();
         this.toastFn('接口异常');
       });
-      // if (url == 1) {
-      //   this.$vux.loading.hide();
-      //   this.$router.push({
-      //     name: 'pay-way',
-      //     query: {
-      //       'names': 'ticket'
-      //     },
-      //     params: {
-      //       refresh: true
-      //     }
-      //   })
-
-      // } else {
-      //   this.$vux.loading.hide();
-      //   this.$router.push({
-      //     name: 'pay-way',
-      //     query: {
-      //       names: 'order'
-      //     },
-      //     params: {
-      //       refresh: true
-      //     }
-      //   })
+    },
+    //跳转到支付接口
+    fnReqPay(url) {
+      this.$vux.loading.show({
+        text: '正在跳转到付款页，请您耐心等待'
+      });
+      this.fnQrcodePay(url);
+      // if(this.payType==1){
+      //   //微信支付
+      //   this.fnWeiXinPay(url);
+      // }else{
+      //   //扫码付
+      //   this.fnQrcodePay(url);
       // }
-
     }
   }
 }

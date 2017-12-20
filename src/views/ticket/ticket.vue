@@ -80,10 +80,16 @@
                 this.$store.dispatch('mine/code_info', body.code_info);
               }
             });
-            this.$router.push({ name: 'pay-form', query: { status: x.status, id: x.exchang_code } })
+            try {
+              this.$router.push({ name: 'pay-form' })
+            } catch (error) {
+              window.location.href='#/pay-form'
+            }
+            // this.$router.push({ name: 'pay-form', query: { status: x.status, id: x.exchang_code } })
           } else {
-            this.$router.push({ name: 'ticket', query: { status: x.status } })
+            this.toastFn('您还未未使用兑奖码')
           }
+
         })
       }
     },
@@ -138,27 +144,19 @@
           let status = ['', '已激活', '已激活', '已激活', '已放弃', '已失效', '已使用'];
           if (body.success && !body.code_info.code_status) {
             this.toastFn('操作成功');
+            try {
+              this.$router.push({ name: 'pay-form' })
+            } catch (error) {
+              window.location.href='#/pay-form'
+            }
             this.$store.dispatch('mine/code_info', body.code_info);
-            this.$router.push({ name: 'pay-form', query: { status: 0 } })
           } else {
             this.toastFn(body.msg);
           }
+        }).catch(x=>{
+          this.toastFn('接口异常');
         });
-        // Vue.http.post(
-        //   "search-exchange-code",
-        //   data,
-        //   { emulateJSON: true }
-        // ).then(res => {
-        //   let body = res.body;
-        //   if (!body) return;
-        //   if (body.success && !body.code_status) {
-        //     this.$store.dispatch('mine/code_info',body.code_info);
-        //     this.toastFn('激活成功');
-        //     this.$router.push({ name: 'pay-form',query:{status:0} })
-        //   } else {
-        //     this.toastFn(body.msg);
-        //   }
-        // })
+
       },
     },
     props: {

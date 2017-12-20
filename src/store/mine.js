@@ -28,6 +28,7 @@ const state = {
   clickStatus: false,  //按钮点击状态
   address: [],
   qrcodeHtml:'',
+  payType: '',
 }
 
 const getters = {
@@ -46,7 +47,7 @@ const getters = {
   clickStatus: state => state.clickStatus,
   address: state => state.address,
   qrcodeHtml: state => state.qrcodeHtml,
-
+  payType: state => state.payType,
 }
 
 const actions = {
@@ -209,11 +210,27 @@ const actions = {
     }
     commit("fin_ids", data);
   },
+  requestPayType({state}){
+    Vue.http.post(
+      "pay-type",
+      {},
+      { emulateJSON: true }
+    ).then(res => {
+      // if (!res.body) return;
+      state.payType= res.body
+    });
+  },
   exchange_code_qrcode({ state, commit }, data) {
     //乘法函数，用来得到精确的乘法结果
     //说明：javascript的乘法结果会有误差，在两个浮点数相乘的时候会比较明显。这个函数返回较为精确的乘法结果。
     //调用：accMul(arg1,arg2)
     //返回值：arg1乘以arg2的精确结果
+    var url;
+    // if(state.payType==1){  //微信支付渠道
+    //   url = 'wx-pay'
+    // }else{    //扫码付
+      url = 'exchange_code_qrcode'
+    // }
     function accMul(arg1, arg2) {
       var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
       try { m += s1.split(".")[1].length } catch (e) { }
@@ -226,8 +243,7 @@ const actions = {
       return accMul(arg, this);
     }
     return Vue.http.post(
-      // 'exchange_code_qrcode',
-      'wx-pay',
+      url,
       {
         amount: data.money && (Number(data.money)).mul(100),
         type: data.type,

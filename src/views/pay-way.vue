@@ -66,7 +66,6 @@
       }
     },
     created() {
-
       let data = this.qrcodeData;
       let routerName = this.$route.query.names;
       let url = routerName =='ticket' ? 'pay-success' : 'pay-complete';

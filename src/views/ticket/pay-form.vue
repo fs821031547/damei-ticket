@@ -380,17 +380,6 @@
 
       },
     },
-    beforeRouteLeave(to, from, next) {
-      // 导航离开该组件的对应路由时调用
-      // 可以访问组件实例 `this`
-      console.log(to.query.status);
-      if (to.name == 'ticket' && !to.query.status) {
-        next(false);
-      } else {
-        next()
-      }
-
-    }
   }
 
 </script>
