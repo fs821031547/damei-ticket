@@ -227,9 +227,9 @@ const actions = {
     //返回值：arg1乘以arg2的精确结果
     var url;
     // if(state.payType==1){  //微信支付渠道
-    //   url = 'wx-pay'
+      url = 'wx-pay';
     // }else{    //扫码付
-      url = 'exchange_code_qrcode'
+      // url = 'exchange_code_qrcode'
     // }
     function accMul(arg1, arg2) {
       var m = 0, s1 = arg1.toString(), s2 = arg2.toString();

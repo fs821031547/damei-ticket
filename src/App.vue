@@ -52,7 +52,7 @@
       if (process.env.NODE_ENV == 'development') {
         this.$store.dispatch('mine/request_enter');
       }
-      this.$store.dispatch('mine/requestPayType');
+      // this.$store.dispatch('mine/requestPayType');
       // console.log(this.$route);
 
     },

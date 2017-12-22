@@ -135,10 +135,10 @@ export default {
       this.$vux.loading.show({
         text: '正在跳转到付款页，请您耐心等待'
       });
-      this.fnQrcodePay(url);
+      // this.fnQrcodePay(url);
       // if(this.payType==1){
       //   //微信支付
-      //   this.fnWeiXinPay(url);
+        this.fnWeiXinPay(url);
       // }else{
       //   //扫码付
       //   this.fnQrcodePay(url);
