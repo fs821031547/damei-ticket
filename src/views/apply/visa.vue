@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="noknow-box">
-       <img src="../../assets/visa.png">
+       <img src="../../assets/visa.jpg">
     </div>
     <div class="question-btn" @click="$router.push('visa-question')">
-      <div style="margin:5px 10px">签证常见问题</div>  
+      <div style="margin:5px 10px">签证常见问题</div>
     </div>
   </div>
 </template>

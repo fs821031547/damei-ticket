@@ -45,7 +45,7 @@
           </label>
         </div>
         <div v-else class="slide" :class="item.visaWayStatus ? 'animate':'' ">
-          <label v-for="way,wayIndex in item.visaWayList1" style="padding:0" class="weui-cell weui-cell_radio weui-check__label">
+          <label v-for="way,wayIndex in item.visaWayList1" v-show="wayIndex===0" style="padding:0" class="weui-cell weui-cell_radio weui-check__label">
             <div class="weui-cell__bd" style="pointer-events:all;padding:10px 15px 10px 0" @click="visaWayChange(index,wayIndex)">
               <p>
                 <span class="vux-radio-label">{{ way }}</span>
@@ -100,11 +100,13 @@
         }],
         visaBox: false,
         visaStatus: ['已有签证', '没有签证'],
+        // visaStatus: ['已有签证'],
         visaVal: false,
         visaWayVal: false,
         visaWay: false,
         visaWayList: ['已办EVUS', '办理EVUS（100.00）'],
-        visaWayList1: ['办理签证（1500.00）', '签证保障套餐（2999.00）'],
+        // visaWayList1: ['办理签证（1500.00）', '签证保障套餐（2999.00）'],
+        visaWayList1: ['办理签证（1500.00）'],
         fromCityName: '',
         toastShow: false,
         toastMsg: '',
@@ -118,6 +120,7 @@
       Icon,
     },
     created() {
+      console.log('this.visawaylist1',this.visaWayList1);
       let fromCityName = this.cityValue.join();
       this.fromCityName = fromCityName;
     },

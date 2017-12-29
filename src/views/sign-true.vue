@@ -31,7 +31,7 @@
     },
     data() {
       return {
-        status: false,
+        status: true,
         // list: [{
         //   src: '../assets/sign_1.jpg',
         // },
@@ -85,6 +85,7 @@
       fnInit() {
         if (this.mine.exchange_code && this.mine.exchange_code.length > 0) {
           this.status = false;
+
         } else {
           this.status = true;
         }
