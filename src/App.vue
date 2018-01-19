@@ -94,7 +94,9 @@
   #app {
     height: 100%;
   }
-
+  .weui-toast{
+    z-index:1234567890!important
+  }
   div,
   p {
     box-sizing: border-box;

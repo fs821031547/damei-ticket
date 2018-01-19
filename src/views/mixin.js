@@ -115,7 +115,7 @@ export default {
           window.localStorage.setItem('payInfo',payInfo);
           window.location.href='pay.html';
         }else{
-          this.toastFn(x.msg);
+          this.toastFn(x.msg || '操作失败');
         }
         // if (x && x.executeStatus == 0 && x.qrcode) {
           // console.log(x.qrcode);
