@@ -1,6 +1,11 @@
 # damei-ticket
 
 > A Vue.js project
+## 声明要点
+该项目基于vuxUI框架
+该项目日历用到了vux中的inline-calendar组件
+由于样式需要时自定义而修改了该组件的源码
+故此需要将项目中的src/vux目录覆盖你所安装在本地的vux模块代码
 
 ## Build Setup
 
